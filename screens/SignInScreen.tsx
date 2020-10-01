@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
+/*
+ * Code is loosely based on the following tutorial: 
+ * https://reactnativemaster.com/react-native-login-screen-tutorial
+*/
 export default function SignInScreen() {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
