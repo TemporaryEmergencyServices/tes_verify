@@ -17,12 +17,16 @@ export default function ClockInScreen() {
   useEffect(() => {
 
   }, [])
+
   return (
-    <Button
-      // onPress={}
-      title="Clock In"
-      color="#13AA52"
-    />
+    <View>
+      <Button
+        // onPress={}
+        title="Clock In"
+        color="#13AA52"
+      />
+    </View>
+    
   )
 }
 
