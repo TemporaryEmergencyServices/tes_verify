@@ -11,25 +11,45 @@ import { Marker } from 'react-native-maps'
 
 export default function ClockInScreen() {
   const [clockedState, setClockedState] = useState(false)
-  const [hello, sethello] = useState('hello')
+  const [inTime, setInTime] = useState('')
+  const [outTime, setOutTime] = useState('')
   
   useEffect(() => {
-
+    
   }, [])
 
-  let toggleClockIn = () => {
+  const toggleClockIn = () => {
+    const today = new Date()
+    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+    + " " +(today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
+    
+    if (clockedState) 
+      setOutTime(time)
+    else {
+      setInTime(time)
+      setOutTime('')
+    }
+
     setClockedState(!clockedState)
   }
 
+
   return (
     <View style={styles.container}>
+      {
+        inTime != '' && 
+        <Text>In: {inTime}</Text>
+      }
+      {
+        outTime != '' && 
+        <Text>Out: {outTime}</Text>
+      }
       <Button
         title={clockedState ? "Clock Out" : "Clock In"}
         color="#13AA52"
         onPress={toggleClockIn}
       />
     </View>
-    
   )
 }
 
