@@ -10,18 +10,23 @@ import MapView, { AnimatedRegion } from 'react-native-maps'
 import { Marker } from 'react-native-maps'
 
 export default function ClockInScreen() {
-  const [clockedIn, setClockedIn] = useState(true)
+  const [clockedState, setClockedState] = useState(false)
+  const [hello, sethello] = useState('hello')
   
   useEffect(() => {
 
   }, [])
 
+  let toggleClockIn = () => {
+    setClockedState(!clockedState)
+  }
+
   return (
-    <View>
+    <View style={styles.container}>
       <Button
-        // onPress={}
-        title="Clock In"
+        title={clockedState ? "Clock Out" : "Clock In"}
         color="#13AA52"
+        onPress={toggleClockIn}
       />
     </View>
     
