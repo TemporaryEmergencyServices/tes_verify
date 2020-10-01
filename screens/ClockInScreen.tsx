@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, Button } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -11,8 +11,19 @@ import { Marker } from 'react-native-maps'
 import TabTwoScreen from './TabTwoScreen';
 
 
-export default function TabOneScreen() {
-  return TabTwoScreen();
+export default function ClockInScreen() {
+  const [clockedIn, setClockedIn] = useState(true)
+  
+  useEffect(() => {
+
+  }, [])
+  return (
+    <Button
+      // onPress={}
+      title="Clock In"
+      color="#13AA52"
+    />
+  )
 }
 
 const styles = StyleSheet.create({
