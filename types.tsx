@@ -8,10 +8,10 @@ export type BottomTabParamList = {
   TabTwo: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type ClockInParamList = {
+  ClockInScreen: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type SettingsParamList = {
+  SettingsScreen: undefined;
 };

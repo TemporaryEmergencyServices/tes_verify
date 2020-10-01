@@ -7,7 +7,7 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ClockInScreen from '../screens/ClockInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import { BottomTabParamList, ClockInParamList, SettingsParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -19,15 +19,15 @@ export default function BottomTabNavigator() {
       initialRouteName="TabOne"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="TabOne"
+        name="Clock In"
         component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Settings"
+        component={SettingsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -44,30 +44,30 @@ function TabBarIcon(props: { name: string; color: string }) {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const ClockInStack = createStackNavigator<ClockInParamList>();
 
 function TabOneNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
+    <ClockInStack.Navigator>
+      <ClockInStack.Screen
         name="ClockInScreen"
         component={ClockInScreen}
         options={{ headerTitle: 'Clock Time' }}
       />
-    </TabOneStack.Navigator>
+    </ClockInStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const SettingsStack = createStackNavigator<SettingsParamList>();
 
-function TabTwoNavigator() {
+function SettingsNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{ headerTitle: 'Settings and Profile Info' }}
       />
-    </TabTwoStack.Navigator>
+    </SettingsStack.Navigator>
   );
 }
