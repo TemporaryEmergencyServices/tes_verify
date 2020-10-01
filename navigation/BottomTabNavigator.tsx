@@ -7,7 +7,8 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ClockInScreen from '../screens/ClockInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList } from '../types';
+import RecordsScreen from '../screens/RecordsScreen';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -16,25 +17,25 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="ClockIn"
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
       <BottomTab.Screen
-        name="Settings"
+        name="Profile"
         component={SettingsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Clock In"
-        component={TabOneNavigator}
+        name="ClockIn"
+        component={ClockInNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       <BottomTab.Screen
-        name="Log"
-        component={SettingsNavigator}
+        name="Records"
+        component={RecordsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
@@ -53,7 +54,7 @@ function TabBarIcon(props: { name: string; color: string }) {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const ClockInStack = createStackNavigator<ClockInParamList>();
 
-function TabOneNavigator() {
+function ClockInNavigator() {
   return (
     <ClockInStack.Navigator>
       <ClockInStack.Screen
@@ -76,5 +77,19 @@ function SettingsNavigator() {
         options={{ headerTitle: 'Settings and Profile Info' }}
       />
     </SettingsStack.Navigator>
+  );
+}
+
+const RecordsStack = createStackNavigator<RecordsParamList>();
+
+function RecordsNavigator() {
+  return (
+    <RecordsStack.Navigator>
+      <RecordsStack.Screen
+        name="RecordsScreen"
+        component={RecordsScreen}
+        options={{ headerTitle: 'Volunteer Records' }}
+      />
+    </RecordsStack.Navigator>
   );
 }

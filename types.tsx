@@ -4,8 +4,9 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  ClockIn: undefined;
+  Records: undefined;
+  Profile: undefined;
 };
 
 export type ClockInParamList = {
@@ -14,4 +15,8 @@ export type ClockInParamList = {
 
 export type SettingsParamList = {
   SettingsScreen: undefined;
+};
+
+export type RecordsParamList = {
+  RecordsScreen: undefined;
 };
