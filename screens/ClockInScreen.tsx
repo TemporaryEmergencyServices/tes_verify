@@ -8,8 +8,6 @@ import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions';
 import MapView, { AnimatedRegion } from 'react-native-maps'
 import { Marker } from 'react-native-maps'
-import TabTwoScreen from './TabTwoScreen';
-
 
 export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(true)

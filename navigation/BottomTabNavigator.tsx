@@ -52,7 +52,7 @@ function TabOneNavigator() {
       <TabOneStack.Screen
         name="ClockInScreen"
         component={ClockInScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+        options={{ headerTitle: 'Clock Time' }}
       />
     </TabOneStack.Navigator>
   );
