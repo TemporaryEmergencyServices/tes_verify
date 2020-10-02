@@ -23,21 +23,21 @@ export default function BottomTabNavigator() {
         name="Profile"
         component={SettingsNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="ClockIn"
         component={ClockInNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
       <BottomTab.Screen
         name="Records"
         component={RecordsNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
     </BottomTab.Navigator>
