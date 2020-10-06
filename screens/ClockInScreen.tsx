@@ -2,17 +2,21 @@ import * as React from 'react';
 import { StyleSheet, Dimensions, Button } from 'react-native';
 import { useEffect, useState } from 'react'
 
-import EditScreenInfo from '../components/EditScreenInfo';
+import firebase from '../firebase.js'
+
 import { Text, View } from '../components/Themed';
-import * as Location from 'expo-location'
-import * as Permissions from 'expo-permissions';
-import MapView, { AnimatedRegion } from 'react-native-maps'
-import { Marker } from 'react-native-maps'
+// import { analytics } from 'firebase';
 
 export default function ClockInScreen() {
-  const [clockedState, setClockedState] = useState(false)
+  const [clockedIn, setClockedIn] = useState(false)
   const [inTime, setInTime] = useState('')
   const [outTime, setOutTime] = useState('')
+
+  const [fbClockedIn, setFbClockedIn] = useState('')
+  const [fbInTime, setFbInTime] = useState('')
+  const [fbOutTime, setFbOutTime] = useState('')
+  // TODO: change this to global var using Redux
+  const [username, setUsername] = useState('brandon')
   
   useEffect(() => {
     
@@ -21,21 +25,65 @@ export default function ClockInScreen() {
   const toggleClockIn = () => {
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    + " " +(today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
+    + " " + (today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
     
-    if (clockedState) 
+    if (clockedIn) 
       setOutTime(time)
     else {
       setInTime(time)
       setOutTime('')
     }
-
-    setClockedState(!clockedState)
+    
+    setClockFB(!clockedIn)
+    setClockedIn(!clockedIn)
   }
 
+  const setClockFB = (clocked: any) => {
+    if (clocked) {
+      firebase.database().ref(username).set({
+        in_time: inTime,
+        // out_time: "",
+        clocked_in: true
+      });
+    } else {
+      firebase.database().ref(username).set({
+        out_time: outTime,
+        clocked_in: false
+      });
+    }
+  }
+
+  const getClockFB = () => {
+    firebase.database().ref(username).on('value', (snapshot: any) => {
+      setFbClockedIn(snapshot.val().clocked_in)
+      setFbInTime(snapshot.val().in_time)
+      setFbOutTime(snapshot.val().out_time)
+    })
+  }
 
   return (
     <View style={styles.container}>
+      <Button
+        title="Get FB Data"
+        color="#13AA52"
+        onPress={getClockFB}
+      />
+      <Text>{fbClockedIn ? "Clocked In: True" : "Clocked In: False"}</Text>
+      {
+        fbInTime != ''
+        ?  <Text>{fbInTime}</Text>
+        : <Text>No Firebase In Time</Text>
+      }
+      {
+        fbOutTime != ''
+        ? <Text>{fbOutTime}</Text>
+        : <Text>No Firebase Out Time</Text>
+      }
+      <Button
+        title={clockedIn ? "Clock Out" : "Clock In"}
+        color="#13AA52"
+        onPress={toggleClockIn}
+      />
       {
         inTime != '' && 
         <Text>In: {inTime}</Text>
@@ -44,11 +92,6 @@ export default function ClockInScreen() {
         outTime != '' && 
         <Text>Out: {outTime}</Text>
       }
-      <Button
-        title={clockedState ? "Clock Out" : "Clock In"}
-        color="#13AA52"
-        onPress={toggleClockIn}
-      />
     </View>
   )
 }
