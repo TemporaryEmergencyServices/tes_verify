@@ -8,7 +8,9 @@ import useColorScheme from '../hooks/useColorScheme';
 import ClockInScreen from '../screens/ClockInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import RecordsScreen from '../screens/RecordsScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList} from '../types';
+import SignInScreen from '../screens/SignInScreen';
+import SignUpScreen from '../screens/SignUpScreen';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, SignInParamList, SignUpParamList} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -38,6 +40,23 @@ export default function BottomTabNavigator() {
         component={RecordsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+
+      {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
+      <BottomTab.Screen
+        name="SignIn"
+        component={SignInNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
+        }}
+      />
+
+      <BottomTab.Screen
+        name="SignUp"
+        component={SignUpNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
         }}
       />
     </BottomTab.Navigator>
@@ -91,5 +110,34 @@ function RecordsNavigator() {
         options={{ headerTitle: 'Volunteer Records' }}
       />
     </RecordsStack.Navigator>
+  );
+}
+
+{/* Ben added SignInNavigator and SignUpNavigator here for easy testing of sign in and sign up. TODO: remove them */}
+const SignInStack = createStackNavigator<SignInParamList>();
+
+function SignInNavigator() {
+  return (
+    <SignInStack.Navigator>
+      <SignInStack.Screen
+        name="SignInScreen"
+        component={SignInScreen}
+        options={{ headerTitle: 'Sign In' }}
+      />
+    </SignInStack.Navigator>
+  );
+}
+
+const SignUpStack = createStackNavigator<SignUpParamList>();
+
+function SignUpNavigator() {
+  return (
+    <SignUpStack.Navigator>
+      <SignUpStack.Screen
+        name="SignUpScreen"
+        component={SignUpScreen}
+        options={{ headerTitle: 'Sign Up' }}
+      />
+    </SignUpStack.Navigator>
   );
 }

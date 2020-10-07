@@ -17,7 +17,7 @@ import env from './env.json'
 // auth up. go to 
 
 var firebaseConfig = {
-    apiKey: env.DEV_FIREBASE_API_KEY,
+    apiKey: env.DEV_FIREBASE_KEY,
     authDomain: env.DEV_FIREBASE_AUTH_DOMAIN,
     databaseURL: env.DEV_FIREBASE_DATABASE_URL,
     projectId: env.DEV_FIREBASE_PROJECT_ID,

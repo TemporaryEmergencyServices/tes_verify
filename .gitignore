@@ -14,3 +14,5 @@ env.json
 # macOS
 .DS_Store
 package-lock.json
+env.json
+devenv.json

@@ -2,8 +2,11 @@ import firebase from '../firebase.js'
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-import { createStackNavigator } from '@react-navigation/stack';
-import Navigation from '../navigation/index.js';
+
+import { bindActionCreators } from 'redux';
+import {Dispatch} from 'redux';
+import { connect } from 'react-redux';
+import { updateEmail, updatePassword, signup } from '../actions/user';
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -11,19 +14,20 @@ import Navigation from '../navigation/index.js';
 */
 
 
-export default function SignInScreen() {
+function SignUpScreen() {
   
 
-
+  
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
-
   
-  const handleLogin = () => {
-    firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
-      //.then(do the navigation to the home screen)
+  const handleSignUp = () => {
+     firebase.auth()
+       .createUserWithEmailAndPassword(emailState,passwordState)   
+    //for redux:
+    //signup()
+    //navigate!
   }
 
   return (
@@ -47,14 +51,12 @@ export default function SignInScreen() {
       <TouchableOpacity>
         <Text style={styles.forgot}>Forgot Password?</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-        <Text style={styles.loginText}>Sign in</Text>
-      </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.loginText}>Sign up</Text>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
+        <Text style={styles.loginText} >Sign up</Text>
       </TouchableOpacity>
     </View>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -101,3 +103,20 @@ const styles = StyleSheet.create({
     color:"white"
   }
 });
+
+
+//Redux logic that doesn't work (probably because this is a function component and not a class component?)
+const mapDispatchToProps = (dispatch: Dispatch)=>{
+  return bindActionCreators({ updateEmail, updatePassword, signup }, dispatch);
+}
+
+const  mapStateToProps = (state: any) => {
+  return {
+      user: state.user
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SignUpScreen);
