@@ -1,9 +1,11 @@
 import firebase from '../firebase.js'
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import Navigation from '../navigation/index.js';
+import SignUpScreen from '../screens/SignUpScreen'
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -11,7 +13,7 @@ import Navigation from '../navigation/index.js';
 */
 
 
-export default function SignInScreen() {
+export default function SignInScreen( { navigation }) {
   
 
 
@@ -25,6 +27,9 @@ export default function SignInScreen() {
       .signInWithEmailAndPassword(emailState,passwordState)
       //.then(do the navigation to the home screen)
   }
+
+  const goToSignUp = () => navigation.replace('SignUpScreen')
+  const goToMainBody = () => navigation.replace('BottomTabNavigator')
 
   return (
     <View style={styles.container}>
@@ -50,8 +55,11 @@ export default function SignInScreen() {
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginText}>Sign in</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress = {goToMainBody}>
+        <Text style={styles.loginText}>i just want to see the app:(</Text>
       </TouchableOpacity>
     </View>
   );

@@ -42,8 +42,11 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
+       {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
 
-      {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
+
+      {/* Marie commented these out since SignUp and SignIn ~should~ be working sort of now. But they could still be useful.
+
       <BottomTab.Screen
         name="SignIn"
         component={SignInNavigator}
@@ -59,6 +62,10 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
         }}
       />
+      */}
+     
+      
+
     </BottomTab.Navigator>
   );
 }
@@ -79,7 +86,8 @@ function ClockInNavigator() {
       <ClockInStack.Screen
         name="ClockInScreen"
         component={ClockInScreen}
-        options={{ headerTitle: 'Clock Time' }}
+        options={{ headerShown: false }}
+        
       />
     </ClockInStack.Navigator>
   );
@@ -93,7 +101,7 @@ function SettingsNavigator() {
       <SettingsStack.Screen
         name="SettingsScreen"
         component={SettingsScreen}
-        options={{ headerTitle: 'Settings and Profile Info' }}
+        options={{ headerShown: false }}
       />
     </SettingsStack.Navigator>
   );
@@ -107,7 +115,7 @@ function RecordsNavigator() {
       <RecordsStack.Screen
         name="RecordsScreen"
         component={RecordsScreen}
-        options={{ headerTitle: 'Volunteer Records' }}
+        options={{ headerShown: false }}
       />
     </RecordsStack.Navigator>
   );

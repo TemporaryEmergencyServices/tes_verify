@@ -14,14 +14,15 @@ import { updateEmail, updatePassword, signup } from '../actions/user';
 */
 
 
-function SignUpScreen() {
+function SignUpScreen( {  navigation  }) {
   
 
   
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
-  
+  const goToSignIn = () => navigation.replace('SignInScreen')
+
   const handleSignUp = () => {
      firebase.auth()
        .createUserWithEmailAndPassword(emailState,passwordState)   
@@ -53,6 +54,9 @@ function SignUpScreen() {
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.loginText} >Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress = {goToSignIn}>
+        <Text style={styles.loginText}>Return to Sign In</Text>
       </TouchableOpacity>
     </View>
   );
