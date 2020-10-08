@@ -11,44 +11,52 @@ export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
   const [inTime, setInTime] = useState('')
   const [outTime, setOutTime] = useState('')
+  const [uniqueClockID, setUniqueClockID] = useState('')
 
   const [fbClockedIn, setFbClockedIn] = useState('')
   const [fbInTime, setFbInTime] = useState('')
   const [fbOutTime, setFbOutTime] = useState('')
   // TODO: change this to global var using Redux
-  const [username, setUsername] = useState('brandon')
-  
+  const [username, setUsername] = useState('brandon@brandon.com')
+
   useEffect(() => {
-    
+
   }, [])
 
   const toggleClockIn = () => {
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    + " " + (today.getMonth()+1) + '/' + today.getDate() + '/' + today.getFullYear()
-    
-    if (clockedIn) 
+      + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+
+    if (clockedIn)
       setOutTime(time)
     else {
       setInTime(time)
-      setOutTime('')
+
+      //setOutTime('')
     }
-    
+
     setClockFB(!clockedIn)
     setClockedIn(!clockedIn)
   }
 
-  const setClockFB = (clocked: any) => {
-    if (clocked) {
-      firebase.database().ref(username).set({
-        in_time: inTime,
-        // out_time: "",
-        clocked_in: true
-      });
+  const setClockFB = async (clockingIn: any) => {
+    if (clockingIn) {
+      var snap = await firebase.database().ref('clock')
+        .push({
+          userid: username,
+          in_time: inTime,
+          out_time: "",
+          in_approved: false,
+          currently_clocked_in: true,
+        })
+      setUniqueClockID(snap.key)
+  
     } else {
-      firebase.database().ref(username).set({
+      firebase.database().ref('clock/' + uniqueClockID).update({
         out_time: outTime,
-        clocked_in: false
+        out_approved: false,
+        currently_clocked_in: false,
       });
     }
   }
@@ -71,13 +79,13 @@ export default function ClockInScreen() {
       <Text>{fbClockedIn ? "Clocked In: True" : "Clocked In: False"}</Text>
       {
         fbInTime != ''
-        ?  <Text>{fbInTime}</Text>
-        : <Text>No Firebase In Time</Text>
+          ? <Text>{fbInTime}</Text>
+          : <Text>No Firebase In Time</Text>
       }
       {
         fbOutTime != ''
-        ? <Text>{fbOutTime}</Text>
-        : <Text>No Firebase Out Time</Text>
+          ? <Text>{fbOutTime}</Text>
+          : <Text>No Firebase Out Time</Text>
       }
       <Button
         title={clockedIn ? "Clock Out" : "Clock In"}
@@ -85,11 +93,11 @@ export default function ClockInScreen() {
         onPress={toggleClockIn}
       />
       {
-        inTime != '' && 
+        inTime != '' &&
         <Text>In: {inTime}</Text>
       }
       {
-        outTime != '' && 
+        outTime != '' &&
         <Text>Out: {outTime}</Text>
       }
     </View>
