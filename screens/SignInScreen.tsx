@@ -12,7 +12,8 @@ import SignUpScreen from '../screens/SignUpScreen'
  * https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574#cbbf
 */
 
-
+//gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
+//unsure of other impacts of having that line, so uncommenting may be a bad idea
 export default function SignInScreen( { navigation }) {
   
 
