@@ -15,20 +15,14 @@ import SignUpScreen from '../screens/SignUpScreen'
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 export default function SignInScreen( { navigation }) {
-  
-
-
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
-
-  
   const handleLogin = () => {
     firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
       //.then(do the navigation to the home screen)
   }
-
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToMainBody = () => navigation.replace('BottomTabNavigator')
 
@@ -56,7 +50,7 @@ export default function SignInScreen( { navigation }) {
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginText}>Sign in</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress = {goToSignUp}>
+      <TouchableOpacity style={styles.createAccountBtn} onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress = {goToMainBody}>
@@ -104,6 +98,16 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:"center",
     marginTop:40,
+    marginBottom:10
+  },
+  createAccountBtn:{
+    width:"80%",
+    backgroundColor:"#fb5b5a",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
     marginBottom:10
   },
   loginText:{

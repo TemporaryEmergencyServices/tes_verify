@@ -9,6 +9,6 @@
     "resolveJsonModule": true,
     "strict": true,
     "allowJs":true,
-    //"noImplicitAny":false
+    "noImplicitAny":false
   }
 }
