@@ -62,9 +62,6 @@ export default function SignInScreen( { navigation }) {
       <TouchableOpacity style={styles.createAccountBtn} onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress = {goToMainBody}>
-        <Text style={styles.loginText}>i just want to see the app:(</Text>
-      </TouchableOpacity>
     </View>
   );
 }
