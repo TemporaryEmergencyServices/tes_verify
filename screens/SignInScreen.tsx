@@ -42,7 +42,7 @@ export default function SignInScreen( { navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Email..." 
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
@@ -50,7 +50,7 @@ export default function SignInScreen( { navigation }) {
           secureTextEntry
           style={styles.inputText}
           placeholder="Password..." 
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <TouchableOpacity>
@@ -72,19 +72,19 @@ export default function SignInScreen( { navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#003f5c',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo:{
     fontWeight:"bold",
     fontSize:50,
-    color:"#fb5b5a",
+    color:"#1C5A7D",
     marginBottom:40
   },
   inputView:{
     width:"80%",
-    backgroundColor:"#465881",
+    backgroundColor:"#2B2E32",
     borderRadius:25,
     height:50,
     marginBottom:20,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
   },
   loginBtn:{
     width:"80%",
-    backgroundColor:"#fb5b5a",
+    backgroundColor:"#E11383",
     borderRadius:25,
     height:50,
     alignItems:"center",
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   createAccountBtn:{
     width:"80%",
-    backgroundColor:"#fb5b5a",
+    backgroundColor:"#E11383",
     borderRadius:25,
     height:50,
     alignItems:"center",

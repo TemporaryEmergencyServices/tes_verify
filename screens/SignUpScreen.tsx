@@ -40,7 +40,7 @@ function SignUpScreen( {  navigation  }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Email..." 
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
@@ -48,17 +48,17 @@ function SignUpScreen( {  navigation  }) {
           secureTextEntry
           style={styles.inputText}
           placeholder="Password..." 
-          placeholderTextColor="#003f5c"
+          placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <TouchableOpacity>
         <Text style={styles.forgot}>Forgot Password?</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
-        <Text style={styles.loginText} >Sign up</Text>
+        <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress = {goToSignIn}>
-        <Text style={styles.loginText}>Return to Sign In</Text>
+        <Text style={styles.returnToSignInText}>Return to Sign In</Text>
       </TouchableOpacity>
     </View>
   );
@@ -68,19 +68,19 @@ function SignUpScreen( {  navigation  }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#003f5c',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
   },
   logo:{
     fontWeight:"bold",
     fontSize:50,
-    color:"#fb5b5a",
+    color:"#1C5A7D",
     marginBottom:40
   },
   inputView:{
     width:"80%",
-    backgroundColor:"#465881",
+    backgroundColor:"#2B2E32",
     borderRadius:25,
     height:50,
     marginBottom:20,
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
   },
   loginBtn:{
     width:"80%",
-    backgroundColor:"#fb5b5a",
+    backgroundColor:"#E11383",
     borderRadius:25,
     height:50,
     alignItems:"center",
@@ -105,7 +105,20 @@ const styles = StyleSheet.create({
     marginTop:40,
     marginBottom:10
   },
-  loginText:{
+  createAccountBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
+    marginBottom:10
+  },
+  returnToSignInText:{
+    color:"black"
+  },
+  signUpText:{
     color:"white"
   }
 });
