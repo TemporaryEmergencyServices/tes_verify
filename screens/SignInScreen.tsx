@@ -21,11 +21,20 @@ export default function SignInScreen( { navigation }) {
   const handleLogin = () => {
     firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
-      //.then(do the navigation to the home screen)
+      .then(goToMainBody)
+      .catch(error => {
+        //let errorCode = error.code;
+        //let errorMessage = error.message;
+        //if (errorCode == 'auth/weak-password') {
+            // ('Weak Password!');
+        //} else {
+            // errorMessage
+        //}
+    });
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToMainBody = () => navigation.replace('BottomTabNavigator')
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
