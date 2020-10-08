@@ -1,11 +1,12 @@
 import firebase from '../firebase.js'
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import Navigation from '../navigation/index.js';
 import SignUpScreen from '../screens/SignUpScreen'
+import ForgotPassword from '../screens/ForgotPasswordScreen'
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -17,22 +18,23 @@ import SignUpScreen from '../screens/SignUpScreen'
 export default function SignInScreen( { navigation }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-
   const handleLogin = () => {
     firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
       .then(goToMainBody)
       .catch(error => {
-        //let errorCode = error.code;
-        //let errorMessage = error.message;
-        //if (errorCode == 'auth/weak-password') {
-            // ('Weak Password!');
-        //} else {
-            // errorMessage
-        //}
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
     });
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
+  const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
   const goToMainBody = () => navigation.replace('BottomTabNavigator')
   
   return (
@@ -53,14 +55,14 @@ export default function SignInScreen( { navigation }) {
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot}>Forgot Password?</Text>
-      </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginText}>Sign in</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.createAccountBtn} onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.forgot} onPress={goToForgotPassword}>
+        <Text>Forgot Password?</Text>
       </TouchableOpacity>
     </View>
   );
@@ -93,8 +95,15 @@ const styles = StyleSheet.create({
     color:"white"
   },
   forgot:{
-    color:"white",
-    fontSize:11
+    color:"black",
+    fontSize:11,
+    width:"80%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
+    marginBottom:10
   },
   loginBtn:{
     width:"80%",
@@ -117,6 +126,7 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   loginText:{
+    marginTop:10,
     color:"white"
   }
 });
