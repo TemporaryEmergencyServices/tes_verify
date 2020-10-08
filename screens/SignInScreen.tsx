@@ -18,8 +18,12 @@ export default function SignInScreen( { navigation }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
-  const handleLogin = async () => {
-    await firebase.auth()
+  const handleForgotPassword = () => {
+    firebase.auth()
+      .sendPasswordResetEmail(emailState)
+  }
+  const handleLogin = () => {
+    firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
       .then(goToMainBody)
       .catch(error => {
@@ -54,14 +58,14 @@ export default function SignInScreen( { navigation }) {
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot}>Forgot Password?</Text>
-      </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
         <Text style={styles.loginText}>Sign in</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.createAccountBtn} onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Text style={styles.forgot} onPress={handleForgotPassword}>Forgot Password?</Text>
       </TouchableOpacity>
     </View>
   );
@@ -94,7 +98,7 @@ const styles = StyleSheet.create({
     color:"white"
   },
   forgot:{
-    color:"white",
+    color:"black",
     fontSize:11
   },
   loginBtn:{
@@ -118,6 +122,7 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   loginText:{
+    marginTop:10,
     color:"white"
   }
 });
