@@ -6,6 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Navigation from '../navigation/index.js';
 import SignUpScreen from '../screens/SignUpScreen'
+import ForgotPassword from '../screens/ForgotPasswordScreen'
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -17,11 +18,6 @@ import SignUpScreen from '../screens/SignUpScreen'
 export default function SignInScreen( { navigation }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-
-  const handleForgotPassword = () => {
-    firebase.auth()
-      .sendPasswordResetEmail(emailState)
-  }
   const handleLogin = () => {
     firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
@@ -38,6 +34,7 @@ export default function SignInScreen( { navigation }) {
     });
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
+  const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
   const goToMainBody = () => navigation.replace('BottomTabNavigator')
   
   return (
@@ -64,8 +61,8 @@ export default function SignInScreen( { navigation }) {
       <TouchableOpacity style={styles.createAccountBtn} onPress = {goToSignUp}>
         <Text style={styles.loginText}>Sign up</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
-        <Text style={styles.forgot} onPress={handleForgotPassword}>Forgot Password?</Text>
+      <TouchableOpacity style={styles.forgot} onPress={goToForgotPassword}>
+        <Text>Forgot Password?</Text>
       </TouchableOpacity>
     </View>
   );
@@ -99,7 +96,14 @@ const styles = StyleSheet.create({
   },
   forgot:{
     color:"black",
-    fontSize:11
+    fontSize:11,
+    width:"80%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
+    marginBottom:10
   },
   loginBtn:{
     width:"80%",
