@@ -1,6 +1,6 @@
 import firebase from '../firebase.js'
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 
 import { createStackNavigator } from '@react-navigation/stack';
@@ -18,18 +18,19 @@ export default function SignInScreen( { navigation }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
-  const handleLogin = () => {
-    firebase.auth()
+  const handleLogin = async () => {
+    await firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
       .then(goToMainBody)
       .catch(error => {
-        //let errorCode = error.code;
-        //let errorMessage = error.message;
-        //if (errorCode == 'auth/weak-password') {
-            // ('Weak Password!');
-        //} else {
-            // errorMessage
-        //}
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
     });
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
