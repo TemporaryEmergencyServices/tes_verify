@@ -11,10 +11,12 @@ import Navigation from './navigation';
 import {createStore, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import reducer from './reducers'
+// import reducer from './reducers'
+import rootReducer from './reducers'
 
 const middleware = applyMiddleware(thunkMiddleware)
-const store = createStore(reducer,middleware)
+const store = createStore(rootReducer, middleware)
+// const store = createStore(rootReducer)
 //End redux
 
 export default function App() {
@@ -25,14 +27,13 @@ export default function App() {
     return null;
   } else {
     return (
-      //Provider wrapper and store are for redux
+      //Provider wrapper and store area for redux
       <Provider store={store}>
         <SafeAreaProvider>
             <Navigation colorScheme={colorScheme} />
             <StatusBar />
         </SafeAreaProvider>
       </Provider>
-      
     );
   }
 }

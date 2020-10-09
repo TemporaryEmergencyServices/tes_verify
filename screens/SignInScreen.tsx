@@ -7,6 +7,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Navigation from '../navigation/index.js';
 import SignUpScreen from '../screens/SignUpScreen'
 import ForgotPassword from '../screens/ForgotPasswordScreen'
+
+import { login, logout, loginFB } from '../actions'
+import { useDispatch } from 'react-redux'
+
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -15,23 +19,26 @@ import ForgotPassword from '../screens/ForgotPasswordScreen'
 
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
-export default function SignInScreen( { navigation }) {
+export default function SignInScreen({ navigation }) {
+  const dispatch = useDispatch()
+
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
   const handleLogin = () => {
-    firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
-      .then(goToMainBody)
-      .catch(error => {
-        Alert.alert(
-          "Error",
-          error.message,
-          [
-            { text: "OK", onPress: () => console.log("OK Pressed") }
-          ],
-          { cancelable: false }
-        );
-    });
+    try {
+      dispatch(loginFB(emailState, passwordState))
+      goToMainBody()
+      dispatch(login())
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        error.message,
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
