@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import isLoggedReducer from './isLoggedReducer'
+import userInfoReducer from './userInfoReducer'
 // import usernameReducer from './usernameReducer'
 // import { LOGIN, SIGNUP, UPDATE_EMAIL, UPDATE_PASSWORD } from '../actions/user'
 
@@ -25,7 +26,8 @@ import isLoggedReducer from './isLoggedReducer'
 // }
 
 const rootReducer = combineReducers({
-    isLoggedIn: isLoggedReducer
+    isLoggedIn: isLoggedReducer,
+    userInfo: userInfoReducer
 })
 
 export default rootReducer
