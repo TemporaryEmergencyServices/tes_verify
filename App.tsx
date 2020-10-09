@@ -12,10 +12,11 @@ import {createStore, applyMiddleware} from 'redux'
 import {Provider} from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 // import reducer from './reducers'
-import isLoggedReducer from './reducers/isLoggedReducer'
+import rootReducer from './reducers'
 
 const middleware = applyMiddleware(thunkMiddleware)
-const store = createStore(isLoggedReducer, middleware)
+const store = createStore(rootReducer, middleware)
+// const store = createStore(rootReducer)
 //End redux
 
 export default function App() {

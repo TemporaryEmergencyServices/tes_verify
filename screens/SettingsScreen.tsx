@@ -1,15 +1,21 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Button } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
+import { useSelector, RootStateOrAny } from 'react-redux'
+
 
 export default function SettingsScreen() {
+  let loggedIn = useSelector((state: RootStateOrAny) => state.isLoggedIn)
+
   return (
     <View style={styles.container}>
+      {/* <Button title="login" onPress={() => dispatch(login())}></Button>
+      <Button title="logout" onPress={() => dispatch(logout())}></Button> */}
+      <Text>{ JSON.stringify(loggedIn)}</Text>
       <Text style={styles.title}>Change your profile info here! But not yet. Check back next sprint:)</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-
     </View>
   );
 }
