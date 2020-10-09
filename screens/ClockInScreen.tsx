@@ -42,7 +42,7 @@ export default function ClockInScreen() {
 
   const setClockFB = async (clockingIn: any) => {
     if (clockingIn) {
-      var snap = await firebase.database().ref('clock')
+      var snap = await firebase.database().ref('ClockInsOuts')
         .push({
           userid: username,
           in_time: inTime,
@@ -53,7 +53,7 @@ export default function ClockInScreen() {
       setUniqueClockID(snap.key)
   
     } else {
-      firebase.database().ref('clock/' + uniqueClockID).update({
+      firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
         out_time: outTime,
         out_approved: false,
         currently_clocked_in: false,

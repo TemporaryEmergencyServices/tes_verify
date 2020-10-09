@@ -7,7 +7,7 @@ import { Text, View } from '../components/Themed';
 export default function SettingsScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Change your profile info here! But not yet. Check back next sprint:)</Text>
+      <Text style={styles.title}>Change your profile info here! But not yet.)</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
 
     </View>
