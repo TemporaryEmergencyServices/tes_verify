@@ -1,12 +1,10 @@
 import firebase from '../firebase.js'
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 
+import { useDispatch } from 'react-redux'
+import { signup } from '../actions'
 
-import { bindActionCreators } from 'redux';
-import {Dispatch} from 'redux';
-import { connect } from 'react-redux';
-import { updateEmail, updatePassword, signup } from '../actions/user';
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -16,7 +14,7 @@ import { updateEmail, updatePassword, signup } from '../actions/user';
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 
-function SignUpScreen( {  navigation  }) {
+export default function SignUpScreen({  navigation  }) {
   
 
   
@@ -24,14 +22,25 @@ function SignUpScreen( {  navigation  }) {
   const [passwordState, setPasswordState] = useState('')
 
   const goToSignIn = () => navigation.replace('SignInScreen')
-
+  const dispatch = useDispatch()
+  
   const handleSignUp = () => {
      firebase.auth()
-       .createUserWithEmailAndPassword(emailState,passwordState)   
-    //for redux:
-    //signup()
-    //navigate!
-  }
+       .createUserWithEmailAndPassword(emailState,passwordState)
+       .then((response) => dispatch(signup(response.user)))
+       .then(goToSignIn)
+       .catch(error => {
+          Alert.alert(
+            "Error",
+            error.message,
+            [
+              { text: "OK", onPress: () => console.log("OK Pressed") }
+            ],
+            { cancelable: false }
+          );
+       })
+    }
+
 
   return (
     <View style={styles.container}>
@@ -121,21 +130,4 @@ const styles = StyleSheet.create({
   signUpText:{
     color:"white"
   }
-});
-
-
-//Redux logic that doesn't work (probably because this is a function component and not a class component?)
-const mapDispatchToProps = (dispatch: Dispatch)=>{
-  return bindActionCreators({ updateEmail, updatePassword, signup }, dispatch);
-}
-
-const  mapStateToProps = (state: any) => {
-  return {
-      user: state.user
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SignUpScreen);
+})
