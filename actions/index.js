@@ -12,10 +12,9 @@ export const login = (userInfo) => {
     }
 }
 
-export const logout = (userInfo) => {
+export const logout = () => {
     return {
-        type: LOGOUT, 
-        payload: userInfo
+        type: LOGOUT
     }
 }
 

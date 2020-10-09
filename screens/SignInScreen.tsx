@@ -39,7 +39,7 @@ export default function SignInScreen({ navigation }) {
           ],
           { cancelable: false }
         );
-    })
+      })
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
