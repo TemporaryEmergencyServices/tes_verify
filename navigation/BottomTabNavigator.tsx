@@ -20,12 +20,12 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="ClockIn"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}>
+      tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
       <BottomTab.Screen
         name="Profile"
         component={SettingsNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
         }}
       />
       <BottomTab.Screen
