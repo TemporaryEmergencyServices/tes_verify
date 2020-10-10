@@ -15,7 +15,7 @@ export default function SettingsScreen() {
       <Button title="logout" onPress={() => dispatch(logout())}></Button> */}
       <Text>{ JSON.stringify(userinfo.email) }</Text>
       <Text>{ JSON.stringify(loggedIn) }</Text>
-      <Text style={styles.title}>Change your profile info here! But not yet. Check back next sprint:)</Text>
+      <Text style={styles.title}>Change your profile info here! But not yet.</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </View>
   );
