@@ -8,7 +8,7 @@ import Navigation from '../navigation/index.js';
 import SignUpScreen from '../screens/SignUpScreen'
 import ForgotPassword from '../screens/ForgotPasswordScreen'
 
-import { login, logout, loginFB } from '../actions'
+import { login } from '../actions'
 import { useDispatch } from 'react-redux'
 
 /*
@@ -22,23 +22,24 @@ import { useDispatch } from 'react-redux'
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch()
 
+  
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
   const handleLogin = () => {
-    try {
-      dispatch(loginFB(emailState, passwordState))
-      goToMainBody()
-      dispatch(login())
-    } catch (error) {
-      Alert.alert(
-        "Error",
-        error.message,
-        [
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      );
-    }
+    firebase.auth()
+      .signInWithEmailAndPassword(emailState,passwordState)
+      .then((response) => dispatch(login(response.user)))
+      .then(goToMainBody)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')

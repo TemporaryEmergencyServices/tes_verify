@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux'
 
 export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
-export const LOGINUSER = 'LOGINUSER'
+export const SIGNUP = 'SIGNUP'
 
-export const login = () => {
+export const login = (userInfo) => {
     return {
-        type: LOGIN
+        type: LOGIN, 
+        payload: userInfo
     }
 }
 
@@ -17,14 +18,9 @@ export const logout = () => {
     }
 }
 
-export const loginFB = (email, password) => {
-    return async (dispatch, getState) => {
-        try {
-            const response = await firebase.auth().signInWithEmailAndPassword(email, password)
-            console.log(response.user)
-            dispatch({ type: LOGINUSER, payload: response.user })
-        } catch (e) {
-            console.log(e)
-        }
+export const signup = (userInfo) => {
+    return {
+        type: SIGNUP, 
+        payload: userInfo
     }
 }
