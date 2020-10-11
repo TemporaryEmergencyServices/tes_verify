@@ -103,16 +103,6 @@ export default function ClockInScreen() {
         onPress={getClockFB}
       />
       <Text>{fbClockedIn ? "Clocked In: True" : "Clocked In: False"}</Text>
-      {
-        fbInTime != ''
-           <Text>{fbInTime}</Text> NOTE: HAD A ? IN FRONT
-          : <Text>No Firebase In Time</Text>
-      }
-      {
-        fbOutTime != ''
-           <Text>{fbOutTime}</Text> NOTE: HAD A ? IN FRONT
-          : <Text>No Firebase Out Time</Text>
-      }
 
     */
 
