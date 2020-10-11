@@ -36,93 +36,57 @@ export default function ClockInScreen() {
         //create firebase entry
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-      + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    
-    if (!clockedIn) {handleClockIn(time)}
+     // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    if (!clockedIn) {handleClockIn(date, time)}
 
-    else { handleClockOut(time)}
+    else { handleClockOut(date, time)}
 
   }
 
-  const handleClockIn = (time: any) => {
+  const handleClockIn = (date: any, time: any) => {
     setInTime(time)
-    writeFBClockIn(time)
+    writeFBClockIn(date, time)
     setClockedIn(true)
   }
 
-  const handleClockOut = (time: any) => {
+  const handleClockOut = (date: any, time: any) => {
     setOutTime(time)
-    writeFBClockOut(time)
+    writeFBClockOut(date, time)
     setClockedIn(false)
-    alertOutLogged(time)
+    alertOutLogged(date, time)
   }
 
-  const writeFBClockIn = async (time: any) => {
+  const writeFBClockIn = async (date: any, time: any) => {
     var snap = await firebase.database().ref('ClockInsOuts').push({
       userid: userEmail,
       in_time: time,
-      //out_time: "",
-      in_approved: false,
+      date: date,
+      in_approved: "pending",
       currently_clocked_in: true,
     });
     setUniqueClockID(snap.key)
   }
 
-  const writeFBClockOut = async (time: any) => {
-    await firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
+  const writeFBClockOut = async (date: any, time: any) => {
+    var snap = await firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
       out_time: time,
-      out_approved: false,
+      out_approved: "pending",
       currently_clocked_in: false,
+      out_date: date
     });
   }
 
-  const alertOutLogged = (outTimeAlert) => 
+  const alertOutLogged = (date, outTimeAlert) => 
     Alert.alert(
       'Clock Out Completed',
-      'Your volunteer session starting at '+inTime+ ' and ending at '+outTimeAlert + ' has been submitted for approval.', // <- this part is optional, you can pass an empty string
+      'Your volunteer session starting at '+inTime+ ' and ending at '+outTimeAlert + ' has been submitted for approval on ' + date + '.', // <- this part is optional, you can pass an empty string
       [
         {text: 'OK', onPress: () => console.log('OK Pressed')},
       ],
       {cancelable: false},
     );
 
-  /* const toggleClockIn = () => {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-      + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-
-    if (clockedIn)
-      setOutTime(time)
-    else {
-      setInTime(time)
-
-      //setOutTime('')
-    }
-
-    setClockFB(!clockedIn)
-    setClockedIn(!clockedIn)
-  } */
-
-  /* const setClockFB = async (clockingIn: any) => {
-    if (clockingIn) {
-      var snap = await firebase.database().ref('ClockInsOuts')
-        .push({
-          userid: userEmail,
-          in_time: inTime,
-          out_time: "",
-          in_approved: false,
-          currently_clocked_in: true,
-        })
-      setUniqueClockID(snap.key)
-  
-    } else {
-      firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
-        out_time: outTime,
-        out_approved: false,
-        currently_clocked_in: false,
-      });
-    }
-  } */
 
   /* const getClockFB = () => {
     firebase.database().ref(userEmail).on('value', (snapshot: any) => {
