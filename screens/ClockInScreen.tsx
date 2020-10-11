@@ -155,7 +155,7 @@ export default function ClockInScreen() {
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
       <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockInButton]} onPress={determineAlreadyClockedIn}>
+        style={[styles.clockInOutButton, styles.clockInResumeButton]} onPress={determineAlreadyClockedIn}>
         <Text style={styles.clockInOutText}>Resume</Text>
       </TouchableOpacity>
     </View>
@@ -200,6 +200,10 @@ const styles = StyleSheet.create({
 
   clockOutButton: {
     backgroundColor: "#E11383"
+  },
+
+  clockInResumeButton: {
+    backgroundColor: "gray"
   },
 
   clockInOutText: {
