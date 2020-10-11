@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -141,23 +141,23 @@ export default function ClockInScreen() {
 
     */
 
-  return (
+  if (clockedIn) {return (
     <View style={styles.container}>
-      <Button
-        title={clockedIn ? "Clock Out" : "Clock In"}
-        color = {clockedIn? "#13AA52" : "#E11383"}
-        onPress={toggleClockIn}
-      />
-      {
-        //inTime != '' &&
-        <Text>In: {inTime}</Text>
-      }
-      {
-        //outTime != '' &&
-        <Text>Out: {outTime}</Text>
-      }
+      <TouchableOpacity 
+        style={[styles.clockInOutButton, styles.clockOutButton]} onPress={toggleClockIn}>
+        <Text style={styles.clockInOutText}>Clock Out</Text>
+      </TouchableOpacity>
     </View>
-  )
+  )}
+  else {return (
+    <View style={styles.container}>
+      <TouchableOpacity 
+        style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
+        <Text style={styles.clockInOutText}>Clock In</Text>
+      </TouchableOpacity>
+    </View>
+
+  )}
 }
 
 const styles = StyleSheet.create({
@@ -179,4 +179,30 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
   },
+
+  clockInOutButton: {
+    width:"80%",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10,
+    
+  }, 
+
+  clockInButton: {
+    backgroundColor: "#13AA52"
+  }, 
+
+  clockOutButton: {
+    backgroundColor: "#E11383"
+  },
+
+  clockInOutText: {
+    color: "white", 
+    fontWeight: "bold",
+    fontSize: 24
+  },
+
 });
