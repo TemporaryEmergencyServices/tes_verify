@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -54,6 +54,7 @@ export default function ClockInScreen() {
     setOutTime(time)
     writeFBClockOut(time)
     setClockedIn(false)
+    alertOutLogged(time)
   }
 
   const writeFBClockIn = async (time: any) => {
@@ -68,12 +69,22 @@ export default function ClockInScreen() {
   }
 
   const writeFBClockOut = async (time: any) => {
-    firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
+    await firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
       out_time: time,
       out_approved: false,
       currently_clocked_in: false,
     });
   }
+
+  const alertOutLogged = (outTimeAlert) => 
+    Alert.alert(
+      'Clock Out Completed',
+      'Your volunteer session starting at '+inTime+ ' and ending at '+outTimeAlert + ' has been submitted for approval.', // <- this part is optional, you can pass an empty string
+      [
+        {text: 'OK', onPress: () => console.log('OK Pressed')},
+      ],
+      {cancelable: false},
+    );
 
   /* const toggleClockIn = () => {
     const today = new Date()
@@ -148,7 +159,7 @@ export default function ClockInScreen() {
       <Text style={styles.instructionsText}> {inTime}. </Text>
       <Text style={styles.instructionsText}> Use the button below to clock out and end your volunteer session. </Text>
       <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockOutButton]} onPress={toggleClockIn}>
+        style={[styles.clockInOutButton, styles.clockOutButton]} onPress={() => {toggleClockIn()}}>
         <Text style={styles.clockInOutText}>Clock Out</Text>
       </TouchableOpacity>
     </View>
