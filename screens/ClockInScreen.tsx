@@ -142,7 +142,11 @@ export default function ClockInScreen() {
     */
 
   if (clockedIn) {return (
+
     <View style={styles.container}>
+      <Text style={styles.instructionsText}> You clocked in at </Text>
+      <Text style={styles.instructionsText}> {inTime} </Text>
+      <Text style={styles.instructionsText}> Use the button below to clock out and end your volunteer session. </Text>
       <TouchableOpacity 
         style={[styles.clockInOutButton, styles.clockOutButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock Out</Text>
@@ -151,6 +155,7 @@ export default function ClockInScreen() {
   )}
   else {return (
     <View style={styles.container}>
+      <Text style={styles.instructionsText}>You are not currently clocked in. Use the button below to begin your volunteer session.</Text>
       <TouchableOpacity 
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
@@ -204,5 +209,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24
   },
+
+  instructionsText: {
+    fontWeight:"bold",
+    fontSize:18,
+    color:"#1C5A7D",
+    marginBottom:15,
+    marginHorizontal: 30,
+    justifyContent: "center",
+    textAlign: "center",
+  },
+
 
 });
