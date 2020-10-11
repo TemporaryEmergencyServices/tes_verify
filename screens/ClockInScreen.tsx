@@ -145,7 +145,7 @@ export default function ClockInScreen() {
 
     <View style={styles.container}>
       <Text style={styles.instructionsText}> You clocked in at </Text>
-      <Text style={styles.instructionsText}> {inTime} </Text>
+      <Text style={styles.instructionsText}> {inTime}. </Text>
       <Text style={styles.instructionsText}> Use the button below to clock out and end your volunteer session. </Text>
       <TouchableOpacity 
         style={[styles.clockInOutButton, styles.clockOutButton]} onPress={toggleClockIn}>
