@@ -26,6 +26,34 @@ export default function ClockInScreen() {
 
   }, [])
 
+  const determineAlreadyClockedIn = async () => {
+    var isAlreadyClockedIn = false
+    const clockInsRef = firebase.database().ref('ClockInsOuts/')
+    await clockInsRef.orderByChild('currently_clocked_in').equalTo(true).limitToLast(1).on("child_added", function(snapshot) {
+      var session = snapshot.val()
+      if (session.userid == userEmail) {
+        setClockedIn(true)
+        setInTime(session.in_time)
+        setUniqueClockID(snapshot.key)
+        isAlreadyClockedIn = true
+      }
+    });
+
+    if (isAlreadyClockedIn == false) {
+      Alert.alert(
+        'Sorry...',
+        'You are not currently in a volunteer session. Please clock in.',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );  
+
+    }
+  }
+
+  //var isAlreadyClockedIn = determineAlreadyClockedIn()
+
   const toggleClockIn = () => {
     //get the time
     //if you are not clocked in, do clock in function
@@ -87,7 +115,7 @@ export default function ClockInScreen() {
       {cancelable: false},
     );
 
-
+    
   /* const getClockFB = () => {
     firebase.database().ref(userEmail).on('value', (snapshot: any) => {
       setFbClockedIn(snapshot.val().clocked_in)
@@ -118,12 +146,17 @@ export default function ClockInScreen() {
       </TouchableOpacity>
     </View>
   )}
-  else {return (
+  else {
+    return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}>You are not currently clocked in. Use the button below to begin your volunteer session.</Text>
+      <Text style={styles.instructionsText}> If you are checking in, press the clock in button. Alternatively, if you have already checked in today, select resume session. </Text>
       <TouchableOpacity 
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        style={[styles.clockInOutButton, styles.clockInButton]} onPress={determineAlreadyClockedIn}>
+        <Text style={styles.clockInOutText}>Resume</Text>
       </TouchableOpacity>
     </View>
 
