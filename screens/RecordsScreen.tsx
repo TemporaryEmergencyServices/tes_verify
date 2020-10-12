@@ -8,6 +8,12 @@ import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 
+/*
+Inspired By:
+
+https://rnfirebase.io/firestore/usage-with-flatlists
+https://medium.com/react-native-development/how-to-use-the-flatlist-component-react-native-basics-92c482816fe6
+*/ 
 export default function RecordsScreen() {
 
   const user = useSelector((state: RootStateOrAny) => state.user)
