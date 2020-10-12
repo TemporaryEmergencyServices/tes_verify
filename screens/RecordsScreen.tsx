@@ -47,17 +47,18 @@ export default function RecordsScreen() {
   return () => {isCancelled = true}
   });
 
+
   return (
     <View style={styles.container}>
-    <Text style={styles.titleFlatList}>Hi!</Text>
+    <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
       <FlatList
         data={records}
         renderItem={({ item }) => (
-          <View style={{ height: 80, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>User ID: {item.userid}</Text>
+          <View style={{ height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>Date: {item.date}</Text>
             <Text>In Time: {item.in_time}</Text>
             <Text>Out Time: {item.out_time}</Text>
+            <Text> Signature: IN: {item.in_approved}, OUT: {item.out_approved}</Text>
           </View>
         )}
       showsVerticalScrollIndicator={false}
