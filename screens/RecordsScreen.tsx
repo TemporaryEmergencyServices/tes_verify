@@ -63,7 +63,7 @@ export default function RecordsScreen() {
       </TouchableOpacity>  
       { 
         loading ? 
-          <ActivityIndicator size="large" color="#E11383" />
+          <ActivityIndicator size="large" color="white" />
         : 
           <FlatList
             data={records}
