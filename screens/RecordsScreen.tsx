@@ -57,14 +57,16 @@ export default function RecordsScreen() {
   return (
     <View style={styles.container}>
     <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
+    <TouchableOpacity style={styles.exportBtn}>
+        <Text style={styles.exportText} >Export as PDF</Text>
+    </TouchableOpacity>  
       <FlatList
         data={records}
         renderItem={({ item }) => (
-          <View style={{ height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={styles.itemStyle}>
             <Text>Date: {item.date}</Text>
-            <Text>In Time: {item.in_time}</Text>
-            <Text>Out Time: {item.out_time}</Text>
-            <Text> Signature: IN: {item.in_approved}, OUT: {item.out_approved}</Text>
+            <Text>In Time: {item.in_time}, {item.in_approved}</Text>
+            <Text>Out Time: {item.out_time}, {item.out_approved}</Text>
           </View>
         )}
       showsVerticalScrollIndicator={false}
@@ -79,6 +81,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  itemStyle: {
+     height: 100,
+     //flexDirection: 'row',
+     alignItems: 'center', 
+     justifyContent: 'center'
+  },
   titleFlatList: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -92,5 +100,20 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  exportText:{
+    color:"white",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+  exportBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:0,
+    marginBottom:10,
   },
 });
