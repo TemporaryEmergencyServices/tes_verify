@@ -53,12 +53,14 @@ export default function RecordsScreen() {
       <FlatList
         data={records}
         renderItem={({ item }) => (
-          <View style={{ height: 60, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ height: 80, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>User ID: {item.userid}</Text>
-            <Text>In Time: {item.in_time} on {item.date} </Text>
+            <Text>Date: {item.date}</Text>
+            <Text>In Time: {item.in_time}</Text>
+            <Text>Out Time: {item.out_time}</Text>
           </View>
         )}
-       
+      showsVerticalScrollIndicator={false}
       />
     </View>
   );
