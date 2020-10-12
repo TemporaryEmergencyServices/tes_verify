@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-native';
 import { useEffect, useState } from 'react'
-
+import { YellowBox } from 'react-native';
 import firebase from '../firebase.js'
 
 import { Text, View } from '../components/Themed';
@@ -22,6 +22,7 @@ export default function ClockInScreen() {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
 
+  YellowBox.ignoreWarnings(['Setting a timer']);
   useEffect(() => {
 
   }, [])
