@@ -13,19 +13,25 @@ export default function RecordsScreen() {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
 
-  const [loading, setLoading] = useState(true);
-  const [records, setRecords] = useState([]);
+  const [loading, setLoading] = useState(true)
+  //var records:any = []
+  const [records, setRecords] = useState([] as any)
+  
 
   useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
-    var test = []
-    ref.on("value", function(snapshot){
-      console.log(snapshot.val());
-      //setRecords(snapshot.val())
-     // test = snapshot.val()
 
-    }, function (errorObject) {
-      console.log("The read failed: " + errorObject.code);
+    ref.once("value", function(snapshot){
+      const help = [] as any;
+
+      snapshot.forEach(function(recordSnapshot){
+        const id = recordSnapshot.key
+        const recorddata = recordSnapshot.val()
+        recorddata['id'] = id
+        help.push(recorddata)
+      })
+      setRecords(help)
+    
     });
 
     //console.log(test)
@@ -33,7 +39,16 @@ export default function RecordsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>All clock ins and outs are currently being logged to console. Am unsure on how to get them on the screen.</Text>
+      <Text style={styles.title}>Hi!</Text>
+      <FlatList
+        data={records}
+        renderItem={({ item }) => (
+          <View style={{ height: 50, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <Text>User ID: {item.userid}</Text>
+            <Text>In Time: {item.in_time} on {item.date} </Text>
+          </View>
+        )}
+      />
     </View>
   );
 }
