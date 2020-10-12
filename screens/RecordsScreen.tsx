@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { useEffect, useState, Component, useLayoutEffect} from 'react'
 
 import firebase from '../firebase.js'
@@ -46,6 +46,7 @@ export default function RecordsScreen() {
       }
 
       //return () => {isCancelled = true};
+      setLoading(false)
     });
   //}
 
@@ -56,27 +57,28 @@ export default function RecordsScreen() {
 
   return (
     <View style={styles.container}>
-    <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
-    <TouchableOpacity style={styles.exportBtn}>
-        <Text style={styles.exportText} >Export as PDF</Text>
-    </TouchableOpacity>  
+      <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
+      <TouchableOpacity style={styles.exportBtn}>
+          <Text style={styles.exportText} >Export as PDF</Text>
+      </TouchableOpacity>  
       { 
-
+        loading ? 
+          <ActivityIndicator size="large" color="#E11383" />
+        : 
+          <FlatList
+            data={records}
+            renderItem={({ item }) => (
+              <View style={styles.itemStyle}>
+                <View style={styles.hairline}></View>
+                <Text style={styles.date}>Date: {item.date}</Text>
+                <Text>In Time: {item.in_time}, {item.in_approved}</Text>
+                <Text>Out Time: {item.out_time}, {item.out_approved}</Text>
+                <View style={styles.hairline}></View>
+              </View>
+            )}
+            showsVerticalScrollIndicator={false}
+          />
       }
-      <FlatList
-        data={records}
-        renderItem={({ item }) => (
-          <View style={styles.itemStyle}>
-            <View style={styles.hairline}></View>
-            <Text style={styles.date}>Date: {item.date}</Text>
-            <Text>In Time: {item.in_time}, {item.in_approved}</Text>
-            <Text>Out Time: {item.out_time}, {item.out_approved}</Text>
-            <View style={styles.hairline}></View>
-
-          </View>
-        )}
-        showsVerticalScrollIndicator={false}
-      />
     </View>
   );
 }
@@ -89,7 +91,6 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
      height: 100,
-     //flexDirection: 'row',
      alignItems: 'center', 
      justifyContent: 'center'
   },
