@@ -24,12 +24,15 @@ export default function RecordsScreen() {
     //if(!unmounted){
     ref.once("value", function(snapshot){
       const help = [] as any;
-
+      
       snapshot.forEach(function(recordSnapshot){
-        const id = recordSnapshot.key
-        const recorddata = recordSnapshot.val()
-        recorddata['id'] = id
-        help.push(recorddata)
+        if(recordSnapshot.val().userid == userEmail) {
+          const id = recordSnapshot.key
+           const recorddata = recordSnapshot.val()
+          recorddata['id'] = id
+          help.push(recorddata)
+        }
+        
       });
 
       if(!isCancelled){
