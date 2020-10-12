@@ -60,16 +60,22 @@ export default function RecordsScreen() {
     <TouchableOpacity style={styles.exportBtn}>
         <Text style={styles.exportText} >Export as PDF</Text>
     </TouchableOpacity>  
+      { 
+
+      }
       <FlatList
         data={records}
         renderItem={({ item }) => (
           <View style={styles.itemStyle}>
-            <Text>Date: {item.date}</Text>
+            <View style={styles.hairline}></View>
+            <Text style={styles.date}>Date: {item.date}</Text>
             <Text>In Time: {item.in_time}, {item.in_approved}</Text>
             <Text>Out Time: {item.out_time}, {item.out_approved}</Text>
+            <View style={styles.hairline}></View>
+
           </View>
         )}
-      showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -115,5 +121,15 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     marginTop:0,
     marginBottom:10,
+  },
+  date: {
+    fontWeight: 'bold', 
+    fontSize: 20
+  }, 
+  hairline: {
+    backgroundColor: 'white', 
+    height: 2, 
+    width: Dimensions.get('window').width - 10, 
+    margin: 2
   },
 });
