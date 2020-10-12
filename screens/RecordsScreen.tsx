@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList } from 'react-native';
-import { useEffect, useState, Component } from 'react'
+import { useEffect, useState, Component, useLayoutEffect} from 'react'
 
 import firebase from '../firebase.js'
 
@@ -20,7 +20,8 @@ export default function RecordsScreen() {
 
   useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
-
+    let isCancelled = false
+    //if(!unmounted){
     ref.once("value", function(snapshot){
       const help = [] as any;
 
@@ -29,12 +30,18 @@ export default function RecordsScreen() {
         const recorddata = recordSnapshot.val()
         recorddata['id'] = id
         help.push(recorddata)
-      })
-      setRecords(help)
-    
-    });
+      });
 
-    //console.log(test)
+      if(!isCancelled){
+        setRecords(help) 
+      }
+
+      //return () => {isCancelled = true};
+    });
+  //}
+
+
+  return () => {isCancelled = true}
   });
 
   return (
@@ -43,7 +50,7 @@ export default function RecordsScreen() {
       <FlatList
         data={records}
         renderItem={({ item }) => (
-          <View style={{ height: 50, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ height: 60, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text>User ID: {item.userid}</Text>
             <Text>In Time: {item.in_time} on {item.date} </Text>
           </View>
