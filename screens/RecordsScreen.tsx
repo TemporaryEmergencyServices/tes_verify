@@ -24,7 +24,7 @@ export default function RecordsScreen() {
     //if(!unmounted){
     ref.once("value", function(snapshot){
       const help = [] as any;
-      
+
       snapshot.forEach(function(recordSnapshot){
         if(recordSnapshot.val().userid == userEmail) {
           const id = recordSnapshot.key
@@ -49,7 +49,7 @@ export default function RecordsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hi!</Text>
+    <Text style={styles.titleFlatList}>Hi!</Text>
       <FlatList
         data={records}
         renderItem={({ item }) => (
@@ -58,6 +58,7 @@ export default function RecordsScreen() {
             <Text>In Time: {item.in_time} on {item.date} </Text>
           </View>
         )}
+       
       />
     </View>
   );
@@ -69,11 +70,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  title: {
+  titleFlatList: {
     fontSize: 20,
     fontWeight: 'bold',
     justifyContent: 'center',
     textAlign: 'center',
+    paddingTop: 60,
+    paddingBottom: 15,
+    color: "#1C5A7D",
   },
   separator: {
     marginVertical: 30,
