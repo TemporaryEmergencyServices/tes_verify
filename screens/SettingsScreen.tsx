@@ -32,11 +32,10 @@ export default function SettingsScreen({ navigation }) {
   }
   return (
     <View style={styles.container}>
+      <Text style={styles.title}> {user.email}</Text>
       <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
         <Text style={styles.signOutText}>Sign Out</Text>
       </TouchableOpacity>   
-      <Text>Email: {user.email}</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
     </View>
   );
 }
@@ -51,6 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: "#1C5A7D"
   },
   separator: {
     marginVertical: 30,

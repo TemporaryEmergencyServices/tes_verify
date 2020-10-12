@@ -134,7 +134,8 @@ const styles = StyleSheet.create({
     marginBottom:10
   },
   loginText:{
-    marginTop:10,
-    color:"white"
+    color:"white",
+    fontSize: 18,
+    fontWeight: "bold"
   }
 });
