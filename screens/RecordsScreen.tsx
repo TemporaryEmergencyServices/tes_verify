@@ -47,7 +47,6 @@ export default function RecordsScreen() {
     return () => {isCancelled = true}
   });
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
@@ -62,7 +61,9 @@ export default function RecordsScreen() {
       </View>
       { 
         loading ? 
-          <ActivityIndicator size="large" color="white" />
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color="white" />
+          </View>
         :
           <FlatList
             data={records}
@@ -163,6 +164,10 @@ const styles = StyleSheet.create({
   }, 
   denied: {
     color: 'red'
+  }, 
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
+    justifyContent: 'center',
   }
 })
 
