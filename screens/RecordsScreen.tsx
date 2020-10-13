@@ -39,9 +39,9 @@ export default function RecordsScreen() {
 
       if(!isCancelled){
         setRecords(help) 
+        setLoading(false)
       }
 
-      setLoading(false)
     });
 
     return () => {isCancelled = true}
