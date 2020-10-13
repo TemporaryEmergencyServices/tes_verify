@@ -34,14 +34,12 @@ export default function RecordsScreen() {
           recorddata['id'] = id
           help.push(recorddata)
         }
-        
       });
 
       if(!isCancelled){
         setRecords(help) 
         setLoading(false)
       }
-
     });
 
     return () => {isCancelled = true}
@@ -85,7 +83,7 @@ export default function RecordsScreen() {
             showsVerticalScrollIndicator={false}
           />
       }
-            <View style={styles.bigSpace}></View>
+      <View style={styles.bigSpace}></View>
     </View>
   )
 }
