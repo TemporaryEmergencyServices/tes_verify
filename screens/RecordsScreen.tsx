@@ -20,17 +20,13 @@ export default function RecordsScreen() {
   const userEmail = user.email
 
   const [loading, setLoading] = useState(true)
-  //var records:any = []
   const [records, setRecords] = useState([] as any)
-  
 
   useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
     let isCancelled = false
-    //if(!unmounted){
     ref.once("value", function(snapshot){
       const help = [] as any;
-
       snapshot.forEach(function(recordSnapshot){
         if(recordSnapshot.val().userid == userEmail) {
           const id = recordSnapshot.key
@@ -45,13 +41,10 @@ export default function RecordsScreen() {
         setRecords(help) 
       }
 
-      //return () => {isCancelled = true};
       setLoading(false)
     });
-  //}
 
-
-  return () => {isCancelled = true}
+    return () => {isCancelled = true}
   });
 
 
@@ -59,8 +52,9 @@ export default function RecordsScreen() {
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
       <TouchableOpacity style={styles.exportBtn}>
-          <Text style={styles.exportText} >Export as PDF</Text>
+        <Text style={styles.exportText} >Export as PDF</Text>
       </TouchableOpacity> 
+      <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
         <Text style={styles.header}>In</Text>
@@ -69,7 +63,7 @@ export default function RecordsScreen() {
       { 
         loading ? 
           <ActivityIndicator size="large" color="white" />
-        : 
+        :
           <FlatList
             data={records}
             renderItem={({ item }) => (
@@ -78,11 +72,11 @@ export default function RecordsScreen() {
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
-                    <Text>{item.in_approved}</Text>
+                    <Text style={renderApproved(item.in_approved)}>{item.in_approved}</Text>
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
-                    <Text>{item.out_approved}</Text>
+                    <Text style={renderApproved(item.out_approved)}>{item.out_approved}</Text>
                   </View>
                 </View>
               </View>
@@ -92,6 +86,16 @@ export default function RecordsScreen() {
       }
     </View>
   )
+}
+
+function renderApproved(status: String) {
+  if (status === "approved") {
+    return styles.approved
+  } else if (status === "pending") {
+    return styles.pending
+  } else if (status === "denied") {
+    return styles.denied
+  }
 }
 
 const styles = StyleSheet.create({
@@ -148,4 +152,17 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'space-around', 
   }, 
+  space: {
+    margin: 15
+  }, 
+  pending: {
+    color: 'orange'
+  }, 
+  approved: {
+    color: 'green'
+  }, 
+  denied: {
+    color: 'red'
+  }
 })
+
