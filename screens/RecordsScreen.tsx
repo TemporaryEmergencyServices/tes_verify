@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { StyleSheet, Dimensions, ActivityIndicator, TouchableOpacity, Alert, FlatList } from 'react-native';
 import { useEffect, useState, Component, useLayoutEffect} from 'react'
 
 import firebase from '../firebase.js'
@@ -20,17 +20,13 @@ export default function RecordsScreen() {
   const userEmail = user.email
 
   const [loading, setLoading] = useState(true)
-  //var records:any = []
   const [records, setRecords] = useState([] as any)
-  
 
   useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
     let isCancelled = false
-    //if(!unmounted){
     ref.once("value", function(snapshot){
       const help = [] as any;
-
       snapshot.forEach(function(recordSnapshot){
         if(recordSnapshot.val().userid == userEmail) {
           const id = recordSnapshot.key
@@ -45,39 +41,73 @@ export default function RecordsScreen() {
         setRecords(help) 
       }
 
-      //return () => {isCancelled = true};
+      setLoading(false)
     });
-  //}
 
-
-  return () => {isCancelled = true}
+    return () => {isCancelled = true}
   });
-
 
   return (
     <View style={styles.container}>
-    <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
-      <FlatList
-        data={records}
-        renderItem={({ item }) => (
-          <View style={{ height: 100, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Date: {item.date}</Text>
-            <Text>In Time: {item.in_time}</Text>
-            <Text>Out Time: {item.out_time}</Text>
-            <Text> Signature: IN: {item.in_approved}, OUT: {item.out_approved}</Text>
+      <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
+      <TouchableOpacity style={styles.exportBtn}>
+        <Text style={styles.exportText} >Export as PDF</Text>
+      </TouchableOpacity> 
+      <View style={styles.space}></View>
+      <View style={styles.row}>
+        <Text style={styles.header}>Date</Text>
+        <Text style={styles.header}>In</Text>
+        <Text style={styles.header}>Out</Text>
+      </View>
+      { 
+        loading ? 
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color="white" />
           </View>
-        )}
-      showsVerticalScrollIndicator={false}
-      />
+        :
+          <FlatList
+            data={records}
+            renderItem={({ item }) => (
+              <View style={styles.itemStyle}>
+                <View style={styles.row}>
+                  <Text>{item.date}</Text>
+                  <View>
+                    <Text>{item.in_time}</Text>
+                    <Text style={renderApproved(item.in_approved)}>{item.in_approved}</Text>
+                  </View>
+                  <View>
+                    <Text>{item.out_time}</Text>
+                    <Text style={renderApproved(item.out_approved)}>{item.out_approved}</Text>
+                  </View>
+                </View>
+              </View>
+            )}
+            showsVerticalScrollIndicator={false}
+          />
+      }
     </View>
-  );
+  )
+}
+
+function renderApproved(status: String) {
+  if (status === "approved") {
+    return styles.approved
+  } else if (status === "pending") {
+    return styles.pending
+  } else if (status === "denied") {
+    return styles.denied
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  itemStyle: {
+     height: 100,
+     alignItems: 'center', 
+     justifyContent: 'center'
   },
   titleFlatList: {
     fontSize: 20,
@@ -93,4 +123,51 @@ const styles = StyleSheet.create({
     height: 1,
     width: '80%',
   },
-});
+  exportText:{
+    color:"white",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+  exportBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:0,
+    marginBottom:10,
+  },
+  header: {
+    fontWeight: 'bold', 
+    fontSize: 20
+  }, 
+  hairline: {
+    backgroundColor: 'white', 
+    height: 2, 
+    width: Dimensions.get('window').width - 10, 
+    margin: 2
+  },
+  row: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-around', 
+  }, 
+  space: {
+    margin: 15
+  }, 
+  pending: {
+    color: 'orange'
+  }, 
+  approved: {
+    color: 'green'
+  }, 
+  denied: {
+    color: 'red'
+  }, 
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
+    justifyContent: 'center',
+  }
+})
+

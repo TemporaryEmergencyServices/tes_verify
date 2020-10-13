@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
     color:"black"
   },
   signUpText:{
-    color:"white"
+    color:"white",
+    fontSize: 18,
+    fontWeight: "bold"
   }
 });
 

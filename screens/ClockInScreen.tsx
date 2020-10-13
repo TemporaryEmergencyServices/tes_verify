@@ -160,7 +160,6 @@ export default function ClockInScreen() {
         <Text style={styles.clockInOutText}>Resume</Text>
       </TouchableOpacity>
     </View>
-
   )}
 }
 

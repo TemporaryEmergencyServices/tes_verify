@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert } from 'react-native';
+import { StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
 import firebase from '../firebase.js'
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -32,10 +32,10 @@ export default function SettingsScreen({ navigation }) {
   }
   return (
     <View style={styles.container}>
-      <Button title="Logout" onPress={handleLogout}></Button>
-      <Text>Email: {user.email}</Text>
-      <Text style={styles.title}>Change your profile info here! But not yet. Check back next sprint:)</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <Text style={styles.title}> {user.email}</Text>
+      <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+        <Text style={styles.signOutText}>Sign Out</Text>
+      </TouchableOpacity>   
     </View>
   );
 }
@@ -50,10 +50,30 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+    color: "#1C5A7D"
   },
   separator: {
     marginVertical: 30,
     height: 1,
     width: '80%',
   },
+  signOutBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
+  },
+  signOutText:{
+    marginTop:10,
+    color:"white",
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontWeight :'bold',
+    fontSize: 18, 
+    paddingBottom: 10
+  }
 });
