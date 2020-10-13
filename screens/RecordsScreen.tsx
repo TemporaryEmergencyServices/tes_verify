@@ -62,7 +62,7 @@ export default function RecordsScreen() {
       { 
         loading ? 
           <View style={styles.centerContainer}>
-            <ActivityIndicator size="large" color="white" />
+            <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
           <FlatList
@@ -85,6 +85,7 @@ export default function RecordsScreen() {
             showsVerticalScrollIndicator={false}
           />
       }
+            <View style={styles.bigSpace}></View>
     </View>
   )
 }
@@ -155,6 +156,9 @@ const styles = StyleSheet.create({
   }, 
   space: {
     margin: 15
+  }, 
+  bigSpace: {
+    margin: 100
   }, 
   pending: {
     color: 'orange'
