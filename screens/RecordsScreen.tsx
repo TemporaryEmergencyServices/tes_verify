@@ -60,7 +60,13 @@ export default function RecordsScreen() {
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
       <TouchableOpacity style={styles.exportBtn}>
           <Text style={styles.exportText} >Export as PDF</Text>
-      </TouchableOpacity>  
+      </TouchableOpacity> 
+        <View style={styles.row}>
+          <Text>Date</Text>
+          <Text>In</Text>
+          <Text>Out</Text>
+        </View>
+      
       { 
         loading ? 
           <ActivityIndicator size="large" color="white" />
@@ -69,23 +75,28 @@ export default function RecordsScreen() {
             data={records}
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
-                <View style={styles.hairline}></View>
-                <Text style={styles.date}>Date: {item.date}</Text>
-                <Text>In Time: {item.in_time}, {item.in_approved}</Text>
-                <Text>Out Time: {item.out_time}, {item.out_approved}</Text>
-                <View style={styles.hairline}></View>
+                <View style={styles.row}>
+                  <Text style={styles.date}>{item.date}</Text>
+                  <View>
+                    <Text>{item.in_time}</Text>
+                    <Text>{item.in_approved}</Text>
+                  </View>
+                  <View>
+                    <Text>{item.out_time}</Text>
+                    <Text>{item.out_approved}</Text>
+                  </View>
+                </View>
               </View>
             )}
             showsVerticalScrollIndicator={false}
           />
       }
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -133,4 +144,9 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 10, 
     margin: 2
   },
-});
+  row: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-around', 
+  }, 
+})
