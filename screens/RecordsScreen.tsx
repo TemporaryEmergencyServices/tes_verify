@@ -61,12 +61,11 @@ export default function RecordsScreen() {
       <TouchableOpacity style={styles.exportBtn}>
           <Text style={styles.exportText} >Export as PDF</Text>
       </TouchableOpacity> 
-        <View style={styles.row}>
-          <Text>Date</Text>
-          <Text>In</Text>
-          <Text>Out</Text>
-        </View>
-      
+      <View style={styles.row}>
+        <Text style={styles.header}>Date</Text>
+        <Text style={styles.header}>In</Text>
+        <Text style={styles.header}>Out</Text>
+      </View>
       { 
         loading ? 
           <ActivityIndicator size="large" color="white" />
@@ -76,7 +75,7 @@ export default function RecordsScreen() {
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
                 <View style={styles.row}>
-                  <Text style={styles.date}>{item.date}</Text>
+                  <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
                     <Text>{item.in_approved}</Text>
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     marginTop:0,
     marginBottom:10,
   },
-  date: {
+  header: {
     fontWeight: 'bold', 
     fontSize: 20
   }, 
