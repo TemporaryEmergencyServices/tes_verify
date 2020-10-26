@@ -60,9 +60,6 @@ export default function SignUpScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
-      <TouchableOpacity>
-        <Text style={styles.forgot}>Forgot Password?</Text>
-      </TouchableOpacity>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
