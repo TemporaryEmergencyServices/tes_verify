@@ -27,7 +27,7 @@ export default function SignUpScreen({  navigation  }) {
   const handleSignUp = () => {
     if (passwordState.length < 6) {
       Alert.alert(
-        "Error",
+        "Alert",
         "Password must be at least 6 characters long.",
         [
           { text: "OK", onPress: () => console.log("OK Pressed") }
