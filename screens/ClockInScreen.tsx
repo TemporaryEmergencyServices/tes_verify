@@ -33,6 +33,7 @@ export default function ClockInScreen() {
     const clockInsRef = firebase.firestore().collection('ClockInsOuts');
     clockInsRef.where('userEmail', '==', userEmail)
                .where('currentlyClockedIn', '==', true)
+    
     /*
     await clockInsRef.orderByChild('currently_clocked_in').equalTo(true).limitToLast(1).on("child_added", function(snapshot) {
       var session = snapshot.val()

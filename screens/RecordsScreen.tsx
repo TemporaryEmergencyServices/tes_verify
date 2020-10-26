@@ -7,6 +7,7 @@ import firebase from '../firebase.js'
 import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
+import { firestore } from 'firebase';
 
 /*
 Inspired By:
@@ -23,7 +24,7 @@ export default function RecordsScreen() {
   const [records, setRecords] = useState([] as any)
 
   useEffect(() => {
-    var ref = firebase.database().ref("ClockInsOuts/")
+    /*var ref = firebase.database().ref("ClockInsOuts/")
     let isCancelled = false
     ref.once("value", function(snapshot){
       const help = [] as any;
@@ -40,7 +41,28 @@ export default function RecordsScreen() {
         setRecords(help) 
         setLoading(false)
       }
-    });
+    });*/
+
+    let isCancelled = false
+    useEffect(() => {
+      const subscriber = firestore()
+        .collection('ClockInsOuts')
+        .where('userid' , '==', userEmail)
+        .onSnapshot(querySnapshot => {
+          const helperRecords = [] as any;
+
+          querySnapshot.forEach(documentSnapshot => {
+            helperRecords.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id
+            });
+          });
+          setRecords(helperRecords);
+      });
+
+      //unsubscribe
+      return () => subscriber();
+    }, []);
 
     return () => {isCancelled = true}
   });
