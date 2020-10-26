@@ -25,20 +25,20 @@ export default function SignUpScreen({  navigation  }) {
   const dispatch = useDispatch()
   
   const handleSignUp = () => {
-     firebase.auth()
-       .createUserWithEmailAndPassword(emailState,passwordState)
-       .then((response) => dispatch(signup(response.user)))
-       .then(goToSignIn)
-       .catch(error => {
-          Alert.alert(
-            "Error",
-            error.message,
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ],
-            { cancelable: false }
-          );
-       })
+    firebase.auth()
+      .createUserWithEmailAndPassword(emailState,passwordState)
+      .then((response) => dispatch(signup(response.user)))
+      .then(goToSignIn)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
     }
 
 
