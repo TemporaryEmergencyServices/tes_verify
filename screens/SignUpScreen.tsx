@@ -25,6 +25,17 @@ export default function SignUpScreen({  navigation  }) {
   const dispatch = useDispatch()
   
   const handleSignUp = () => {
+    if (passwordState.length < 6) {
+      Alert.alert(
+        "Error",
+        "Password must be at least 6 characters long.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+      return;
+    }
     firebase.auth()
       .createUserWithEmailAndPassword(emailState,passwordState)
       .then((response) => dispatch(signup(response.user)))
