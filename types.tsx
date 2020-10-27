@@ -7,6 +7,7 @@ export type BottomTabParamList = {
   ClockIn: undefined;
   Records: undefined;
   Profile: undefined;
+  ManagerApprove: undefined;
   //Ben added for testing auth. TODO: remove
   SignIn: undefined;
   SignUp: undefined;
@@ -23,6 +24,10 @@ export type SettingsParamList = {
 export type RecordsParamList = {
   RecordsScreen: undefined;
 };
+
+export type ManagerApproveParamList = {
+  ManagerApproveScreen: undefined; 
+}
 
 //Ben added for testing auth. TODO: remove
 export type SignInParamList = {

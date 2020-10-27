@@ -5,12 +5,13 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
+import ManagerApproveScreen from '../screens/ManagerApproveScreen'
 import ClockInScreen from '../screens/ClockInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import RecordsScreen from '../screens/RecordsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, SignInParamList, SignUpParamList} from '../types';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, SignInParamList, SignUpParamList} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -38,6 +39,16 @@ export default function BottomTabNavigator() {
       <BottomTab.Screen
         name="Records"
         component={RecordsNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+      {/* MANAGER SCREENS
+          TODO: modify to conditional rendering based on redux roles
+      */}
+      <BottomTab.Screen
+        name="ManagerApprove"
+        component={ManagerApproveNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
@@ -119,6 +130,20 @@ function RecordsNavigator() {
       />
     </RecordsStack.Navigator>
   );
+}
+
+const ManagerApproveStack = createStackNavigator<ManagerApproveParamList>()
+
+function ManagerApproveNavigator() {
+  return (
+    <ManagerApproveStack.Navigator>
+      <ManagerApproveStack.Screen
+        name="ManagerApproveScreen"
+        component={ManagerApproveScreen}
+        options={{ headerShown: false }}
+      />
+    </ManagerApproveStack.Navigator>
+  )
 }
 
 {/* Ben added SignInNavigator and SignUpNavigator here for easy testing of sign in and sign up. TODO: remove them */}

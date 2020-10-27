@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-n
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
+import '@firebase/firestore';
 
 import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
@@ -28,12 +29,17 @@ export default function ClockInScreen() {
 
   const determineAlreadyClockedIn = async () => {
     var isAlreadyClockedIn = false
-    const clockInsRef = firebase.database().ref('ClockInsOuts/')
+    //const clockInsRef = firebase.database().ref('ClockInsOuts/')
+    const clockInsRef = firebase.firestore().collection('ClockInsOuts');
+    clockInsRef.where('userEmail', '==', userEmail)
+               .where('currentlyClockedIn', '==', true)
+    
+    /*
     await clockInsRef.orderByChild('currently_clocked_in').equalTo(true).limitToLast(1).on("child_added", function(snapshot) {
       var session = snapshot.val()
       if (session.userid == userEmail) {
         setClockedIn(true)
-        setInTime(session.in_time)
+        setInTime(session.in_time) 
         setUniqueClockID(snapshot.key)
         isAlreadyClockedIn = true
       }
@@ -50,6 +56,7 @@ export default function ClockInScreen() {
       );  
 
     }
+    */
   }
 
   //var isAlreadyClockedIn = determineAlreadyClockedIn()
@@ -86,18 +93,18 @@ export default function ClockInScreen() {
   }
 
   const writeFBClockIn = async (date: any, time: any) => {
-    var snap = await firebase.database().ref('ClockInsOuts').push({
+    var snap = await firebase.firestore().collection('ClockInsOuts').add({
       userid: userEmail,
       in_time: time,
       date: date,
       in_approved: "pending",
       currently_clocked_in: true,
     });
-    setUniqueClockID(snap.key)
+    setUniqueClockID(snap.id)
   }
 
   const writeFBClockOut = async (date: any, time: any) => {
-    var snap = await firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
+    var snap = await firebase.firestore().collection('ClockInsOuts').doc(uniqueClockID).update({
       out_time: time,
       out_approved: "pending",
       currently_clocked_in: false,

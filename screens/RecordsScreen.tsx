@@ -22,7 +22,11 @@ export default function RecordsScreen() {
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
 
-  useEffect(() => {
+  //OLD USE EFFECT WITH REALTIME DATABASE
+  //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
+  //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
+  
+  /*  useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
     let isCancelled = false
     ref.once("value", function(snapshot){
@@ -43,7 +47,25 @@ export default function RecordsScreen() {
     });
 
     return () => {isCancelled = true}
-  });
+  }); */
+
+  useEffect(() => {
+    const subscriber = firebase.firestore()
+       .collection('ClockInsOuts')
+       .where('userid' , '==', userEmail)
+       .onSnapshot(querySnapshot => {
+         const helperRecords = [] as any;
+         querySnapshot.forEach(documentSnapshot => {
+           helperRecords.push({
+           ...documentSnapshot.data(),
+           key: documentSnapshot.id
+           });
+         });
+         setRecords(helperRecords);
+         setLoading(false);
+     });
+    return () => subscriber();
+  } ,[]);
 
   return (
     <View style={styles.container}>
@@ -71,11 +93,11 @@ export default function RecordsScreen() {
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
-                    <Text style={renderApproved(item.in_approved)}>{item.in_approved}</Text>
+                    <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
-                    <Text style={renderApproved(item.out_approved)}>{item.out_approved}</Text>
+                    <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                   </View>
                 </View>
               </View>
@@ -88,7 +110,7 @@ export default function RecordsScreen() {
   )
 }
 
-function renderApproved(status: String) {
+function renderRecordStatus(status: String) {
   if (status === "approved") {
     return styles.approved
   } else if (status === "pending") {
