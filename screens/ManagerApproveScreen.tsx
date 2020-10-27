@@ -63,16 +63,28 @@ export default function ManagerApproveScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Manager Approvals</Text>
-      <View style={styles.space}></View>
-      <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
-        <Text style={styles.exportText}>Approve All</Text>
-      </TouchableOpacity>
-      <View style={styles.space}></View>
-      <View style={styles.row}>
-        <Text style={styles.header}>Date</Text>
-        <Text style={styles.header}>In</Text>
-        <Text style={styles.header}>Out</Text>
-      </View>
+      {/* TODO: show "no pending records" when records empty. 
+          for some reason, it's currently populating records and then 
+          immediately become empty currently
+      */}
+      {/* {
+        records != [] ?
+          <>  */}
+            <View style={styles.space}></View>
+            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
+              <Text style={styles.exportText}>Approve All</Text>
+            </TouchableOpacity>
+            <View style={styles.space}></View>
+            <View style={styles.row}>
+              <Text style={styles.header}>Date</Text>
+              <Text style={styles.header}>In</Text>
+              <Text style={styles.header}>Out</Text>
+            </View>
+          {/* </>
+        :
+          <Text style={styles.container}>No Pending Records!</Text>
+      } */}
+      
       { 
         loading ? 
           <View style={styles.centerContainer}>
