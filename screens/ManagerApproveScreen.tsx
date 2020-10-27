@@ -12,10 +12,14 @@ export default function ClockInScreen() {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
+  const [clockRef, setClockRef] = useState({})
 
   useEffect(() => {
     const subscriber = firebase.firestore()
     .collection('ClockInsOuts')
+    setClockRef(subscriber)
+
+    const query = subscriber
     .where('in_approved' , '==', 'pending')
     .where('out_approved', '==', 'pending')
     .onSnapshot(querySnapshot => {
@@ -28,8 +32,8 @@ export default function ClockInScreen() {
       });
       setRecords(helperRecords);
       setLoading(false);
-  });
-  return () => subscriber();
+    });
+    return () => query();
   }, [])
 
   /*
@@ -52,6 +56,14 @@ export default function ClockInScreen() {
       </View>
     )
   }
+}
+
+function approve(id: String) {
+
+}
+
+function deny(id: String) {
+
 }
 
 const styles = StyleSheet.create({
