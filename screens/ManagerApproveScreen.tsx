@@ -62,7 +62,11 @@ export default function ManagerApproveScreen() {
  
   return (
     <View style={styles.container}>
-      <Text>Manager Approvals</Text>
+      <Text style={styles.titleFlatList}>Manager Approvals</Text>
+      <View style={styles.space}></View>
+      <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
+        <Text style={styles.exportText}>Approve All</Text>
+      </TouchableOpacity>
       <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
@@ -79,6 +83,9 @@ export default function ManagerApproveScreen() {
             data={records}
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
+                <View style={styles.row}>
+                  <Text style={styles.space}>{item.userid}</Text>
+                </View>
                 <View style={styles.row}>
                   <Text>{item.date}</Text>
                   <View>
@@ -110,6 +117,16 @@ export default function ManagerApproveScreen() {
         }
     </View>
   )
+}
+
+// FIXME: this may even approve those records that 
+// are no longer displaying or have been previously denied, 
+// must test this
+function approveAll(records: any, clockRef: any) {
+  records.forEach(record => {
+    approve(record.key, "in", clockRef)
+    approve(record.key, "out", clockRef)
+  })
 }
 
 function approve(key: String, type: String, clockRef: any) {
@@ -156,6 +173,30 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', 
     fontSize: 20
   }, 
+  titleFlatList: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    textAlign: 'center',
+    paddingTop: 60,
+    paddingBottom: 15,
+    color: "#1C5A7D",
+  },
+  exportText:{
+    color:"white",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+  exportBtn:{
+    width:"80%",
+    backgroundColor:"#13AA52",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:0,
+    marginBottom:10,
+  },
   itemStyle: {
     height: 100,
     alignItems: 'center', 
