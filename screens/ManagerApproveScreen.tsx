@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -42,34 +42,109 @@ export default function ClockInScreen() {
     - allow for option to approve/deny
     - allow for editing (separate screen?)
   */
-  if (loading) {
-    return (
-      <View>
-        <Text>Sorry, I'm still loading...</Text>
-      </View>
-    )
-  } else {
+ 
     return (
       <View style={styles.container}>
         <Text>Manager Approvals</Text>
-        <Text>{JSON.stringify(records)}</Text>
+        <View style={styles.space}></View>
+        <View style={styles.row}>
+          <Text style={styles.header}>Date</Text>
+          <Text style={styles.header}>In</Text>
+          <Text style={styles.header}>Out</Text>
+        </View>
+        {/* format pending with buttons to approve/deny/edit */}
+        {/* <Text>{JSON.stringify(records)}</Text> */}
+        { 
+          loading ? 
+            <View style={styles.centerContainer}>
+              <ActivityIndicator size="large" color="#E11383" />
+            </View>
+          :
+            <FlatList
+              data={records}
+              renderItem={({ item }) => (
+                <View style={styles.itemStyle}>
+                  <View style={styles.row}>
+                    <Text>{item.date}</Text>
+                    <View>
+                      <Text>{item.in_time}</Text>
+                      <Text style={styles.pending}>{item.in_approved}</Text>
+                    </View>
+                    <View>
+                      <Text>{item.out_time}</Text>
+                      <Text style={styles.pending}>{item.out_approved}</Text>
+                    </View>
+                  </View>
+                </View>
+              )}
+              showsVerticalScrollIndicator={false}
+            />
+          }
       </View>
     )
+}
+
+function approve(key: String, approval_type: String, clockRef: any) {
+  if (approval_type == "in") {
+    clockRef.doc(key).set({
+      in_approved: "approved"
+    })
+  } else {
+    clockRef.doc(key).set({
+      out_approved: "approved"
+    })
   }
 }
 
-function approve(id: String) {
-
-}
-
-function deny(id: String) {
-
+function deny(key: String, approval_type: String, clockRef: any) {
+  if (approval_type == "in") {
+    clockRef.doc(key).set({
+      in_approved: "denied"
+    })
+  } else {
+    clockRef.doc(key).set({
+      out_approved: "denied"
+    })
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    justifyContent: 'center',
+  }, 
+  header: {
+    fontWeight: 'bold', 
+    fontSize: 20
+  }, 
+  itemStyle: {
+    height: 100,
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  row: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-around', 
+  }, 
+  space: {
+    margin: 15
+  }, 
+  bigSpace: {
+    margin: 100
+  }, 
+  pending: {
+    color: 'orange'
+  }, 
+  approved: {
+    color: 'green'
+  }, 
+  denied: {
+    color: 'red'
+  }, 
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
     justifyContent: 'center',
   }
 });

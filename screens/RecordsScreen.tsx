@@ -93,11 +93,11 @@ export default function RecordsScreen() {
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
-                    <Text style={renderApproved(item.in_approved)}>{item.in_approved}</Text>
+                    <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
-                    <Text style={renderApproved(item.out_approved)}>{item.out_approved}</Text>
+                    <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                   </View>
                 </View>
               </View>
@@ -110,7 +110,7 @@ export default function RecordsScreen() {
   )
 }
 
-function renderApproved(status: String) {
+function renderRecordStatus(status: String) {
   if (status === "approved") {
     return styles.approved
   } else if (status === "pending") {
