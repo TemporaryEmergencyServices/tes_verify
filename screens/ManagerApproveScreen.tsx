@@ -20,8 +20,22 @@ export default function ManagerApproveScreen() {
     .collection('ClockInsOuts')
     setClockRef(subscriber)
 
-    const query = subscriber
+    const clockInQuery = subscriber
     .where('in_approved' , '==', 'pending')
+    // .where('out_approved', '==', 'pending')
+    .onSnapshot(querySnapshot => {
+      const helperRecords = [] as any;
+      querySnapshot.forEach(documentSnapshot => {
+          helperRecords.push({
+          ...documentSnapshot.data(),
+          key: documentSnapshot.id
+        });
+      });
+      setRecords(helperRecords);
+      setLoading(false);
+    });
+
+    const clockOutQuery = subscriber
     .where('out_approved', '==', 'pending')
     .onSnapshot(querySnapshot => {
       const helperRecords = [] as any;
@@ -34,7 +48,9 @@ export default function ManagerApproveScreen() {
       setRecords(helperRecords);
       setLoading(false);
     });
-    return () => query();
+
+    () => clockInQuery()
+    return () => clockOutQuery();
   }, [])
 
   /*
@@ -67,7 +83,7 @@ export default function ManagerApproveScreen() {
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
-                    <Text style={styles.pending}>{item.in_approved}</Text>
+                    <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
                     {/* TODO: modularize approve/deny component */}
                     <TouchableOpacity onPress={() => {approve(item.key, "in", clockRef)}}>
                       <Text style={styles.approved}>approve</Text>
@@ -78,7 +94,7 @@ export default function ManagerApproveScreen() {
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
-                    <Text style={styles.pending}>{item.out_approved}</Text>
+                    <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                     <TouchableOpacity onPress={() => {approve(item.key, "out", clockRef)}}>
                       <Text style={styles.approved}>approve</Text>
                     </TouchableOpacity> 
@@ -117,6 +133,16 @@ function deny(key: String, type: String, clockRef: any) {
     clockRef.doc(key).set({
       out_approved: "denied"
     }, { merge: true })
+  }
+}
+
+function renderRecordStatus(status: String) {
+  if (status === "approved") {
+    return styles.approved
+  } else if (status === "pending") {
+    return styles.pending
+  } else if (status === "denied") {
+    return styles.denied
   }
 }
 
