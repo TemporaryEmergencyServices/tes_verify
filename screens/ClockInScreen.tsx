@@ -8,6 +8,7 @@ import '@firebase/firestore';
 import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
+import SettingsScreen from './SettingsScreen.js';
 
 export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
@@ -24,9 +25,31 @@ export default function ClockInScreen() {
   const userEmail = user.email
 
   useEffect(() => {
+    const subscriber = firebase.firestore()
+       .collection('ClockInsOuts')
+       .where('userid' , '==', userEmail)
+       .where('currently_clocked_in', '==', true)
+       .limit(1)
+       .onSnapshot(querySnapshot => {
+         if(querySnapshot.empty) {
+          setClockedIn(false)
+         }
+         else{
+           const queryDocumentSnapshot = querySnapshot.docs[0];
+           const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+           setUniqueClockID(queryDocumentSnapshot.id)
+           setInTime(queryDocumentSnapshotData.in_time)
+           setClockedIn(true)
+           //do stuff for resume - set clocked in to true
+           //set in time
+           //set unique clock id
+         }
+     });
+    return () => subscriber();
+  } ,[]);
 
-  }, [])
 
+  /*
   const determineAlreadyClockedIn = async () => {
     var isAlreadyClockedIn = false
     //const clockInsRef = firebase.database().ref('ClockInsOuts/')
@@ -34,7 +57,7 @@ export default function ClockInScreen() {
     clockInsRef.where('userEmail', '==', userEmail)
                .where('currentlyClockedIn', '==', true)
     
-    /*
+    
     await clockInsRef.orderByChild('currently_clocked_in').equalTo(true).limitToLast(1).on("child_added", function(snapshot) {
       var session = snapshot.val()
       if (session.userid == userEmail) {
@@ -56,8 +79,9 @@ export default function ClockInScreen() {
       );  
 
     }
-    */
+    
   }
+  */
 
   //var isAlreadyClockedIn = determineAlreadyClockedIn()
 
@@ -161,13 +185,16 @@ export default function ClockInScreen() {
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
-      <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockInResumeButton]} onPress={determineAlreadyClockedIn}>
-        <Text style={styles.clockInOutText}>Resume</Text>
-      </TouchableOpacity>
+      
     </View>
   )}
 }
+
+/* was resume button 
+<TouchableOpacity 
+        style={[styles.clockInOutButton, styles.clockInResumeButton]} onPress={determineAlreadyClockedIn}>
+        <Text style={styles.clockInOutText}>Resume</Text>
+      </TouchableOpacity> */
 
 const styles = StyleSheet.create({
   container: {
