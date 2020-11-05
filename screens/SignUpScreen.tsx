@@ -54,6 +54,8 @@ export default function SignUpScreen({  navigation  }) {
           { cancelable: false }
         );
       })
+
+      //record in the user collection will be created
     }
 
 
