@@ -25,6 +25,7 @@ export default function ClockInScreen() {
   const userEmail = user.email
 
   useEffect(() => {
+    let unmounted = false
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
@@ -45,7 +46,7 @@ export default function ClockInScreen() {
            //set unique clock id
          }
      });
-    return () => subscriber();
+    return () => {subscriber(); unmounted = true};
   } ,[]);
 
 
