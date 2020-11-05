@@ -28,6 +28,7 @@
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
     "firebase": "7.9.0",
+    "firebase-admin": "^9.3.0",
     "pushid": "^1.0.0",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
@@ -39,6 +40,7 @@
     "react-native-screens": "~2.9.0",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.1",
+    "react-redux-firebase": "^3.7.0",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0"
   },

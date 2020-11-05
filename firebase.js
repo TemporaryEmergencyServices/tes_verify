@@ -24,7 +24,8 @@ var firebaseConfig = {
     storageBucket: env.DEV_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: env.DEV_FIREBASE_MESSAGING_SENDER_ID,
     appId: env.DEV_FIREBASE_APP_ID,
-    measurementId: env.DEV_FIREBASE_MEASUREMENT_ID
+    measurementId: env.DEV_FIREBASE_MEASUREMENT_ID,
+    userProfile: 'users'
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
