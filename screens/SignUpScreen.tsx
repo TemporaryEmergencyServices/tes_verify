@@ -5,6 +5,8 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import { useDispatch } from 'react-redux'
 import { signup } from '../actions'
 
+import PassMeter from "react-native-passmeter";
+
 /*
  * Code is loosely based on the following tutorials: 
  * https://reactnativemaster.com/react-native-login-screen-tutorial
@@ -14,10 +16,12 @@ import { signup } from '../actions'
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 
-export default function SignUpScreen({  navigation  }) {
-  
+const 
+  MIN_PASSWORD_LEN = 6,
+  MAX_PASSWORD_LEN = 15,
+  PASSWORD_LABELS = ["Too Short", "Weak", "Fair", "Strong", "Secure"];
 
-  
+export default function SignUpScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
@@ -67,10 +71,17 @@ export default function SignUpScreen({  navigation  }) {
         <TextInput  
           secureTextEntry
           style={styles.inputText}
+          maxLength={MAX_PASSWORD_LEN}
           placeholder="Password..." 
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
+      <PassMeter
+          showLabels
+          password={passwordState}
+          maxLength={MAX_PASSWORD_LEN}
+          minLength={MIN_PASSWORD_LEN}
+          labels={PASSWORD_LABELS}/>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
@@ -139,5 +150,13 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize: 18,
     fontWeight: "bold"
+  },
+  input: {
+    margin: 5,
+    padding: 6,
+    borderRadius: 8,
+    marginBottom: 8,
+    paddingHorizontal: 10,
+    backgroundColor: "#eceff1"
   }
 })
