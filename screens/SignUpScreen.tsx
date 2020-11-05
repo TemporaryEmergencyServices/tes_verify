@@ -1,7 +1,7 @@
 import firebase from '../firebase.js'
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
-import PasswordStrengthChecker from 'react-native-password-strength-checker';
+
 import { useDispatch } from 'react-redux'
 import { signup } from '../actions'
 
@@ -15,29 +15,44 @@ import { signup } from '../actions'
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 
 export default function SignUpScreen({  navigation  }) {
+  
+
+  
   const [emailState, setEmailState] = useState('')
-  const [passwordState, setPasswordState] = useState({password: '', isValid: false})
+  const [passwordState, setPasswordState] = useState('')
 
   const goToSignIn = () => navigation.replace('SignInScreen')
   const dispatch = useDispatch()
+  
   const handleSignUp = () => {
-    if (passwordState.isValid) {
-      firebase.auth()
-        .createUserWithEmailAndPassword(emailState,passwordState.password)
-        .then((response) => dispatch(signup(response.user)))
-        .then(goToSignIn)
-        .catch(error => {
-          Alert.alert(
-            "Error",
-            error.message,
-            [
-              { text: "OK", onPress: () => console.log("OK Pressed") }
-            ],
-            { cancelable: false }
-          );
-        })
-      }
+    if (passwordState.length < 6) {
+      Alert.alert(
+        "Alert",
+        "Password must be at least 6 characters long.",
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+      return;
     }
+    firebase.auth()
+      .createUserWithEmailAndPassword(emailState,passwordState)
+      .then((response) => dispatch(signup(response.user)))
+      .then(goToSignIn)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
+    }
+
+
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
@@ -49,23 +64,13 @@ export default function SignUpScreen({  navigation  }) {
           onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
-        <Text>{"\n"}</Text>
-        <PasswordStrengthChecker
+        <TextInput  
           secureTextEntry
           style={styles.inputText}
           placeholder="Password..." 
           placeholderTextColor="white"
-          minLength={6}
-          ruleNames="symbols|words"
-          strengthLevels={strengthLevels}
-          tooShort={tooShort}
-          minLevel={2}
-          barWidthPercent={65}
-          showBarOnEmpty={true}
-          barColor="#ccc"
-          onChangeText={(text, valid) => setPasswordState({password: text, isValid: valid })}/>
+          onChangeText={text => setPasswordState(text)}/>
       </View>
-
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
@@ -76,47 +81,6 @@ export default function SignUpScreen({  navigation  }) {
   );
   
 }
-
-// Define strength level list
-const strengthLevels = [
-  {
-    label: 'Weak',
-    labelColor: '#fff',
-    widthPercent: '33',
-    innerBarColor: '#fe6c6c'
-  },
-  {
-    label: 'Weak',
-    labelColor: '#fff',
-    widthPercent: '33',
-    innerBarColor: '#fe6c6c'
-  },
-  {
-    label: 'Fair',
-    labelColor: '#fff',
-    widthPercent: '67',
-    innerBarColor: '#feb466'
-  },
-  {
-    label: 'Fair',
-    labelColor: '#fff',
-    widthPercent: '67',
-    innerBarColor: '#feb466'
-  },
-  {
-    label: 'Strong',
-    labelColor: '#fff',
-    widthPercent: '100',
-    innerBarColor: '#6cfeb5'
-  }
-];
-
-// Define too short object
-const tooShort = {
-  enabled: true,
-  label: 'Too short',
-  labelColor: 'red'
-};
 
 const styles = StyleSheet.create({
   container: {
