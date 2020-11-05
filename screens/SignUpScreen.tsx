@@ -20,10 +20,8 @@ const
 export default function SignUpScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-  const goToSignIn = () => {navigation.replace('SignInScreen'); console.log("hello") }
-  //const createUserRecord = (username) => {
-  //  console.log(username)
-  //}
+  const goToSignIn = () => {navigation.replace('SignInScreen') }
+
   const dispatch = useDispatch()  
   const handleSignUp = () => {
     if (passwordState.length < 6) {
