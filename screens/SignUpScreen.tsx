@@ -76,12 +76,16 @@ export default function SignUpScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
-      <PassMeter
-          showLabels
-          password={passwordState}
-          maxLength={MAX_PASSWORD_LEN}
-          minLength={MIN_PASSWORD_LEN}
-          labels={PASSWORD_LABELS}/>
+      <View>
+        {passwordState.length > 0 ? 
+          <PassMeter
+            showLabels
+            password={passwordState}
+            maxLength={MAX_PASSWORD_LEN}
+            minLength={MIN_PASSWORD_LEN}
+            labels={PASSWORD_LABELS}/>
+          : null}
+      </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
