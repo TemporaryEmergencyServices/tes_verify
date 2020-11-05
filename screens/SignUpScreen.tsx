@@ -7,27 +7,21 @@ import { signup } from '../actions'
 
 import PassMeter from "react-native-passmeter";
 
-/*
- * Code is loosely based on the following tutorials: 
- * https://reactnativemaster.com/react-native-login-screen-tutorial
- * https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574#cbbf
-*/
-
-//gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
-//unsure of other impacts of having that line, so uncommenting may be a bad idea
-
 const 
   MIN_PASSWORD_LEN = 6,
   MAX_PASSWORD_LEN = 15,
   PASSWORD_LABELS = ["Too Short", "Weak", "Fair", "Strong", "Secure"];
 
+/*
+ * Code is loosely based on the following tutorials: 
+ * https://reactnativemaster.com/react-native-login-screen-tutorial
+ * https://heartbeat.fritz.ai/how-to-build-an-email-authentication-app-with-firebase-firestore-and-react-native-a18a8ba78574#cbbf
+ */
 export default function SignUpScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-
   const goToSignIn = () => navigation.replace('SignInScreen')
-  const dispatch = useDispatch()
-  
+  const dispatch = useDispatch()  
   const handleSignUp = () => {
     if (passwordState.length < 6) {
       Alert.alert(
@@ -57,8 +51,6 @@ export default function SignUpScreen({  navigation  }) {
 
       //record in the user collection will be created
     }
-
-
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
@@ -78,12 +70,16 @@ export default function SignUpScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setPasswordState(text)}/>
       </View>
-      <PassMeter
-          showLabels
-          password={passwordState}
-          maxLength={MAX_PASSWORD_LEN}
-          minLength={MIN_PASSWORD_LEN}
-          labels={PASSWORD_LABELS}/>
+      <View>
+        { passwordState.length > 0 
+          ? <PassMeter
+              showLabels
+              password={passwordState}
+              maxLength={MAX_PASSWORD_LEN}
+              minLength={MIN_PASSWORD_LEN}
+              labels={PASSWORD_LABELS}/>
+          : null }
+      </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handleSignUp}>
         <Text style={styles.signUpText} >Sign up</Text>
       </TouchableOpacity>
