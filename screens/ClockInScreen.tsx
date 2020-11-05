@@ -180,7 +180,7 @@ export default function ClockInScreen() {
   else {
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> If you are checking in, press the clock in button. Alternatively, if you have already checked in today, select resume session. </Text>
+      <Text style={styles.instructionsText}> If you are checking in, press the clock in button! </Text>
       <TouchableOpacity 
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
