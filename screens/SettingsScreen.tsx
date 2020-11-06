@@ -12,9 +12,13 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const dispatch = useDispatch()
 
+  const goToApply = () => navigation.replace('ApplyScreen')
 
   const goToSignIn = () => navigation.replace('SignInScreen')
 
+  const handleApply = () => {
+    goToApply()
+  }
   const handleLogout = () => {
     firebase.auth().signOut()
     .then(() => dispatch(logout()))
@@ -31,11 +35,17 @@ export default function SettingsScreen({ navigation }) {
     })
   }
   return (
+    
     <View style={styles.container}>
+      
       <Text style={styles.title}> {user.email}</Text>
       <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
         <Text style={styles.signOutText}>Sign Out</Text>
-      </TouchableOpacity>   
+      </TouchableOpacity>  
+
+      <TouchableOpacity style={styles.signOutBtn} onPress = {handleApply}>
+        <Text style={styles.signOutText}>Apply to be a volunteer</Text>
+      </TouchableOpacity> 
     </View>
   );
 }

@@ -1,12 +1,13 @@
 import firebase from '../firebase.js'
 import '@firebase/firestore'
 import React, { useState } from 'react';
+
+import { useSelector, RootStateOrAny } from 'react-redux'
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 import { useDispatch } from 'react-redux'
 
 export default function ApplyScreen({  navigation  }) {
-  const [emailState, setEmailState] = useState('')
   const [firstNameState,setFirstNameState] = useState('')
   const[lastNameState,setLastNameState] = useState('')
   const[phoneState,setPhoneState] = useState('')
@@ -26,24 +27,45 @@ export default function ApplyScreen({  navigation  }) {
   const[appApprovedByDate,setAppApprovedByDateState] = useState('')
   const[appSubmitDate,setAppSubmitDate] = useState('')
   
-
+  const user = useSelector((state: RootStateOrAny) => state.user)
+  const userEmail = user.email
 
   const dispatch = useDispatch()  
-  const handleApply = () => {
-
+  const handleApply = async () => {
+    const today = new Date()
+    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+     // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const dateTime = date+" " + time
+    setAppSubmitDate(dateTime)
+    var snap = await firebase.firestore().collection('volunteers').add({
+            userid: userEmail,
+            firstName: firstNameState,
+            lastName: lastNameState,
+            phone: phoneState,
+            sex: sexState,
+            ethnicity: ethnicityState,
+            emergencyName1: emergencyName1State,
+            emergencyPhone1: emergencyPhone1State,
+            emergencyName2: emergencyName2State,
+            emergencyPhone2: emergencyPhone2State,
+            addressLine1: address1State,
+            addressLine2: address2State,
+            addressZip: addressZip,
+            addressCity: addressCity,
+            addressState: addressState,
+            approved: appApproved,
+            approvedBy: appApprovedBy,
+            approvedDate: appApprovedByDate,
+            appSubmitDate: appSubmitDate
+ 
+    });
   }//do nothing for now
     
 
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
-      <View style={styles.inputView} >
-        <TextInput  
-          style={styles.inputText}
-          placeholder="Email..." 
-          placeholderTextColor="white"
-          onChangeText={text => setEmailState(text)}/>
-      </View>
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
