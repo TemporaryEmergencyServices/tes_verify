@@ -1,4 +1,5 @@
 import firebase from '../firebase.js'
+import '@firebase/firestore'
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 
@@ -20,8 +21,14 @@ const
 export default function SignUpScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
+  
   const goToSignIn = () => {navigation.replace('SignInScreen') }
-
+  const setRole = async (email : String, role: String) => {
+    var snap = await firebase.firestore().collection('roles').add({
+      username: email,
+      role: role
+    });
+  }
   const dispatch = useDispatch()  
   const handleSignUp = () => {
     if (passwordState.length < 6) {
@@ -38,6 +45,7 @@ export default function SignUpScreen({  navigation  }) {
     firebase.auth()
       .createUserWithEmailAndPassword(emailState,passwordState)
       .then((response) => dispatch(signup(response.user)))
+      .then(() => setRole(emailState,"volunteer"))
       .then(goToSignIn)
       .catch(error => {
         Alert.alert(
