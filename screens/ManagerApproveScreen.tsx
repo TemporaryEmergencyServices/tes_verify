@@ -15,7 +15,34 @@ export default function ManagerApproveScreen() {
   const [records, setRecords] = useState([] as any)
   const [clockRef, setClockRef] = useState({})
 
+  const[hasAccess,setHasAccess] = useState(false)
+
+
+  const user = useSelector((state: RootStateOrAny) => state.user)
+  const userEmail = user.email
+
   useEffect(() => {
+    let unmounted = false
+    const roleSubscriber = firebase.firestore()
+       .collection('roles')
+       .where('username' , '==', userEmail)
+       .limit(1)
+       .onSnapshot(querySnapshot => {
+         if(querySnapshot.empty) {
+          setHasAccess(false)
+         }
+         else{
+           const queryDocumentSnapshot = querySnapshot.docs[0];
+           const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+           if (queryDocumentSnapshotData.role == 'administrator'){
+              console.log("idk man")
+              setHasAccess(true)
+            
+            }
+          else {setHasAccess(false)}
+         }
+     });
+
     const subscriber = firebase.firestore()
     .collection('ClockInsOuts')
     setClockRef(subscriber)
@@ -50,7 +77,7 @@ export default function ManagerApproveScreen() {
     });
 
     () => clockInQuery()
-    return () => clockOutQuery();
+    return () => {clockOutQuery(); roleSubscriber(); unmounted=true};
   }, [])
 
   /*
@@ -59,7 +86,14 @@ export default function ManagerApproveScreen() {
     - allow for option to approve/deny
     - allow for editing (separate screen?)
   */
- 
+ console.log(hasAccess)
+ if (!hasAccess){
+   return (
+   <View style={styles.container}>
+     <Text style={styles.header}> You are not authorized :( </Text>
+   </View>
+   )
+ }
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Manager Approvals</Text>
