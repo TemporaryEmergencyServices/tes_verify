@@ -19,6 +19,7 @@ export default function ApplyScreen({  navigation  }) {
   const[address1State,setAddress1State] = useState('')// Genuine question: what about homeless people?
   const[address2State,setAddress2State] = useState('')
   const[addressZip,setAddressZipState] = useState('')
+  const[addressCity,setAddressCityState] = useState('')
   const[addressState,setAddressStateState] = useState('')
   const[appApproved,setAppApprovedState] = useState(false)
   const[appApprovedBy,setAppApprovedByState] = useState('')
@@ -27,19 +28,11 @@ export default function ApplyScreen({  navigation  }) {
   
 
 
-
-
-  const setRole = async (email : String, role: String) => {
-    var snap = await firebase.firestore().collection('roles').add({
-      username: email,
-      role: role
-    });
-  }
   const dispatch = useDispatch()  
-  const handleApply = () => {}//do nothing for now
-      
+  const handleApply = () => {
 
-      //record in the user collection will be created
+  }//do nothing for now
+    
 
   return (
     <View style={styles.container}>
@@ -58,8 +51,103 @@ export default function ApplyScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setFirstNameState(text)}/>
       </View>
-      
-      <TouchableOpacity style={styles.loginBtn} onPress={handleApplyp}>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Last Name" 
+          placeholderTextColor="white"
+          onChangeText={text => setLastNameState(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Phone number" 
+          placeholderTextColor="white"
+          onChangeText={text => setPhoneState(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          maxLength = {1}
+          placeholder="Sex (M/F)" 
+          placeholderTextColor="white"
+          onChangeText={text => setSexState(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Ethnicity" 
+          placeholderTextColor="white"
+          onChangeText={text => setEthnicityState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Emergency contact 1 name" 
+          placeholderTextColor="white"
+          onChangeText={text => setEmergencyName1State(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Emergency contact 1 phone number" 
+          placeholderTextColor="white"
+          onChangeText={text => setEmergencyPhone1State(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Emergency contact 2 name" 
+          placeholderTextColor="white"
+          onChangeText={text => setEmergencyName2State(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Emergency contact 1 phone number" 
+          placeholderTextColor="white"
+          onChangeText={text => setEmergencyPhone2State(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Address Line 1" 
+          placeholderTextColor="white"
+          onChangeText={text => setAddress1State(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Address Line 2" 
+          placeholderTextColor="white"
+          onChangeText={text => setAddress2State(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Zip code" 
+          placeholderTextColor="white"
+          onChangeText={text => setAddressZipState(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="City" 
+          placeholderTextColor="white"
+          onChangeText={text => setAddressCityState(text)}/>
+      </View>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          maxLength = {2}
+          placeholder="State" 
+          placeholderTextColor="white"
+          onChangeText={text => setAddressStateState(text)}/>
+      </View>
+
+      <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
         <Text style={styles.signUpText} >Apply to be a volunteer</Text>
       </TouchableOpacity>
       
