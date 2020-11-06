@@ -19,6 +19,8 @@ export default function ClockInScreen() {
   const [fbClockedIn, setFbClockedIn] = useState('')
   const [fbInTime, setFbInTime] = useState('')
   const [fbOutTime, setFbOutTime] = useState('')
+
+  const[hasAccess,setHasAccess] = useState(false)
   // TODO: change this to global var using Redux
   //const [username, setUsername] = useState('brandon@brandon.com')
   const user = useSelector((state: RootStateOrAny) => state.user)
@@ -40,13 +42,40 @@ export default function ClockInScreen() {
            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
            setUniqueClockID(queryDocumentSnapshot.id)
            setInTime(queryDocumentSnapshotData.in_time)
+          //  console.log(clockedIn)
            setClockedIn(true)
+          //  console.log(clockedIn)
+           //do stuff for resume - set clocked in to true
+           //set in time
+           //set unique clock id
+         }
+        //  console.log(clockedIn)
+     });
+     const roleSubscriber = firebase.firestore()
+       .collection('roles')
+       .where('username' , '==', userEmail)
+       .limit(1)
+       .onSnapshot(querySnapshot => {
+         if(querySnapshot.empty) {
+          setHasAccess(false)
+         }
+         else{
+           const queryDocumentSnapshot = querySnapshot.docs[0];
+           const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+           if (queryDocumentSnapshotData.role == 'administrator'){
+              console.log("idk man")
+              setHasAccess(true)
+            
+            }
+          else {setHasAccess(false)}
+          // console.log(hasAccess)
+          // console.log(queryDocumentSnapshotData.role)
            //do stuff for resume - set clocked in to true
            //set in time
            //set unique clock id
          }
      });
-    return () => {subscriber(); unmounted = true};
+    return () => {subscriber(); roleSubscriber(); unmounted = true};
   } ,[]);
 
 
@@ -166,6 +195,15 @@ export default function ClockInScreen() {
 
     */
 
+  // console.log(hasAccess)
+  // if (!hasAccess){
+  //   return (
+  //   <View style={styles.container}>
+  //     <Text style={styles.instructionsText}> You are not authorized :( </Text>
+  //     <Text style={styles.instructionsText}> {inTime}. </Text>
+  //   </View>
+  //   )
+  // }
   if (clockedIn) {return (
 
     <View style={styles.container}>
