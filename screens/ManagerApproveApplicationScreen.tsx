@@ -8,15 +8,15 @@ import '@firebase/firestore';
 import { Text, View } from '../components/Themed';
 // import { ManagerStatusButtons } from '../components/ManagerStatusButtons'
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
-
+import { RadioButton } from 'react-native-paper';
 export default function ManagerApproveApplicationScreen() {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
-  const [clockRef, setClockRef] = useState({})
-
+  const [appRef, setAppRef] = useState({})
+  
   const[hasAccess,setHasAccess] = useState(false)
-
+  const[viewtype,setViewType] = useState('pending')
 
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
@@ -44,11 +44,13 @@ export default function ManagerApproveApplicationScreen() {
 
      const subscriber = firebase.firestore()
      .collection('volunteers')
-     setClockRef(subscriber)
+     setAppRef(subscriber)
 
     const pendingQuery = subscriber
-    .where('approved','==','pending')
+    .where('approved','==',viewtype)
     .onSnapshot(querySnapshot => {
+        console.log(viewtype)
+        console.log("in the query^")
         const helperRecords = [] as any;
         querySnapshot.forEach(documentSnapshot => {
             helperRecords.push({
@@ -59,8 +61,9 @@ export default function ManagerApproveApplicationScreen() {
         setRecords(helperRecords);
         setLoading(false);
     });
-    return () => {pendingQuery(); roleSubscriber(); unmounted=true};
-  }, [])
+    () => pendingQuery();
+    return () => {pendingQuery(); roleSubscriber(); unmounted=false};
+  }, [viewtype])//need to pass the viewtype variable to useEffect so it uses the latest state value
 
   /*
     TODO: 
@@ -68,7 +71,7 @@ export default function ManagerApproveApplicationScreen() {
     - allow for option to approve/deny
     - allow for editing (separate screen?)
   */
- console.log(hasAccess)
+ console.log(viewtype)
  if (!hasAccess){
    return (
    <View style={styles.container}>
@@ -76,9 +79,10 @@ export default function ManagerApproveApplicationScreen() {
    </View>
    )
  }
+  console.log(records)
   return (
     <View style={styles.container}>
-      <Text style={styles.titleFlatList}>Manager Approvals</Text>
+      <Text style={styles.titleFlatList}>Pending Volunteer Application Approvals</Text>
       {/* TODO: show "no pending records" when records empty. 
           for some reason, it's currently populating records and then 
           immediately become empty currently
@@ -87,14 +91,21 @@ export default function ManagerApproveApplicationScreen() {
         records != [] ?
           <>  */}
             <View style={styles.space}></View>
-            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef,userEmail)}>
+            <View>
+                <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
+                    <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
+                    <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
+                    <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
+                </RadioButton.Group>
+            </View>
+            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
               <Text style={styles.exportText}>Approve All</Text>
             </TouchableOpacity>
             <View style={styles.space}></View>
             <View style={styles.row}>
-              <Text style={styles.header}>Date</Text>
-              <Text style={styles.header}>In</Text>
-              <Text style={styles.header}>Out</Text>
+              <Text style={styles.header}>Name</Text>
+              <Text style={styles.header}>Email</Text>
+              <Text style={styles.header}>Status</Text>
             </View>
           {/* </>
         :
@@ -115,15 +126,14 @@ export default function ManagerApproveApplicationScreen() {
                   <Text style={styles.space}>{item.userid}</Text>
                 </View>
                 <View style={styles.row}>
-                  <Text>{item.date}</Text>
+                  <Text>{item.firstName} {item.lastName}</Text>
                   <View>
-                    <Text>{item.in_time}</Text>
-                    <Text style={renderRecordStatus(item.approved)}>{item.approved}</Text>
+                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>
                     {/* TODO: modularize approve/deny component */}
-                    <TouchableOpacity onPress={() => {approve(item.key, "in", clockRef,userEmail)}}>
+                    <TouchableOpacity onPress={() => {approve(item.key, appRef,userEmail)}}>
                       <Text style={styles.approved}>approve</Text>
                     </TouchableOpacity> 
-                    <TouchableOpacity onPress={() => {deny(item.key, "in", clockRef)}}>
+                    <TouchableOpacity onPress={() => {deny(item.key,  appRef, userEmail)}}>
                       <Text style={styles.denied}>deny</Text>
                     </TouchableOpacity> 
                   </View>
@@ -140,31 +150,36 @@ export default function ManagerApproveApplicationScreen() {
 // FIXME: this may even approve those records that 
 // are no longer displaying or have been previously denied, 
 // must test this
-function approveAll(records: any, clockRef: any, userEmail: String) {
+function approveAll(records: any, appRef: any, userEmail: String) {
   records.forEach(record => {
-    approve(record.key, "in", clockRef, userEmail)
-    approve(record.key, "out", clockRef, userEmail)
+    approve(record.key,  appRef, userEmail)
+    approve(record.key,  appRef, userEmail)
   })
 }
 
-function approve(key: String, type: String, appRef: any, userEmail: String) {
+function approve(key: String, appRef: any, userEmail: String) {
+    const today = new Date()
+    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const dateTime = date+ " " + time
     appRef.doc(key).set({
       approved: "approved",
       approvedBy: userEmail,
+      approvedDate: dateTime
     }, { merge: true })
 
 }
 
-function deny(key: String, type: String, clockRef: any) {
-  if (type == "in") {
-    clockRef.doc(key).set({
-      in_approved: "denied"
-    }, { merge: true })
-  } else {
-    clockRef.doc(key).set({
-      out_approved: "denied"
-    }, { merge: true })
-  }
+function deny(key: String, appRef: any, userEmail: String) {
+    const today = new Date()
+    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const dateTime = date+ " " + time
+    appRef.doc(key).set({
+        approved: "denied",
+        approvedBy: userEmail,
+        approvedDate: dateTime
+      }, { merge: true })
 }
 
 function renderRecordStatus(status: String) {
