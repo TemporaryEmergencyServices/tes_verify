@@ -14,7 +14,7 @@ export default function SettingsScreen({ navigation }) {
 
   const goToApply = () => navigation.navigate('ApplyScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
-  const goToApprove= () => navigation.replace('ManagerApproveApplicationScreen')
+  const goToApprove= () => navigation.navigate('ManagerApproveApplicationScreen')
 
   const handleApply = () => {goToApply()}
   const handleApprove = () => {goToApprove()}

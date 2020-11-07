@@ -9,7 +9,7 @@ import { Text, View } from '../components/Themed';
 // import { ManagerStatusButtons } from '../components/ManagerStatusButtons'
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 import { RadioButton } from 'react-native-paper';
-export default function ManagerApproveApplicationScreen() {
+export default function ManagerApproveApplicationScreen({navigation}) {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
@@ -83,6 +83,7 @@ export default function ManagerApproveApplicationScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Pending Volunteer Application Approvals</Text>
+      <Button title="Go back" onPress={() => navigation.goBack()} />
       {/* TODO: show "no pending records" when records empty. 
           for some reason, it's currently populating records and then 
           immediately become empty currently
