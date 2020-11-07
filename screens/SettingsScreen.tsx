@@ -13,12 +13,11 @@ export default function SettingsScreen({ navigation }) {
   const dispatch = useDispatch()
 
   const goToApply = () => navigation.replace('ApplyScreen')
-
   const goToSignIn = () => navigation.replace('SignInScreen')
+  const goToApprove= () => navigation.replace('ManagerApproveApplicationScreen')
 
-  const handleApply = () => {
-    goToApply()
-  }
+  const handleApply = () => {goToApply()}
+  const handleApprove = () => {goToApprove()}
   const handleLogout = () => {
     firebase.auth().signOut()
     .then(() => dispatch(logout()))
@@ -34,6 +33,7 @@ export default function SettingsScreen({ navigation }) {
       );
     })
   }
+
   return (
     
     <View style={styles.container}>
@@ -45,6 +45,9 @@ export default function SettingsScreen({ navigation }) {
 
       <TouchableOpacity style={styles.signOutBtn} onPress = {handleApply}>
         <Text style={styles.signOutText}>Apply to be a volunteer</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity style={styles.signOutBtn} onPress = {handleApprove}>
+        <Text style={styles.signOutText}>Approve volunteer applications</Text>
       </TouchableOpacity> 
     </View>
   );

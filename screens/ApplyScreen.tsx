@@ -22,7 +22,7 @@ export default function ApplyScreen({  navigation  }) {
   const[addressZip,setAddressZipState] = useState('')
   const[addressCity,setAddressCityState] = useState('')
   const[addressState,setAddressStateState] = useState('')
-  const[appApproved,setAppApprovedState] = useState(false)
+  const[appApproved,setAppApprovedState] = useState('pending')
   const[appApprovedBy,setAppApprovedByState] = useState('')
   const[appApprovedByDate,setAppApprovedByDateState] = useState('')
   const[appSubmitDate,setAppSubmitDate] = useState('')
