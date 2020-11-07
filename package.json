@@ -47,6 +47,7 @@
     "react-native-dotenv": "^2.4.1",
     "react-native-gesture-handler": "^1.8.0",
     "react-native-maps": "0.27.1",
+    "react-native-paper": "^4.3.1",
     "react-native-passmeter": "0.0.5",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
