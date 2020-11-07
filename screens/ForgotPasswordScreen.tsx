@@ -15,7 +15,7 @@ import { updateEmail, updatePassword, signup } from '../actions/user';
 
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
-function ForgotPasswordScreen( {  navigation  }) {
+function ForgotPasswordScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const goToSignIn = () => navigation.replace('SignInScreen')
   const handlePasswordReset = () => {

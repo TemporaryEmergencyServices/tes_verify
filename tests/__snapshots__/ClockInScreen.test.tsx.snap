@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ClockInScreen /> renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fff",
+      },
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        Object {
+          "color": "#1C5A7D",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "justifyContent": "center",
+          "marginBottom": 15,
+          "marginHorizontal": 30,
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+     You are not authorized :( 
+  </Text>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        Object {
+          "color": "#1C5A7D",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "justifyContent": "center",
+          "marginBottom": 15,
+          "marginHorizontal": 30,
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+     
+    
+    . 
+  </Text>
+</View>
+`;

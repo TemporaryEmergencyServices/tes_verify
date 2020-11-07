@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SignInScreen /> renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#FFFFFF",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#1C5A7D",
+        "fontSize": 50,
+        "fontWeight": "bold",
+        "marginBottom": 40,
+      }
+    }
+  >
+    TES Verify
+  </Text>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#2B2E32",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 20,
+        "padding": 20,
+        "width": "80%",
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      onChangeText={[Function]}
+      placeholder="Email..."
+      placeholderTextColor="white"
+      rejectResponderTermination={true}
+      style={
+        Object {
+          "color": "white",
+          "height": 50,
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#2B2E32",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 20,
+        "padding": 20,
+        "width": "80%",
+      }
+    }
+  >
+    <TextInput
+      allowFontScaling={true}
+      onChangeText={[Function]}
+      placeholder="Password..."
+      placeholderTextColor="white"
+      rejectResponderTermination={true}
+      secureTextEntry={true}
+      style={
+        Object {
+          "color": "white",
+          "height": 50,
+        }
+      }
+      underlineColorAndroid="transparent"
+    />
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#E11383",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 40,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 18,
+          "fontWeight": "bold",
+        }
+      }
+    >
+      Sign in
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#E11383",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 10,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "color": "white",
+          "fontSize": 18,
+          "fontWeight": "bold",
+        }
+      }
+    >
+      Sign up
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "borderRadius": 25,
+        "color": "black",
+        "fontSize": 11,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 10,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text>
+      Forgot Password?
+    </Text>
+  </View>
+</View>
+`;
