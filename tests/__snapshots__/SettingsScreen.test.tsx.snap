@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SettingsScreen /> renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fff",
+      },
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        Object {
+          "color": "#1C5A7D",
+          "fontSize": 20,
+          "fontWeight": "bold",
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+     
+  </Text>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#E11383",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 40,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+          },
+          Object {
+            "alignContent": "center",
+            "color": "white",
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "justifyContent": "center",
+            "marginTop": 10,
+            "paddingBottom": 10,
+          },
+        ]
+      }
+    >
+      Sign Out
+    </Text>
+  </View>
+</View>
+`;

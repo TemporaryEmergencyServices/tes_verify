@@ -7,7 +7,7 @@ export default function ManagerStatusButtons(props: any) {
         <View>
             <TouchableOpacity onPress={() => {props.approve()}}>
                 <Text style={styles.approved}>approve</Text>
-            </TouchableOpacity> 
+            </TouchableOpacity>
             <TouchableOpacity>
                 <Text onPress={() => {props.deny()}} style={styles.denied}>deny</Text>
             </TouchableOpacity> 
@@ -18,7 +18,7 @@ export default function ManagerStatusButtons(props: any) {
 const styles = StyleSheet.create({
     approved: {
         color: 'green'
-    }, 
+    },
     denied: {
         color: 'red'
     }

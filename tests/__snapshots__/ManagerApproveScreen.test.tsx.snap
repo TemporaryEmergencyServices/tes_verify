@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ManagerApproveScreen /> renders correctly 1`] = `
+<View
+  style={
+    Array [
+      Object {
+        "backgroundColor": "#fff",
+      },
+      Object {
+        "alignItems": "center",
+        "flex": 1,
+        "justifyContent": "center",
+      },
+    ]
+  }
+>
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "#000",
+        },
+        Object {
+          "fontSize": 20,
+          "fontWeight": "bold",
+        },
+      ]
+    }
+  >
+     You are not authorized :( 
+  </Text>
+</View>
+`;
