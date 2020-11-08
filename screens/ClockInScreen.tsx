@@ -226,7 +226,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     justifyContent: "center",
     textAlign: "center",
-  },
-
-
+  }
 });
