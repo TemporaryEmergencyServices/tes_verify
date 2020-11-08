@@ -61,14 +61,33 @@ export default function ApplyScreen({  navigation  }) {
             appSubmitDate: appSubmitDate
  
     });
+
+    Alert.alert(
+     'Application Submitted',
+     "Press OK to continue. An administrator will view your submission shortly.",
+      [
+        {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+      ],
+      {cancelable: false},
+    );
   }//do nothing for now
     
+  /* back button; should no longer be necessary
+  navigation uses push to pull up apply screen
+  <Button title="Go back" onPress={() => navigation.goBack()} />
+  */
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>TES Verify</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
-      <ScrollView style={styles.scrollView}>
+      <Text style={styles.logo}>Volunteer Approval Application</Text>
+      <Text style={styles.instructions}>Please enter the information below exactly as it appeared on your paper application.</Text>
+
+      <ScrollView 
+        style={styles.scrollView}
+        centerContent={true} 
+        contentContainerStyle={styles.contentContainer} >
+
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
@@ -172,11 +191,12 @@ export default function ApplyScreen({  navigation  }) {
           onChangeText={text => setAddressStateState(text)}/>
       </View>
 
-      <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
-        <Text style={styles.signUpText} >Apply to be a volunteer</Text>
-      </TouchableOpacity>
+     
 
       </ScrollView>
+      <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
+        <Text style={styles.signUpText} >SUBMIT</Text>
+      </TouchableOpacity>
     </View>
   );
   
@@ -191,6 +211,7 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 15,
     color: "#1C5A7D",
+    
   },
   container: {
     flex: 1,
@@ -198,20 +219,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  contentContainer: {
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300
+  },
+
   logo:{
     fontWeight:"bold",
-    fontSize:50,
+    fontSize:24,
     color:"#1C5A7D",
-    marginBottom:40
+    marginBottom:10,
+    textAlign: 'center',
+    marginTop: 60,
+    paddingRight: 30, 
+    paddingLeft: 30
+  },
+
+  instructions:{
+    fontSize:18,
+    color:"#1C5A7D",
+    marginBottom:40,
+    textAlign: 'center',
+    paddingRight: 7,
+    paddingLeft: 7
   },
   inputView:{
-    width:"80%",
+    width:"90%",
     backgroundColor:"#2B2E32",
     borderRadius:25,
     height:50,
     marginBottom:20,
     justifyContent:"center",
-    padding:20
+    padding: 20,
+    paddingRight: 40,
+    
   },
   inputText:{
     height:50,
@@ -255,6 +298,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     paddingHorizontal: 10,
-    backgroundColor: "#eceff1"
+    backgroundColor: "#eceff1",
   }
 })
