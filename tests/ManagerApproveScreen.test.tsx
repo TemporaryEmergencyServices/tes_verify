@@ -11,4 +11,8 @@ describe("<ManagerApproveScreen />", () => {
         const tree = renderer.create(<Provider store={store} ><ManagerApproveScreen /></Provider>).toJSON();
         expect(tree).toMatchSnapshot();
     });
+
+    // it('renders appropriate status', () => {
+
+    // })
 });

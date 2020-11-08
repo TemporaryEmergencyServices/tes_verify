@@ -154,7 +154,7 @@ export default function ClockInScreen() {
     return (
     <View style={styles.container}>
       <Text style={styles.instructionsText}> If you are checking in, press the clock in button! </Text>
-      <TouchableOpacity 
+      <TouchableOpacity accessibilityLabel="clock in button"
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>

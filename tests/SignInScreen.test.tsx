@@ -12,4 +12,8 @@ describe("<SignInScreen />", () => {
         const tree = renderer.create(<Provider store={store} ><SignInScreen navigation={navigation}/></Provider>).toJSON();
         expect(tree).toMatchSnapshot();
     });
+
+    // it('signs in', () => {
+
+    // })
 });
