@@ -61,6 +61,15 @@ export default function ApplyScreen({  navigation  }) {
             appSubmitDate: appSubmitDate
  
     });
+
+    Alert.alert(
+     'Application Submitted',
+     "Press OK to continue. An administrator will view your submission shortly.",
+      [
+        {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+      ],
+      {cancelable: false},
+    );
   }//do nothing for now
     
   /* back button; should no longer be necessary
@@ -78,6 +87,7 @@ export default function ApplyScreen({  navigation  }) {
         style={styles.scrollView}
         centerContent={true} 
         contentContainerStyle={styles.contentContainer} >
+
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
