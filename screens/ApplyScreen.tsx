@@ -74,7 +74,10 @@ export default function ApplyScreen({  navigation  }) {
       <Text style={styles.logo}>Volunteer Approval Application</Text>
       <Text style={styles.instructions}>Please enter the information below exactly as it appeared on your paper application.</Text>
 
-      <ScrollView style={styles.scrollView}>
+      <ScrollView 
+        style={styles.scrollView}
+        centerContent={true} 
+        contentContainerStyle={styles.contentContainer} >
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
@@ -178,11 +181,12 @@ export default function ApplyScreen({  navigation  }) {
           onChangeText={text => setAddressStateState(text)}/>
       </View>
 
+     
+
+      </ScrollView>
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
         <Text style={styles.signUpText} >SUBMIT</Text>
       </TouchableOpacity>
-
-      </ScrollView>
     </View>
   );
   
@@ -198,13 +202,18 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     color: "#1C5A7D",
     
-    
   },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  contentContainer: {
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 300
   },
 
   logo:{
