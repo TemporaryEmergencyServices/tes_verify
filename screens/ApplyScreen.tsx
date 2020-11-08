@@ -72,7 +72,8 @@ export default function ApplyScreen({  navigation  }) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>Volunteer Approval Application</Text>
-      
+      <Text style={styles.instructions}>Please enter the information below exactly as it appeared on your paper application.</Text>
+
       <ScrollView style={styles.scrollView}>
       <View style={styles.inputView} >
         <TextInput  
@@ -178,7 +179,7 @@ export default function ApplyScreen({  navigation  }) {
       </View>
 
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
-        <Text style={styles.signUpText} >Apply to be a volunteer</Text>
+        <Text style={styles.signUpText} >SUBMIT</Text>
       </TouchableOpacity>
 
       </ScrollView>
@@ -196,6 +197,8 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 15,
     color: "#1C5A7D",
+    
+    
   },
   container: {
     flex: 1,
@@ -203,28 +206,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   logo:{
     fontWeight:"bold",
     fontSize:24,
-    color:"white",
+    color:"#1C5A7D",
+    marginBottom:10,
+    textAlign: 'center',
+    marginTop: 60,
+    paddingRight: 30, 
+    paddingLeft: 30
+  },
+
+  instructions:{
+    fontSize:18,
+    color:"#1C5A7D",
     marginBottom:40,
     textAlign: 'center',
-    backgroundColor: "#1C5A7D",
-    width: 400,
-    height: 150,
-    paddingRight: 40,
-    paddingLeft: 40,
-    paddingTop: 60
-    
+    paddingRight: 7,
+    paddingLeft: 7
   },
   inputView:{
-    width:"80%",
+    width:"90%",
     backgroundColor:"#2B2E32",
     borderRadius:25,
     height:50,
     marginBottom:20,
     justifyContent:"center",
-    padding:20
+    padding: 20,
+    paddingRight: 40,
+    
   },
   inputText:{
     height:50,
@@ -268,6 +279,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 8,
     paddingHorizontal: 10,
-    backgroundColor: "#eceff1"
+    backgroundColor: "#eceff1",
   }
 })
