@@ -12,7 +12,7 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const dispatch = useDispatch()
 
-  const goToApply = () => navigation.navigate('ApplyScreen')
+  const goToApply = () => navigation.push('ApplyScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
   const goToApprove= () => navigation.navigate('ManagerApproveApplicationScreen')
 

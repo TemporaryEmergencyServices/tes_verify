@@ -63,11 +63,16 @@ export default function ApplyScreen({  navigation  }) {
     });
   }//do nothing for now
     
+  /* back button; should no longer be necessary
+  navigation uses push to pull up apply screen
+  <Button title="Go back" onPress={() => navigation.goBack()} />
+  */
+
 
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      
       <ScrollView style={styles.scrollView}>
       <View style={styles.inputView} >
         <TextInput  
