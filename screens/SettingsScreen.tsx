@@ -39,16 +39,17 @@ export default function SettingsScreen({ navigation }) {
     <View style={styles.container}>
       
       <Text style={styles.title}> {user.email}</Text>
+
+      <TouchableOpacity style={styles.appBtns} onPress = {handleApply}>
+        <Text style={styles.signOutText}>Apply to be a volunteer</Text>
+      </TouchableOpacity> 
+      <TouchableOpacity style={styles.appBtns} onPress = {handleApprove}>
+        <Text style={styles.signOutText}>Approve volunteer applications</Text>
+      </TouchableOpacity> 
+
       <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
         <Text style={styles.signOutText}>Sign Out</Text>
       </TouchableOpacity>  
-
-      <TouchableOpacity style={styles.signOutBtn} onPress = {handleApply}>
-        <Text style={styles.signOutText}>Apply to be a volunteer</Text>
-      </TouchableOpacity> 
-      <TouchableOpacity style={styles.signOutBtn} onPress = {handleApprove}>
-        <Text style={styles.signOutText}>Approve volunteer applications</Text>
-      </TouchableOpacity> 
     </View>
   );
 }
@@ -69,6 +70,16 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  appBtns:{
+    width:"80%",
+    backgroundColor:"#1C5A7D",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
   },
   signOutBtn:{
     width:"80%",
