@@ -71,7 +71,7 @@ export default function ApplyScreen({  navigation  }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>TES Verify</Text>
+      <Text style={styles.logo}>Volunteer Approval Application</Text>
       
       <ScrollView style={styles.scrollView}>
       <View style={styles.inputView} >
@@ -205,9 +205,17 @@ const styles = StyleSheet.create({
   },
   logo:{
     fontWeight:"bold",
-    fontSize:50,
-    color:"#1C5A7D",
-    marginBottom:40
+    fontSize:24,
+    color:"white",
+    marginBottom:40,
+    textAlign: 'center',
+    backgroundColor: "#1C5A7D",
+    width: 400,
+    height: 150,
+    paddingRight: 40,
+    paddingLeft: 40,
+    paddingTop: 60
+    
   },
   inputView:{
     width:"80%",
