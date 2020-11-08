@@ -3,9 +3,10 @@ import '@firebase/firestore'
 import React, { useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
 
 import { useDispatch } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function ApplyScreen({  navigation  }) {
   const [firstNameState,setFirstNameState] = useState('')
@@ -66,6 +67,8 @@ export default function ApplyScreen({  navigation  }) {
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
+      <Button title="Go back" onPress={() => navigation.goBack()} />
+      <ScrollView style={styles.scrollView}>
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
@@ -172,13 +175,23 @@ export default function ApplyScreen({  navigation  }) {
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
         <Text style={styles.signUpText} >Apply to be a volunteer</Text>
       </TouchableOpacity>
-      
+
+      </ScrollView>
     </View>
   );
   
 }
 
 const styles = StyleSheet.create({
+  scrollview: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    textAlign: 'center',
+    paddingTop: 60,
+    paddingBottom: 15,
+    color: "#1C5A7D",
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
