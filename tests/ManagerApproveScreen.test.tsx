@@ -7,12 +7,18 @@ import { store } from '../App'
 jest.useFakeTimers()
 
 describe("<ManagerApproveScreen />", () => {
+    const tree = renderer.create(<Provider store={store} ><ManagerApproveScreen /></Provider>)
+    const wrapper = tree.toJSON()
+
     it('renders correctly', () => {
-        const tree = renderer.create(<Provider store={store} ><ManagerApproveScreen /></Provider>).toJSON();
-        expect(tree).toMatchSnapshot();
+        expect(wrapper).toMatchSnapshot();
     });
 
-    // it('renders appropriate status', () => {
-
-    // })
+    it('displays not authorized', () => {
+        // const wrapper = tree.toJSON()
+        // let root = tree.root
+        const text = wrapper.children[0].children[0]
+        expect(text === ' You are not authorized :( ').toBe(true)
+        // TODO: add capability for authorized
+    })
 });
