@@ -55,7 +55,8 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          onChangeText={text => setEmailState(text)}/>
+          value={emailState}
+          onChangeText={text => setEmailState(text.toLowerCase())}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
