@@ -43,9 +43,13 @@ export default function SettingsScreen({ navigation }) {
       <TouchableOpacity style={styles.appBtns} onPress = {handleApply}>
         <Text style={styles.signOutText}>Apply to be a volunteer</Text>
       </TouchableOpacity> 
+      
+      {/* 
       <TouchableOpacity style={styles.appBtns} onPress = {handleApprove}>
         <Text style={styles.signOutText}>Approve volunteer applications</Text>
       </TouchableOpacity> 
+      */}
+     
 
       <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
         <Text style={styles.signOutText}>Sign Out</Text>

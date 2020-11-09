@@ -83,7 +83,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Pending Volunteer Application Approvals</Text>
-      <Button title="Go back" onPress={() => navigation.goBack()} />
+      {/*<Button title="Go back" onPress={() => navigation.goBack()} /> */}
       {/* TODO: show "no pending records" when records empty. 
           for some reason, it's currently populating records and then 
           immediately become empty currently
