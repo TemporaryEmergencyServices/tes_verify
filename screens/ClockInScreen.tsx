@@ -133,7 +133,7 @@ export default function ClockInScreen() {
   if (!hasAccess){
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> You must have an approved volunteer application before you may clock in. Please use the profile page and speak with a manager. </Text>
+      <Text style={styles.instructionsText}> You must be listed as a volunteer to do this. Eventually, this will be have an approved application.</Text>
     </View>
     )
   }
