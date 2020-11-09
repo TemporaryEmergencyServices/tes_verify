@@ -181,13 +181,19 @@ const styles = StyleSheet.create({
     margin: 100
   }, 
   pending: {
-    color: 'orange'
+    color: 'orange',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   approved: {
-    color: 'green'
+    color: 'green',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   denied: {
-    color: 'red'
+    color: 'red',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,

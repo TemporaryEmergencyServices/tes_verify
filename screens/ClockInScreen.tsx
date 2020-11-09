@@ -45,6 +45,7 @@ export default function ClockInScreen() {
            //set unique clock id
          }
      });
+     let unmounted2 = false
      const roleSubscriber = firebase.firestore()
        .collection('roles')
        .where('username' , '==', userEmail)
@@ -63,7 +64,7 @@ export default function ClockInScreen() {
           else {setHasAccess(false)}
          }
      });
-    return () => {subscriber(); roleSubscriber(); unmounted = true};
+    return () => {subscriber(); roleSubscriber(); unmounted = true; unmounted2 = true};
   } ,[]);
 
 
@@ -132,8 +133,7 @@ export default function ClockInScreen() {
   if (!hasAccess){
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> You are not authorized :( </Text>
-      <Text style={styles.instructionsText}> {inTime}. </Text>
+      <Text style={styles.instructionsText}> You must have an approved volunteer application before you may clock in. Please use the profile page and speak with a manager. </Text>
     </View>
     )
   }
