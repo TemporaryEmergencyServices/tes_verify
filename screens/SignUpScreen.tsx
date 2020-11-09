@@ -43,7 +43,7 @@ export default function SignUpScreen({  navigation  }) {
       return;
     }
     firebase.auth()
-      .createUserWithEmailAndPassword(emailState,passwordState)
+      .createUserWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => dispatch(signup(response.user)))
       .then(() => setRole(emailState,"volunteer"))
       .then(goToSignIn)
@@ -72,8 +72,7 @@ export default function SignUpScreen({  navigation  }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          value={emailState}
-          onChangeText={text => setEmailState(text.toLowerCase())}/>
+          onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
@@ -83,6 +82,7 @@ export default function SignUpScreen({  navigation  }) {
           maxLength={MAX_PASSWORD_LEN}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <View>

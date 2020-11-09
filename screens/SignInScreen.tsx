@@ -28,7 +28,7 @@ export default function SignInScreen({ navigation }) {
 
   const handleLogin = () => {
     firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
+      .signInWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => {
         firebase.firestore()
         .collection('roles')
@@ -75,8 +75,7 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          value={emailState}
-          onChangeText={text => setEmailState(text.toLowerCase())}/>
+          onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
@@ -85,6 +84,7 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
