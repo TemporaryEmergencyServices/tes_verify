@@ -23,6 +23,13 @@ export default function SECONDBottomTabNavigator() {
     <SECONDBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
+        <SECONDBottomTab.Screen
+          name="Profile"
+          component={SettingsNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
+          }}
+        />
       <SECONDBottomTab.Screen
         name="ManagerApprove"
         component={ManagerApproveNavigator}

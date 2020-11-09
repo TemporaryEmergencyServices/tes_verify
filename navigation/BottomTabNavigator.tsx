@@ -19,6 +19,7 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
 
+
   return (
     <BottomTab.Navigator
       initialRouteName="Profile"
@@ -44,24 +45,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
-      {/* MANAGER SCREENS
-          TODO: modify to conditional rendering based on redux roles
-      */}
-      <BottomTab.Screen
-        name="ManagerApprove"
-        component={ManagerApproveNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="ManagerApproveApplication"
-        component={ManagerApproveApplicationNavigator}
-        options={{
-         tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
-        }}
-      />
-       {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
+      {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
 
 
       {/* Marie commented these out since SignUp and SignIn ~should~ be working sort of now. But they could still be useful.
@@ -82,9 +66,6 @@ export default function BottomTabNavigator() {
         }}
       />
       */}
-     
-      
-
     </BottomTab.Navigator>
   );
 }

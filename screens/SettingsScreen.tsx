@@ -14,6 +14,8 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
   const dispatch = useDispatch()
+
+  // console.log('EMAISSL', userEmail)
   
   //appState gives application status. Can be none (has not submitted before), pending, approved, or denied.
   //the status of appState is determined in the below useEffect.
@@ -28,12 +30,10 @@ export default function SettingsScreen({ navigation }) {
        .onSnapshot(querySnapshot => {
         if(querySnapshot.empty) {
           setAppState("none")
-         }
-
-        else{
+        } else {
          const queryDocumentSnapshot = querySnapshot.docs[0];
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-          setAppState(queryDocumentSnapshotData.approved)
+         setAppState(queryDocumentSnapshotData.approved)
         }
      });
 

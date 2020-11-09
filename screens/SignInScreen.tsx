@@ -25,11 +25,45 @@ export default function SignInScreen({ navigation }) {
   
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
+  // const [role, setRole] = useState('administrator')
+  
+  // const getRole = (email) => {
+  //   var role
+  //   firebase.firestore()
+  //     .collection('roles')
+  //     .where('username' , '==', email)
+  //     .limit(1)
+  //     .onSnapshot(querySnapshot => {
+  //       if (!querySnapshot.empty) {
+  //         const queryDocumentSnapshot = querySnapshot.docs[0];
+  //         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+  //         console.log('test')
+  //         return queryDocumentSnapshotData.role
+  //       }
+  //     })
+  // }
+
+  // var role
   const handleLogin = () => {
     firebase.auth()
       .signInWithEmailAndPassword(emailState,passwordState)
-      .then((response) => dispatch(login(response.user)))
-      .then(goToMainBody)
+      .then((response) => {
+        dispatch(login(response.user))
+        return response.user.email
+      })
+      .then(async (email) => {
+        firebase.firestore()
+        .collection('roles')
+        .where('username' , '==', email)
+        .limit(1)
+        .onSnapshot(querySnapshot => {
+          if (!querySnapshot.empty) {
+            const queryDocumentSnapshot = querySnapshot.docs[0];
+            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+            goToMainBody(queryDocumentSnapshotData.role)
+          }
+        })
+      })
       .catch(error => {
         Alert.alert(
           "Error",
@@ -43,7 +77,13 @@ export default function SignInScreen({ navigation }) {
   }
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
-  const goToMainBody = () => navigation.replace('BottomTabNavigator')
+  const goToMainBody = (role) => {
+    if (role == "administrator") {
+      navigation.replace('SECONDBottomTabNavigator')
+    } else if (role == "volunteer") {
+      navigation.replace('BottomTabNavigator')
+    }
+  }
   
   return (
     <View style={styles.container}>

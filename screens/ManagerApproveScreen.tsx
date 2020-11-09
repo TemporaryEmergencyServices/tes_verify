@@ -21,6 +21,8 @@ export default function ManagerApproveScreen() {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
 
+  console.log('USER', userEmail)
+
   useEffect(() => {
     let unmounted = false
     const roleSubscriber = firebase.firestore()
