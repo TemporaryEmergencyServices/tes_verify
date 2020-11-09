@@ -67,13 +67,17 @@ export default function SignUpScreen({  navigation  }) {
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          onChangeText={text => setEmailState(text)}/>
+          value={emailState}
+          onChangeText={text => setEmailState(text.toLowerCase())}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="visible-password"
           secureTextEntry
           style={styles.inputText}
           maxLength={MAX_PASSWORD_LEN}

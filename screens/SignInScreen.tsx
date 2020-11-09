@@ -50,10 +50,13 @@ export default function SignInScreen({ navigation }) {
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="visible-password"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          onChangeText={text => setEmailState(text)}/>
+          value={emailState}
+          onChangeText={text => setEmailState(text.toLowerCase())}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  

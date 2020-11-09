@@ -27,6 +27,8 @@ function ForgotPasswordScreen({  navigation  }) {
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"

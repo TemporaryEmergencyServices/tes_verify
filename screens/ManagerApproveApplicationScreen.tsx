@@ -21,6 +21,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
 
+
   useEffect(() => {
     let unmounted = false
     const roleSubscriber = firebase.firestore()
@@ -104,9 +105,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             </TouchableOpacity>
             <View style={styles.space}></View>
             <View style={styles.row}>
-              <Text style={styles.header}>Name</Text>
-              <Text style={styles.header}>Email</Text>
-              <Text style={styles.header}>Status</Text>
+              <Text style={styles.header}>Application</Text>
+              <Text style={styles.header}>Actions</Text>
             </View>
           {/* </>
         :
@@ -123,19 +123,24 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             data={records}
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
+                
                 <View style={styles.row}>
-                  <Text style={styles.space}>{item.userid}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text>{item.firstName} {item.lastName}</Text>
+                  <Text style={{fontSize: 16}}>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.firstName} {item.lastName}</Text>
+                      {"\n"}{item.userid}{"\n"}
+                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> </Text>
                   <View>
-                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>
+                    {/*<Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>*/}
                     {/* TODO: modularize approve/deny component */}
                     <TouchableOpacity onPress={() => {approve(item.key, appRef,userEmail)}}>
                       <Text style={styles.approved}>approve</Text>
                     </TouchableOpacity> 
                     <TouchableOpacity onPress={() => {deny(item.key,  appRef, userEmail)}}>
                       <Text style={styles.denied}>deny</Text>
+                    </TouchableOpacity> 
+                    <TouchableOpacity onPress={() => {view(item.key,  appRef, userEmail)}}>
+                      <Text style={styles.view}>VIEW</Text>
                     </TouchableOpacity> 
                   </View>
                 </View>
@@ -181,6 +186,17 @@ function deny(key: String, appRef: any, userEmail: String) {
         approvedBy: userEmail,
         approvedDate: dateTime
       }, { merge: true })
+}
+
+function view(key: String, appRef: any, userEmail: String) { 
+  Alert.alert(
+    'test',
+    'this will hopefully work eventually',
+    [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ],
+    {cancelable: false},
+  );
 }
 
 function renderRecordStatus(status: String) {
@@ -235,7 +251,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     width: Dimensions.get('window').width,
-    justifyContent: 'space-around', 
+    justifyContent: 'space-between',
+    paddingRight: 20,
+    paddingLeft: 20,
   }, 
   space: {
     margin: 15
@@ -251,6 +269,10 @@ const styles = StyleSheet.create({
   }, 
   denied: {
     color: 'red'
+  },
+  view: {
+    color: 'blue', 
+    fontSize: 20
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,
