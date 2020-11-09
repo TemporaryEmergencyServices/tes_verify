@@ -14,50 +14,26 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList} from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const SECONDBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function SECONDBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <BottomTab.Navigator
+    <SECONDBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
-      <BottomTab.Screen
-        name="Profile"
-        component={SettingsNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
-        }}
-      />
-      <BottomTab.Screen
-        name="ClockIn"
-        component={ClockInNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Records"
-        component={RecordsNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
-        }}
-      />
-      {/* MANAGER SCREENS
-          TODO: modify to conditional rendering based on redux roles
-      */}
-      <BottomTab.Screen
+      <SECONDBottomTab.Screen
         name="ManagerApprove"
         component={ManagerApproveNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
-      <BottomTab.Screen
-        name="ManagerApproveApplication"
-        component={ManagerApproveApplicationNavigator}
-        options={{
+      <SECONDBottomTab.Screen
+       name="ManagerApproveApplication"
+       component={ManagerApproveApplicationNavigator}
+       options={{
          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
@@ -85,7 +61,7 @@ export default function BottomTabNavigator() {
      
       
 
-    </BottomTab.Navigator>
+    </SECONDBottomTab.Navigator>
   );
 }
 

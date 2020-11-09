@@ -9,6 +9,7 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { RootStackParamList } from '../types';
 import BottomTabNavigator from './BottomTabNavigator';
+import SECONDBottomTabNavigator from './SECONDBottomTabNavigator';
 import ApplyScreen from '../screens/ApplyScreen';
 import ManagerApproveApplicationScreen from '../screens/ManagerApproveApplicationScreen';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -40,6 +41,7 @@ function RootNavigator() {
       <Stack.Screen name="SignInScreen" component={SignInScreen} />
       <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} />
       <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} />
+      <Stack.Screen name="SECONDBottomTabNavigator" component={SECONDBottomTabNavigator} />
       <Stack.Screen name="ApplyScreen" component={ApplyScreen} />
       <Stack.Screen name="ManagerApproveApplicationScreen" component={ManagerApproveApplicationScreen} />
     </Stack.Navigator>
