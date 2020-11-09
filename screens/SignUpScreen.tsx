@@ -77,6 +77,7 @@ export default function SignUpScreen({  navigation  }) {
       </View>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="visible-password"
           secureTextEntry
           style={styles.inputText}
           maxLength={MAX_PASSWORD_LEN}
