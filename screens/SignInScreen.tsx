@@ -86,6 +86,7 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
