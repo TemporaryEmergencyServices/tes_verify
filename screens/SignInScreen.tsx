@@ -25,28 +25,10 @@ export default function SignInScreen({ navigation }) {
   
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
-  // const [role, setRole] = useState('administrator')
-  
-  // const getRole = (email) => {
-  //   var role
-  //   firebase.firestore()
-  //     .collection('roles')
-  //     .where('username' , '==', email)
-  //     .limit(1)
-  //     .onSnapshot(querySnapshot => {
-  //       if (!querySnapshot.empty) {
-  //         const queryDocumentSnapshot = querySnapshot.docs[0];
-  //         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-  //         console.log('test')
-  //         return queryDocumentSnapshotData.role
-  //       }
-  //     })
-  // }
 
-  // var role
   const handleLogin = () => {
     firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
+      .signInWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => {
         dispatch(login(response.user))
         return response.user.email
@@ -95,8 +77,7 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          value={emailState}
-          onChangeText={text => setEmailState(text.toLowerCase())}/>
+          onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
