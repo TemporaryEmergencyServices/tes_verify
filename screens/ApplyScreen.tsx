@@ -197,6 +197,23 @@ export default function ApplyScreen({  navigation  }) {
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
         <Text style={styles.signUpText} >SUBMIT</Text>
       </TouchableOpacity>
+
+      <Button 
+        title="LEAVE PAGE" 
+        color = "#1C5A7D" 
+        onPress={() => 
+          {Alert.alert(
+            'Leave Page?',
+            "Are you sure you want to leave the page? All progress will be lost.",
+             [
+               {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+               {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
+
+             ],
+             {cancelable: false},
+           );
+           
+          }} />
     </View>
   );
   
@@ -271,7 +288,7 @@ const styles = StyleSheet.create({
     height:50,
     alignItems:"center",
     justifyContent:"center",
-    marginTop:40,
+    marginTop:15,
     marginBottom:10
   },
   createAccountBtn:{
