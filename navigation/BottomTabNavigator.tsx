@@ -6,12 +6,13 @@ import * as React from 'react';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import ManagerApproveScreen from '../screens/ManagerApproveScreen'
+import ManagerApproveApplicationScreen from '../screens/ManagerApproveApplicationScreen'
 import ClockInScreen from '../screens/ClockInScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import RecordsScreen from '../screens/RecordsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, SignInParamList, SignUpParamList} from '../types';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -20,7 +21,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="ClockIn"
+      initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
       <BottomTab.Screen
         name="Profile"
@@ -47,10 +48,17 @@ export default function BottomTabNavigator() {
           TODO: modify to conditional rendering based on redux roles
       */}
       <BottomTab.Screen
-        name="ManagerApprove"
+        name="Approve CI/O"
         component={ManagerApproveNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+      <BottomTab.Screen
+       name="Approve App"
+       component={ManagerApproveApplicationNavigator}
+       options={{
+         tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
        {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
@@ -143,6 +151,21 @@ function ManagerApproveNavigator() {
         options={{ headerShown: false }}
       />
     </ManagerApproveStack.Navigator>
+  )
+}
+
+const ManagerApproveApplicationStack = createStackNavigator<ManagerApproveApplicationParamList>()
+
+
+function ManagerApproveApplicationNavigator() {
+  return (
+    <ManagerApproveApplicationStack.Navigator>
+      <ManagerApproveApplicationStack.Screen
+        name="ManagerApproveApplicationScreen"
+        component={ManagerApproveApplicationScreen}
+        options={{ headerShown: false }}
+      />
+    </ManagerApproveApplicationStack.Navigator>
   )
 }
 
