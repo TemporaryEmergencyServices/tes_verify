@@ -45,6 +45,96 @@ exports[`<SettingsScreen /> renders correctly 1`] = `
     style={
       Object {
         "alignItems": "center",
+        "backgroundColor": "#1C5A7D",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 40,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+          },
+          Object {
+            "alignContent": "center",
+            "color": "white",
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "justifyContent": "center",
+            "marginTop": 10,
+            "paddingBottom": 10,
+          },
+        ]
+      }
+    >
+      Apply to be a volunteer
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1C5A7D",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 40,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+          },
+          Object {
+            "alignContent": "center",
+            "color": "white",
+            "fontSize": 18,
+            "fontWeight": "bold",
+            "justifyContent": "center",
+            "marginTop": 10,
+            "paddingBottom": 10,
+          },
+        ]
+      }
+    >
+      Approve volunteer applications
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
         "backgroundColor": "#E11383",
         "borderRadius": 25,
         "height": 50,

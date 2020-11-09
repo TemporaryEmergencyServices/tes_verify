@@ -12,4 +12,8 @@ describe("<SignUpScreen />", () => {
         const tree = renderer.create(<Provider store={store} ><SignUpScreen navigation={navigation}/></Provider>).toJSON();
         expect(tree).toMatchSnapshot();
     });
+
+    // it('signs out', () => {
+
+    // })
 });
