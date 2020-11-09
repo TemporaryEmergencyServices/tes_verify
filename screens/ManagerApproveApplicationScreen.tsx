@@ -38,7 +38,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               setHasAccess(true)
             
             }
-          else {setHasAccess(true)}//FIXME: set to false when not debugging
+          else {setHasAccess(false)}//FIXME: set to false when not debugging
          }
      });
 
