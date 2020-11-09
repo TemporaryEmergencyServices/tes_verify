@@ -28,7 +28,7 @@ export default function SignInScreen({ navigation }) {
 
   const handleLogin = () => {
     firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
+      .signInWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => {
         dispatch(login(response.user))
         return response.user.email
@@ -77,8 +77,7 @@ export default function SignInScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
-          value={emailState}
-          onChangeText={text => setEmailState(text.toLowerCase())}/>
+          onChangeText={text => setEmailState(text)}/>
       </View>
       <View style={styles.inputView} >
         <TextInput  
