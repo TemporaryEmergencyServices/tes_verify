@@ -33,21 +33,7 @@ export default function SettingsScreen({ navigation }) {
         else{
          const queryDocumentSnapshot = querySnapshot.docs[0];
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-         if (queryDocumentSnapshotData.approved == 'pending'){
-            console.log("has pending app")
-            setAppState("pending")
-          
-          }
-          else {
-            if(queryDocumentSnapshotData.approved == 'approved') {
-              console.log("has approved app")
-              setAppState("approved")
-            }
-            if(queryDocumentSnapshotData.approved == 'denied') {
-              console.log("has denied app")
-              setAppState("denied")
-            }
-          }
+          setAppState(queryDocumentSnapshotData.approved)
         }
      });
 
@@ -60,6 +46,30 @@ export default function SettingsScreen({ navigation }) {
 
   const handleApply = () => {goToApply()}
   const handleApprove = () => {goToApprove()}
+  const handleView = () => {
+    Alert.alert(
+      ":)",
+      "this will be to view submitted, approved, and denied applications but isnt functional yet",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
+  }
+
+  //reapply needs to be a separate thing i think since it will be updated records.... but i could be wrong
+
+  const handleReApply = () => {
+    Alert.alert(
+      ":)",
+      "this will be to reapply but isnt functional yet.",
+      [
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );
+  }
+
   const handleLogout = () => {
     firebase.auth().signOut()
     .then(() => dispatch(logout()))
@@ -76,29 +86,123 @@ export default function SettingsScreen({ navigation }) {
     })
   }
 
-  return (
+  const returnForNone = (
+    <View style={styles.container}>
+        
+        <Text style={styles.largeTitle}> Welcome! </Text>
+        <Text style={styles.instructions}> Your email 
+          <Text style={styles.emph}> {userEmail}</Text> does not have an associated application. Please submit one below.
+          
+        </Text>
+
+        <TouchableOpacity style={styles.appBtns} onPress = {handleApply}>
+          <Text style={styles.signOutText}>Create Application</Text>
+        </TouchableOpacity> 
+  
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
+     
+      </View>
+  )
+
+  const returnForPending = (
+    <View style={styles.container}>
+        
+        <Text style={styles.largeTitle}> Welcome Back! </Text>
+        <Text style={styles.instructions}> Your email 
+          <Text style={styles.emph}> {userEmail}</Text> has a pending application. You may view the application using the button below. If you are waiting on approval, please speak with a TES employee.
+          
+        </Text>
+
+        <TouchableOpacity style={styles.appBtns} onPress = {handleView}>
+          <Text style={styles.signOutText}>View Pending Application</Text>
+        </TouchableOpacity> 
+  
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
+     
+      </View>
+  )
+
+  const returnForApproved = (
+    <View style={styles.container}>
+        
+        <Text style={styles.largeTitle}> Welcome Back! </Text>
+        <Text style={styles.instructions}> Your email 
+          <Text style={styles.emph}> {userEmail}</Text> has an approved application. You may view the application below! If you wish to update any of the information, please speak with a TES manager.
+          
+        </Text>
+
+        <TouchableOpacity style={styles.appBtns} onPress = {handleView}>
+          <Text style={styles.signOutText}>View Approved Application</Text>
+        </TouchableOpacity> 
+  
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
+     
+      </View>
+  )
+
+  const returnForDenied = (
+    <View style={styles.container}>
+        
+        <Text style={styles.largeTitle}> Welcome Back! </Text>
+        <Text style={styles.instructions}> Your email 
+          <Text style={styles.emph}> {userEmail}</Text> has a denied application. You may view the denied application and re-apply below.
+          
+        </Text>
+
+        <TouchableOpacity style={styles.appBtns} onPress = {handleView}>
+          <Text style={styles.signOutText}>View Denied Application</Text>
+        </TouchableOpacity> 
+
+        <TouchableOpacity style={styles.appBtns} onPress = {handleReApply}>
+          <Text style={styles.signOutText}>Re-Apply</Text>
+        </TouchableOpacity> 
+  
+  
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
+     
+      </View>
+  )
+
+  if (appState == 'none') {return (returnForNone)}
+  if (appState == 'pending') {return(returnForPending)}
+  if (appState == 'approved') {return(returnForApproved)}
+  if (appState == 'denied') {return(returnForDenied)}
+
+  else { return (
     
     <View style={styles.container}>
       
-  <Text style={styles.title}> {user.email}, {appState}</Text>
+      
+      <Text style={styles.title}> {user.email}, {appState}, something has gone wrong</Text>
 
       <TouchableOpacity style={styles.appBtns} onPress = {handleApply}>
         <Text style={styles.signOutText}>Apply to be a volunteer</Text>
       </TouchableOpacity> 
+        
+        {/* 
+        <TouchableOpacity style={styles.appBtns} onPress = {handleApprove}>
+          <Text style={styles.signOutText}>Approve volunteer applications</Text>
+        </TouchableOpacity> 
+        */}
       
-      {/* 
-      <TouchableOpacity style={styles.appBtns} onPress = {handleApprove}>
-        <Text style={styles.signOutText}>Approve volunteer applications</Text>
-      </TouchableOpacity> 
-      */}
-     
 
       <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
         <Text style={styles.signOutText}>Sign Out</Text>
       </TouchableOpacity>  
+   
     </View>
-  );
+  ); }
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
@@ -112,6 +216,26 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: "#1C5A7D"
   },
+  emph: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: "#E11383"
+  },
+  largeTitle: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: "#1C5A7D",
+    marginBottom: 40
+  },
+  instructions: {
+    fontSize: 20,
+    textAlign: 'center',
+    color: "#1C5A7D",
+    paddingRight: 20, 
+    paddingLeft: 20,
+    marginBottom: 20
+  },
   separator: {
     marginVertical: 30,
     height: 1,
@@ -124,7 +248,7 @@ const styles = StyleSheet.create({
     height:50,
     alignItems:"center",
     justifyContent:"center",
-    marginTop:40,
+    marginTop:13,
     marginBottom:10
   },
   signOutBtn:{
