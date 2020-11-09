@@ -32,6 +32,7 @@ function ForgotPasswordScreen({  navigation  }) {
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
+          value={emailState}
           onChangeText={text => setEmailState(text)}/>
       </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handlePasswordReset}>

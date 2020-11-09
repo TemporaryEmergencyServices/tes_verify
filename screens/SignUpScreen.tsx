@@ -82,6 +82,7 @@ export default function SignUpScreen({  navigation  }) {
           maxLength={MAX_PASSWORD_LEN}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <View>
