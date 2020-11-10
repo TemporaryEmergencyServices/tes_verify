@@ -15,10 +15,8 @@ describe("<ClockInScreen />", () => {
         expect(wrapper).toMatchSnapshot()
     });
 
-    it('displays not authorized', () => {
-        // let root = tree.root
+    it('displays activity indicator', () => {
         const text = wrapper.children[0].children[0]
-        expect(text === ' You are not authorized :( ').toBeDefined()
-        // TODO: Add clock in, clock out
+        expect(wrapper.children[0].type === 'ActivityIndicator').toBeDefined()
     })
 });

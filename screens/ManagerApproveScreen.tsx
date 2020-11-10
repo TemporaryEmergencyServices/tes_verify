@@ -86,14 +86,14 @@ export default function ManagerApproveScreen() {
     - allow for option to approve/deny
     - allow for editing (separate screen?)
   */
- console.log(hasAccess)
- if (!hasAccess){
-   return (
-   <View style={styles.container}>
-     <Text style={styles.header}> You are not authorized :( </Text>
-   </View>
-   )
- }
+//  console.log(hasAccess)
+//  if (!hasAccess){
+//    return (
+//    <View style={styles.container}>
+//      <Text style={styles.header}> You are not authorized :( </Text>
+//    </View>
+//    )
+//  }
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Manager Approvals</Text>
