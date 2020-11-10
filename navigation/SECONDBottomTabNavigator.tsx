@@ -14,38 +14,37 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList} from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const SECONDBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function SECONDBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
-
   return (
-    <BottomTab.Navigator
+    <SECONDBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
-      <BottomTab.Screen
-        name="Profile"
-        component={SettingsNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
-        }}
-      />
-      <BottomTab.Screen
-        name="ClockIn"
-        component={ClockInNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
-        }}
-      />
-      <BottomTab.Screen
-        name="Records"
-        component={RecordsNavigator}
+        <SECONDBottomTab.Screen
+          name="Profile"
+          component={SettingsNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
+          }}
+        />
+      <SECONDBottomTab.Screen
+        name="ManagerApprove"
+        component={ManagerApproveNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
-      {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
+      <SECONDBottomTab.Screen
+       name="ManagerApproveApplication"
+       component={ManagerApproveApplicationNavigator}
+       options={{
+         tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+       {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
 
 
       {/* Marie commented these out since SignUp and SignIn ~should~ be working sort of now. But they could still be useful.
@@ -66,7 +65,10 @@ export default function BottomTabNavigator() {
         }}
       />
       */}
-    </BottomTab.Navigator>
+     
+      
+
+    </SECONDBottomTab.Navigator>
   );
 }
 

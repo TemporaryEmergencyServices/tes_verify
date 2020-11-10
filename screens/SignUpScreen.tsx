@@ -43,7 +43,7 @@ export default function SignUpScreen({  navigation  }) {
       return;
     }
     firebase.auth()
-      .createUserWithEmailAndPassword(emailState,passwordState)
+      .createUserWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => dispatch(signup(response.user)))
       .then(() => setRole(emailState,"volunteer"))
       .then(goToSignIn)
@@ -67,6 +67,8 @@ export default function SignUpScreen({  navigation  }) {
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
@@ -74,11 +76,13 @@ export default function SignUpScreen({  navigation  }) {
       </View>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="visible-password"
           secureTextEntry
           style={styles.inputText}
           maxLength={MAX_PASSWORD_LEN}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <View>

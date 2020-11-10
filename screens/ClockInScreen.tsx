@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, Platform } from 'react-native';
+import {  ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -24,7 +25,8 @@ export default function ClockInScreen() {
 
   const[hasAccess,setHasAccess] = useState(false)
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
+  const [loading, setLoading] = useState(true)
 
   // const [hasCamPermission, setHasCamPermission] = useState(null);
   // const [scanned, setScanned] = useState(false);
@@ -49,6 +51,7 @@ export default function ClockInScreen() {
        .onSnapshot(querySnapshot => {
          if(querySnapshot.empty) {
           setClockedIn(false)
+
          }
          else{
            const queryDocumentSnapshot = querySnapshot.docs[0];
@@ -56,13 +59,13 @@ export default function ClockInScreen() {
            setUniqueClockID(queryDocumentSnapshot.id)
            setInTime(queryDocumentSnapshotData.in_time)
            setClockedIn(true)
+           
            //do stuff for resume - set clocked in to true
            //set in time
            //set unique clock id
          }
      });
-
-     //role authorization
+     let unmounted2 = false
      const roleSubscriber = firebase.firestore()
        .collection('roles')
        .where('username' , '==', userEmail)
@@ -76,12 +79,15 @@ export default function ClockInScreen() {
            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
            if (queryDocumentSnapshotData.role == 'volunteer'){
               setHasAccess(true)
-            
+              setLoading(false)
             }
-          else {setHasAccess(false)}
+          else {
+            setHasAccess(false)
+            setLoading(false)
+          }
          }
      });
-    return () => {subscriber(); roleSubscriber(); unmounted = true};
+    return () => {subscriber(); roleSubscriber(); unmounted = true; unmounted2 = true };
   } ,[]);
 
   // const isValidQR = (data : string) => {
@@ -169,12 +175,19 @@ export default function ClockInScreen() {
       {cancelable: false},
     );
 
+  if (loading) {
+      return (
+            <View style={styles.centerContainer}>
+              <ActivityIndicator size="large" color="#E11383" />
+            </View>
+      )
+  }
 
-  if (!hasAccess){
+  else {
+    if (!hasAccess){
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> You are not authorized :( </Text>
-      <Text style={styles.instructionsText}> {inTime}. </Text>
+      <Text style={styles.instructionsText}> You must be listed as a volunteer to do this. Eventually, this will be have an approved application.</Text>
     </View>
     )
   }
@@ -206,7 +219,7 @@ export default function ClockInScreen() {
     return (
     <View style={styles.container}>
       <Text style={styles.instructionsText}> If you are checking in, press the clock in button! </Text>
-      <TouchableOpacity 
+      <TouchableOpacity accessibilityLabel="clock in button"
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
@@ -219,6 +232,7 @@ export default function ClockInScreen() {
       } */}
     </View>
   )}
+}
 }
 
 
@@ -287,6 +301,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
   },
-
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
+    justifyContent: 'center',
+  },
 
 });

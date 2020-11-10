@@ -10,4 +10,4 @@ describe("<NotFoundScreen />", () => {
         const tree = renderer.create(<NotFoundScreen navigation={navigation}/>).toJSON();
         expect(tree).toMatchSnapshot();
     });
-});
+})

@@ -17,7 +17,7 @@ https://medium.com/react-native-development/how-to-use-the-flatlist-component-re
 export default function RecordsScreen() {
 
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
@@ -181,13 +181,19 @@ const styles = StyleSheet.create({
     margin: 100
   }, 
   pending: {
-    color: 'orange'
+    color: 'orange',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   approved: {
-    color: 'green'
+    color: 'green',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   denied: {
-    color: 'red'
+    color: 'red',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,

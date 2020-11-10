@@ -19,7 +19,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const[viewtype,setViewType] = useState('pending')
   const[modalVisible,setModalVisible] = useState(false);
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
+
 
   const [detailApp,setDetailApp] = useState([] as any)
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               setHasAccess(true)
             
             }
-          else {setHasAccess(true)}//FIXME: set to false when not debugging
+          else {setHasAccess(false)}//FIXME: set to false when not debugging
          }
      });
 
@@ -167,13 +168,12 @@ export default function ManagerApproveApplicationScreen({navigation}) {
       </TouchableHighlight> */}
 
       <View style={{height:'40%'}}>
-        <View style={{flex: 1,flexDirection: 'row', alignSelf:'flex-start'}}>
+        {/* <View style={{flex: 1,flexDirection: 'row', alignSelf:'flex-start'}}>
           
-          {/* <TouchableOpacity style={styles.backButton} onPress={() => setModalVisible(true)}> */}
           <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
             <Text style={styles.backText}>Back</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
                   {/* TODO: show "no pending records" when records empty. 
                       for some reason, it's currently populating records and then 
@@ -183,8 +183,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                     records != [] ?
                       <>  */}
             {/* <View style={styles.space}></View> */}
-            <View style={{height:'65%',alignItems:'center'}}> 
-              <View style={{height:'65%',width:'100%',alignItems:'center'}}>
+            <View style={{height:'70%',alignItems:'center'}}> 
+              <View style={{height:'55%',width:'100%',alignItems:'center'}}>
                 <Text>Select to view pending, approved, or denied applications:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
                     <View style={{flexDirection: 'row'}}>
@@ -202,9 +202,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               </View> 
               <View style={styles.space}></View>
               <View style={styles.row}>
-                <Text style={styles.header}>Name</Text>
-                <Text style={styles.header}>Email</Text>
-                <Text style={styles.header}>Status</Text>
+                <Text style={styles.header}>Application</Text>
+                <Text style={styles.header}>Actions</Text>
               </View>
             </View>
           {/* </>
@@ -222,13 +221,15 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             data={records}
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
+                
                 <View style={styles.row}>
-                  <Text style={styles.space}>{item.userid}</Text>
-                </View>
-                <View style={styles.row}>
-                  <Text>{item.firstName} {item.lastName}</Text>
+                  <Text style={{fontSize: 16}}>
+                    <Text style={{fontWeight: 'bold'}}>
+                      {item.firstName} {item.lastName}</Text>
+                      {"\n"}{item.userid}{"\n"}
+                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> </Text>
                   <View>
-                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>
+                    {/*<Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>*/}
                     {/* TODO: modularize approve/deny component */}
                     {/* <TouchableOpacity onPress={() => {approve(item.key, appRef,userEmail)}}>
                       <Text style={styles.approved}>approve</Text>
@@ -236,8 +237,11 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                     <TouchableOpacity onPress={() => {deny(item.key,  appRef, userEmail)}}>
                       <Text style={styles.denied}>deny</Text>
                     </TouchableOpacity>  */}
-                    <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
+                    {/* <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.pending}>details</Text>
+                    </TouchableOpacity>  */}
+                    <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
+                      <Text style={styles.view}>VIEW</Text>
                     </TouchableOpacity> 
                   </View>
                 </View>
@@ -283,6 +287,17 @@ function deny(key: String, appRef: any, userEmail: String) {
         approvedBy: userEmail,
         approvedDate: dateTime
       }, { merge: true })
+}
+
+function view(key: String, appRef: any, userEmail: String) { 
+  Alert.alert(
+    'test',
+    'this will hopefully work eventually',
+    [
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ],
+    {cancelable: false},
+  );
 }
 
 function renderRecordStatus(status: String) {
@@ -337,7 +352,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     width: Dimensions.get('window').width,
-    justifyContent: 'space-around', 
+    justifyContent: 'space-between',
+    paddingRight: 20,
+    paddingLeft: 20,
   }, 
   space: {
     margin: 15
@@ -353,6 +370,10 @@ const styles = StyleSheet.create({
   }, 
   denied: {
     color: 'red'
+  },
+  view: {
+    color: 'blue', 
+    fontSize: 20
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,
