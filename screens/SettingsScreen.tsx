@@ -92,6 +92,9 @@ export default function SettingsScreen({ navigation }) {
         <Text style={styles.emph}>{userEmail}</Text>
         <Text style={styles.instructions}> Role </Text>
         <Text style={styles.emph}>{userRole}</Text>
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
     </View>
   )
 
@@ -230,7 +233,8 @@ const styles = StyleSheet.create({
   emph: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: "#E11383"
+    color: "#E11383", 
+    margin: 
   },
   largeTitle: {
     fontSize: 40,

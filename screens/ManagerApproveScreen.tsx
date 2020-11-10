@@ -19,7 +19,7 @@ export default function ManagerApproveScreen() {
 
 
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
   useEffect(() => {
     let unmounted = false

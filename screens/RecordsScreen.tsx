@@ -17,7 +17,7 @@ https://medium.com/react-native-development/how-to-use-the-flatlist-component-re
 export default function RecordsScreen() {
 
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)

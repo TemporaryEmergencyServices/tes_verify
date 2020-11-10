@@ -29,7 +29,7 @@ export default function ApplyScreen({  navigation  }) {
   const[appSubmitDate,setAppSubmitDate] = useState('')
   
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
   const dispatch = useDispatch()  
   const handleApply = async () => {
