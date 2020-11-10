@@ -15,15 +15,18 @@ export default function ManagerApproveScreen() {
   const [records, setRecords] = useState([] as any)
   const [clockRef, setClockRef] = useState({})
 
-  const[hasAccess,setHasAccess] = useState(false)
+  const[hasAccess,setHasAccess] = useState(true)
 
 
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
+  const userRole = user.role
+  //if(user.role == 'administrator') {setHasAccess(true)}
 
   useEffect(() => {
     let unmounted = false
-    const roleSubscriber = firebase.firestore()
+    //role is now redux - should not need roleSubscriber anymore:)
+    /*const roleSubscriber = firebase.firestore()
        .collection('roles')
        .where('username' , '==', userEmail)
        .limit(1)
@@ -41,7 +44,7 @@ export default function ManagerApproveScreen() {
             }
           else {setHasAccess(false)}
          }
-     });
+     }); */ 
 
     const subscriber = firebase.firestore()
     .collection('ClockInsOuts')
@@ -77,7 +80,7 @@ export default function ManagerApproveScreen() {
     });
 
     () => clockInQuery()
-    return () => {clockOutQuery(); roleSubscriber(); unmounted=true};
+    return () => {clockOutQuery(); unmounted=true};
   }, [])
 
   /*
@@ -96,7 +99,7 @@ export default function ManagerApproveScreen() {
 //  }
   return (
     <View style={styles.container}>
-      <Text style={styles.titleFlatList}>Manager Approvals</Text>
+      <Text style={styles.titleFlatList}>Approve Clock Ins and Outs</Text>
       {/* TODO: show "no pending records" when records empty. 
           for some reason, it's currently populating records and then 
           immediately become empty currently
@@ -130,29 +133,29 @@ export default function ManagerApproveScreen() {
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
                 <View style={styles.row}>
-                  <Text style={styles.space}>{item.userid}</Text>
+                  <Text style={styles.userIdText}>{item.userid}</Text>
                 </View>
-                <View style={styles.row}>
+                <View style={styles.row2}>
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
                     <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
                     {/* TODO: modularize approve/deny component */}
-                    <TouchableOpacity onPress={() => {approve(item.key, "in", clockRef)}}>
-                      <Text style={styles.approved}>approve</Text>
+                    <TouchableOpacity style={styles.approvedBtn} onPress={() => {approve(item.key, "in", clockRef)}}>
+                      <Text style={styles.actionText}>approve</Text>
                     </TouchableOpacity> 
-                    <TouchableOpacity onPress={() => {deny(item.key, "in", clockRef)}}>
-                      <Text style={styles.denied}>deny</Text>
+                    <TouchableOpacity style={styles.denyBtn} onPress={() => {deny(item.key, "in", clockRef)}}>
+                      <Text style={styles.actionText}>deny</Text>
                     </TouchableOpacity> 
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
                     <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
-                    <TouchableOpacity onPress={() => {approve(item.key, "out", clockRef)}}>
-                      <Text style={styles.approved}>approve</Text>
+                    <TouchableOpacity style={styles.approvedBtn} onPress={() => {approve(item.key, "out", clockRef)}}>
+                      <Text style={styles.actionText}>approve</Text>
                     </TouchableOpacity> 
-                    <TouchableOpacity onPress={() => {deny(item.key, "out", clockRef)}}>
-                      <Text style={styles.denied}>deny</Text>
+                    <TouchableOpacity style={styles.denyBtn} onPress={() => {deny(item.key, "out", clockRef)}}>
+                      <Text style={styles.actionText}>deny</Text>
                     </TouchableOpacity> 
                   </View>
                 </View>
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
     marginBottom:10,
   },
   itemStyle: {
-    height: 100,
+    height: 150,
     alignItems: 'center', 
     justifyContent: 'center'
   },
@@ -253,20 +256,49 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'space-around', 
   }, 
+  row2: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-around', 
+  }, 
+  userIdText: {
+    margin: 15, 
+    fontWeight: 'bold'
+  },
   space: {
-    margin: 15
+    margin: 15, 
   }, 
   bigSpace: {
     margin: 100
   }, 
   pending: {
-    color: 'orange'
+    color: 'orange',
+    fontWeight: 'bold',
   }, 
+  actionText:{
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   approved: {
-    color: 'green'
+    color: 'green',
+    fontWeight: 'bold'
+  }, 
+  approvedBtn: {
+    backgroundColor: 'green',
+    borderRadius: 15,
+    height: 20,
+    marginTop: 5
   }, 
   denied: {
-    color: 'red'
+    color: 'red',
+    fontWeight: 'bold'
+  }, 
+  denyBtn: {
+    backgroundColor: 'red',
+    borderRadius: 15,
+    height: 20,
+    marginTop: 5
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,

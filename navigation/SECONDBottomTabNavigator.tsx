@@ -34,14 +34,15 @@ export default function SECONDBottomTabNavigator() {
         name="ManagerApprove"
         component={ManagerApproveNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+          title: "Approve Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
       <SECONDBottomTab.Screen
        name="ManagerApproveApplication"
+       
        component={ManagerApproveApplicationNavigator}
        options={{
-         tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+          title: "Approve Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
        {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
