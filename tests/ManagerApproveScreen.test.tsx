@@ -15,8 +15,7 @@ describe("<ManagerApproveScreen />", () => {
     });
 
     it('displays not authorized', () => {
-        console.log(wrapper.children[0])
         const text = wrapper.children[0].children[0]
-        expect(text === 'Volunteer Records for ').toBe(true)
+        expect(text === 'Approve Clock Ins and Outs').toBe(true)
     })
 });

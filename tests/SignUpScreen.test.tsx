@@ -14,8 +14,4 @@ describe("<SignUpScreen />", () => {
     it('renders correctly', () => {
         expect(wrapper).toMatchSnapshot();
     });
-
-    // it('signs out', () => {
-
-    // })
 });

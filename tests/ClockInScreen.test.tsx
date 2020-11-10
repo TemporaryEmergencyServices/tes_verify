@@ -15,8 +15,8 @@ describe("<ClockInScreen />", () => {
         expect(wrapper).toMatchSnapshot()
     });
 
-    it('displays activity indicator', () => {
-        const text = wrapper.children[0].children[0]
-        expect(wrapper.children[0].type === 'ActivityIndicator').toBeDefined()
-    })
+    // it('displays activity indicator', () => {
+    //     const text = wrapper.children[0].children[0]
+    //     expect(wrapper.children[0].type === 'ActivityIndicator').toBeDefined()
+    // })
 });

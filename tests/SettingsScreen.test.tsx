@@ -16,7 +16,6 @@ describe("<SettingsScreen />", () => {
     });
 
     it('displays screen for admin', () => {
-        console.log(wrapper.children[0])
         const text = wrapper.children[0].children[0]
         expect(text === ' Welcome! ').toBeDefined()
     })

@@ -183,7 +183,6 @@ export default function SettingsScreen({ navigation }) {
       </View>
   )
 
-  console.log(userRole, appState)
   if (userRole == 'administrator') {return (returnForManager)}
   if (appState == 'none') {return (returnForNone)}
   if (appState == 'pending') {return(returnForPending)}
