@@ -12,10 +12,8 @@ import { useEffect, useState, Component, useLayoutEffect} from 'react'
 
 export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
   const dispatch = useDispatch()
-
-  // console.log('EMAISSL', userEmail)
   
   //appState gives application status. Can be none (has not submitted before), pending, approved, or denied.
   //the status of appState is determined in the below useEffect.

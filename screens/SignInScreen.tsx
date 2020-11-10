@@ -9,7 +9,7 @@ import SignUpScreen from '../screens/SignUpScreen'
 import ForgotPassword from '../screens/ForgotPasswordScreen'
 
 import { login } from '../actions'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 
 /*
  * Code is loosely based on the following tutorials: 
@@ -30,18 +30,15 @@ export default function SignInScreen({ navigation }) {
     firebase.auth()
       .signInWithEmailAndPassword(emailState.toLowerCase(),passwordState)
       .then((response) => {
-        dispatch(login(response.user))
-        return response.user.email
-      })
-      .then(async (email) => {
         firebase.firestore()
         .collection('roles')
-        .where('username' , '==', email)
+        .where('username' , '==', response.user.email)
         .limit(1)
         .onSnapshot(querySnapshot => {
           if (!querySnapshot.empty) {
             const queryDocumentSnapshot = querySnapshot.docs[0];
             const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+            dispatch(login(queryDocumentSnapshotData))
             goToMainBody(queryDocumentSnapshotData.role)
           }
         })
@@ -57,6 +54,7 @@ export default function SignInScreen({ navigation }) {
         );
       })
   }
+
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
   const goToMainBody = (role) => {
