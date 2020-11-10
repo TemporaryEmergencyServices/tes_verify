@@ -16,9 +16,8 @@ describe("<ClockInScreen />", () => {
     });
 
     it('displays not authorized', () => {
-        // let root = tree.root
+        console.log(wrapper)
         const text = wrapper.children[0].children[0]
         expect(text === ' You are not authorized :( ').toBeDefined()
-        // TODO: Add clock in, clock out
     })
 });
