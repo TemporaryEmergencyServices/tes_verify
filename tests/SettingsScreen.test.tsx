@@ -15,9 +15,9 @@ describe("<SettingsScreen />", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('displays not authorized', () => {
-        console.log(wrapper)
+    it('displays screen for admin', () => {
+        console.log(wrapper.children[0])
         const text = wrapper.children[0].children[0]
-        expect(text === ' You are not authorized :( ').toBeDefined()
+        expect(text === ' Welcome! ').toBeDefined()
     })
 });

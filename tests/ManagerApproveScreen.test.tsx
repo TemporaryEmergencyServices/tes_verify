@@ -15,10 +15,8 @@ describe("<ManagerApproveScreen />", () => {
     });
 
     it('displays not authorized', () => {
-        // const wrapper = tree.toJSON()
-        // let root = tree.root
+        console.log(wrapper.children[0])
         const text = wrapper.children[0].children[0]
-        expect(text === ' You are not authorized :( ').toBe(true)
-        // TODO: add capability for authorized
+        expect(text === 'Volunteer Records for ').toBe(true)
     })
 });

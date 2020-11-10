@@ -15,9 +15,8 @@ describe("<ClockInScreen />", () => {
         expect(wrapper).toMatchSnapshot()
     });
 
-    it('displays not authorized', () => {
-        console.log(wrapper)
+    it('displays activity indicator', () => {
         const text = wrapper.children[0].children[0]
-        expect(text === ' You are not authorized :( ').toBeDefined()
+        expect(wrapper.children[0].type === 'ActivityIndicator').toBeDefined()
     })
 });
