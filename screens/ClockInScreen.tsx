@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, Platform } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -8,6 +8,9 @@ import '@firebase/firestore';
 import { Text, View } from '../components/Themed';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 import SettingsScreen from './SettingsScreen.js';
+
+// import { BarCodeScanner } from 'expo-barcode-scanner';
+// import { Permissions } from 'expo';
 
 export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
@@ -23,8 +26,21 @@ export default function ClockInScreen() {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.email
 
+  // const [hasCamPermission, setHasCamPermission] = useState(null);
+  // const [scanned, setScanned] = useState(false);
+  // const [validQR, setValidQR] = useState(false);
   useEffect(() => {
+
+    // QR scanning permissions
+    // if (Platform.OS !== 'web'){
+    // (async () => {
+    //   const { status } = await BarCodeScanner.requestPermissionsAsync();
+    //   setHasCamPermission(status === 'granted');
+    // })();}
+
     let unmounted = false
+
+    //clock ins
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
@@ -45,6 +61,8 @@ export default function ClockInScreen() {
            //set unique clock id
          }
      });
+
+     //role authorization
      const roleSubscriber = firebase.firestore()
        .collection('roles')
        .where('username' , '==', userEmail)
@@ -66,6 +84,29 @@ export default function ClockInScreen() {
     return () => {subscriber(); roleSubscriber(); unmounted = true};
   } ,[]);
 
+  // const isValidQR = (data : string) => {
+  //   var isValid = false;
+  //   const docRef = firebase.firestore()
+  //        .collection('QRcodes')
+  //        .doc(data).get()
+  //        .then((doc) => {setValidQR(doc.data().active)})
+  //        .then(() => setScanned(true));
+  // }
+
+  // const handleBarCodeScanned = ({type, data}) => {
+  //   isValidQR(data);
+    
+  //   if (validQR){
+  //     console.log("valid!!!")
+  //     alert(`valid QR code!`)
+  //   }
+
+  //   else{
+  //     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+  //   }
+  // };
+
+  
 
   const toggleClockIn = () => {
     //get the time
@@ -137,7 +178,18 @@ export default function ClockInScreen() {
     </View>
     )
   }
-  
+
+  //based on https://docs.expo.io/versions/latest/sdk/bar-code-scanner/
+  //if on mobile, check permissions
+  // if (Platform.OS !== 'web'){
+  //   if (hasCamPermission === null){
+  //     return <Text> Requesting for camera permission</Text>;
+  //   }
+  //   if (hasCamPermission === false) {
+  //     return <Text>No access to camera</Text>;
+  //   }
+  // }
+
   if (clockedIn) {return (
 
     <View style={styles.container}>
@@ -158,10 +210,18 @@ export default function ClockInScreen() {
         style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
-      
+{/* 
+      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
+      : hasCamPermission === false ? <Text> no camera permission :( </Text>
+      : <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        style={StyleSheet.absoluteFillObject} />
+      } */}
     </View>
   )}
 }
+
+
 
 /* was resume button 
 <TouchableOpacity 
