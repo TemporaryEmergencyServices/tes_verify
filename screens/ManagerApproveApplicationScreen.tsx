@@ -19,7 +19,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const[viewtype,setViewType] = useState('pending')
 
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
 
   useEffect(() => {

@@ -21,7 +21,7 @@ export default function ClockInScreen() {
 
   const[hasAccess,setHasAccess] = useState(false)
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
