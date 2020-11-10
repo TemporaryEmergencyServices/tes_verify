@@ -13,6 +13,7 @@ import { useEffect, useState, Component, useLayoutEffect} from 'react'
 export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
+  const userRole = user.role
   const dispatch = useDispatch()
   
   //appState gives application status. Can be none (has not submitted before), pending, approved, or denied.
@@ -83,6 +84,16 @@ export default function SettingsScreen({ navigation }) {
       );
     })
   }
+
+  const returnForManager = (
+    <View style={styles.container}>
+        <Text style={styles.largeTitle}> Welcome! </Text>
+        <Text style={styles.instructions}> Email </Text>
+        <Text style={styles.emph}>{userEmail}</Text>
+        <Text style={styles.instructions}> Role </Text>
+        <Text style={styles.emph}>{userRole}</Text>
+    </View>
+  )
 
   const returnForNone = (
     <View style={styles.container}>
@@ -169,6 +180,8 @@ export default function SettingsScreen({ navigation }) {
       </View>
   )
 
+  console.log(userRole, appState)
+  if (userRole == 'administrator') {return (returnForManager)}
   if (appState == 'none') {return (returnForNone)}
   if (appState == 'pending') {return(returnForPending)}
   if (appState == 'approved') {return(returnForApproved)}

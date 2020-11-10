@@ -21,8 +21,6 @@ import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch()
-
-  
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
 
