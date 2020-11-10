@@ -122,6 +122,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
 
+            {/*<Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
@@ -132,8 +133,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
             <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
+          <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text> */}
 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
@@ -185,9 +185,9 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             {/* <View style={styles.space}></View> */}
             <View style={{height:'70%',alignItems:'center'}}> 
               <View style={{height:'55%',width:'100%',alignItems:'center'}}>
-                <Text>Select to view pending, approved, or denied applications:</Text>
+                <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
-                    <View style={{flexDirection: 'row'}}>
+                    <View style={{flexDirection: 'row', paddingLeft: 20}}>
                       <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
                       <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
                       <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
@@ -240,7 +240,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                     {/* <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.pending}>details</Text>
                     </TouchableOpacity>  */}
-                    <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
+                    <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.view}>VIEW</Text>
                     </TouchableOpacity> 
                   </View>
@@ -334,11 +334,17 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16
   },
+  instructionsText:{
+    fontSize: 16, 
+    marginRight: '5%',
+    marginLeft: '5%',
+    textAlign: 'center'
+  },
   exportBtn:{
-    width:"80%",
+    width:"60%",
     backgroundColor:"#13AA52",
-    borderRadius:25,
-    height:50,
+    borderRadius:15,
+    height:40,
     alignItems:"center",
     justifyContent:"center",
     marginTop:0,
@@ -363,17 +369,27 @@ const styles = StyleSheet.create({
     margin: 100
   }, 
   pending: {
-    color: 'orange'
+    color: 'orange',
+    fontWeight: 'bold'
   }, 
   approved: {
-    color: 'green'
+    color: 'green',
+    fontWeight: 'bold'
   }, 
   denied: {
-    color: 'red'
+    color: 'red',
+    fontWeight: 'bold'
   },
   view: {
-    color: 'blue', 
-    fontSize: 20
+    color: 'white', 
+    fontSize: 16,
+    fontWeight: 'bold'
+  }, 
+  viewBtn: {
+    backgroundColor: "#1C5A7D", 
+    fontSize: 20,
+    borderRadius: 10,
+    padding: 10
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,
