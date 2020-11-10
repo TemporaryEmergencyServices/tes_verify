@@ -27,6 +27,8 @@ export default function ClockInScreen() {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const [loading, setLoading] = useState(true)
+  
+  const [appState, setAppState] = useState("none")
 
   // const [hasCamPermission, setHasCamPermission] = useState(null);
   // const [scanned, setScanned] = useState(false);
@@ -66,7 +68,7 @@ export default function ClockInScreen() {
          }
      });
      let unmounted2 = false
-     const roleSubscriber = firebase.firestore()
+     /*const roleSubscriber = firebase.firestore()
        .collection('roles')
        .where('username' , '==', userEmail)
        .limit(1)
@@ -86,8 +88,22 @@ export default function ClockInScreen() {
             setLoading(false)
           }
          }
+     }); */
+     const appStateSubscriber = firebase.firestore()
+       .collection('volunteers')
+       .where('userid' , '==', userEmail)
+       .onSnapshot(querySnapshot => {
+        if(querySnapshot.empty) {
+          setAppState("none")
+          setLoading(false)
+        } else {
+         const queryDocumentSnapshot = querySnapshot.docs[0];
+         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+         setAppState(queryDocumentSnapshotData.approved)
+         setLoading(false)
+        }
      });
-    return () => {subscriber(); roleSubscriber(); unmounted = true; unmounted2 = true };
+    return () => {subscriber(); appStateSubscriber(); unmounted = true; unmounted2 = true };
   } ,[]);
 
   // const isValidQR = (data : string) => {
@@ -184,10 +200,10 @@ export default function ClockInScreen() {
   }
 
   else {
-    if (!hasAccess){
+    if (appState != 'approved'){
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> You must be listed as a volunteer to do this. Eventually, this will be have an approved application.</Text>
+      <Text style={styles.instructionsText}> You must have an approved volunteer application to clock in. Please speak with a TES manager.</Text>
     </View>
     )
   }
