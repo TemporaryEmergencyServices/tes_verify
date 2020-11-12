@@ -12,7 +12,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import RecordsScreen from '../screens/RecordsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList} from '../types';
+import ManagerQRcodesScreen from '../screens/ManagerQRcodesScreen';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList} from '../types';
 
 const SECONDBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -43,6 +44,13 @@ export default function SECONDBottomTabNavigator() {
        component={ManagerApproveApplicationNavigator}
        options={{
           title: "Approve Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+      <SECONDBottomTab.Screen
+       name="ManagerQRcodes"
+       component={ManagerQRcodesNavigator}
+       options={{
+          title: "Manage QR codes", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
        {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
@@ -150,6 +158,22 @@ function ManagerApproveApplicationNavigator() {
         options={{ headerShown: false }}
       />
     </ManagerApproveApplicationStack.Navigator>
+  )
+}
+
+
+const ManagerQRcodesStack = createStackNavigator<ManagerQRcodesParamList>()
+
+
+function ManagerQRcodesNavigator() {
+  return (
+    <ManagerQRcodesStack.Navigator>
+      <ManagerQRcodesStack.Screen
+        name="ManagerQRcodesScreen"
+        component={ManagerQRcodesScreen}
+        options={{ headerShown: false }}
+      />
+    </ManagerQRcodesStack.Navigator>
   )
 }
 

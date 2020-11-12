@@ -112,7 +112,7 @@ export default function ClockInScreen() {
     const docRef = firebase.firestore()
          .collection('QRcodes')
          .doc(data).get()
-         .then((doc) => {console.log(doc.data().active);setValidQR(doc.data().active)})
+         .then((doc) => {console.log(doc.data().active);setValidQR("enabled" == doc.data().active)})
          .then(() => {
             if (validQR){
               toggleClockIn();
@@ -128,15 +128,6 @@ export default function ClockInScreen() {
     setScanned(true);
     isValidQR(data);
     
-    // if (validQR){
-    //   console.log("valid!!!")
-    //   toggleClockIn()
-    //   alert(`valid QR code!`)
-    // }
-
-    // else{
-    //   alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-    // }
     setShowScanner(false);
     setScanned(false);
   };
