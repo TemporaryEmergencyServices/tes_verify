@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView, TextInput } from 'react-native';
 import { useEffect, useState } from 'react'
 
 import firebase from '../firebase.js'
@@ -9,6 +9,7 @@ import { Text, View } from '../components/Themed';
 // import { ManagerStatusButtons } from '../components/ManagerStatusButtons'
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 import { RadioButton } from 'react-native-paper';
+import  QRCode  from 'react-native-qrcode-svg';
 export default function ManagerQRcodesScreen({navigation}) {
 
   const [loading, setLoading] = useState(true)
@@ -21,8 +22,10 @@ export default function ManagerQRcodesScreen({navigation}) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
 
-
+  const [newNickname,setNewNickname] = useState('')
   const [detailCode,setDetailCode] = useState([] as any)
+  const [qrValue, setQRvalue] = useState('Default QR')
+  const [showQR, setShowQR] = useState(false) 
   useEffect(() => {
     let unmounted = false
     const roleSubscriber = firebase.firestore()
@@ -74,6 +77,34 @@ export default function ManagerQRcodesScreen({navigation}) {
    </View>
    )
  }
+
+ const createQRrecord = async () => {
+  const today = new Date()
+  const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+   // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+  const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+  const dateTime = date+" " + time
+  var docRef = await firebase.firestore().collection('QRcodes').add({
+          createdBy: userEmail,
+          createDate: dateTime,
+          updatedBy: userEmail,
+          updateDate: dateTime,
+          active: "enabled",
+          nickname: newNickname
+  }).then(function(docRef) {() =>
+    setQRvalue(docRef.id);
+  });
+
+  Alert.alert(
+   'QR code created!',
+   "Press OK to continue.",
+    [
+      {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
+    ],
+    {cancelable: false},
+    );
+  }//do nothing for now
+
   // console.log(records)
   return (
     <View style={styles.container}>
@@ -97,6 +128,7 @@ export default function ManagerQRcodesScreen({navigation}) {
             <Text style={modalstyles.textStyle}>Created by: {detailCode.createdBy} </Text>
             <Text style={modalstyles.textStyle}>Last updated at: {detailCode.updateDate} </Text>
             <Text style={modalstyles.textStyle}>Last updated by: {detailCode.updatedBy}</Text>
+            {showQR && <QRCode value={qrValue} />}
             
 
             </ScrollView>
@@ -133,6 +165,20 @@ export default function ManagerQRcodesScreen({navigation}) {
                   </RadioButton.Group>
                   
             
+              </View>
+              <View>
+                <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
+                  <Text>Generate new QR code with nickname: </Text>  
+                </TouchableOpacity>  
+                
+                <View style={styles.inputView} >
+                  <TextInput  
+                  style={styles.inputText}
+                  placeholder="Nickname" 
+                  placeholderTextColor="white"
+                  onChangeText={text => setNewNickname(text)}/>
+                  </View>
+
               </View> 
               <View style={styles.space}></View>
               <View style={styles.row}>
@@ -160,7 +206,7 @@ export default function ManagerQRcodesScreen({navigation}) {
                       <Text style={renderRecordStatus(item.active)}>Status: {item.active}</Text> </Text>
                   <View>
 
-                    <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setModalVisible(true)}}>
+                    <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setQRvalue(item.key); setShowQR(true); setModalVisible(true)}}>
                       <Text style={styles.view}>VIEW</Text>
                     </TouchableOpacity> 
                   </View>
@@ -348,7 +394,29 @@ const styles = StyleSheet.create({
     // marginTop:30,
     // marginBottom:15
   },
-
+  input: {
+    margin: 5,
+    padding: 6,
+    borderRadius: 8,
+    marginBottom: 8,
+    paddingHorizontal: 10,
+    backgroundColor: "#eceff1",
+  },
+  inputView:{
+    width:"90%",
+    backgroundColor:"#2B2E32",
+    borderRadius:25,
+    height:50,
+    marginBottom:20,
+    justifyContent:"center",
+    padding: 20,
+    paddingRight: 40,
+    
+  },
+  inputText:{
+    height:50,
+    color:"white"
+  },
 });
 
 const modalstyles = StyleSheet.create({
@@ -388,5 +456,7 @@ const modalstyles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
-  }
+  },
+
+
 });
