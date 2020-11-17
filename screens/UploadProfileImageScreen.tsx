@@ -33,7 +33,7 @@ export default function UploadProfileImageScreen() {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.cancelled);
+      setImage(result.uri);
     }
   };
 
