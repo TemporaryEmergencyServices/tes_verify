@@ -40,10 +40,12 @@ export default function SettingsScreen({ navigation }) {
   } ,[]);
 
   const goToApply = () => navigation.push('ApplyScreen')
+  const goToUpload= () => navigation.push('UploadProfileImageScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
   const goToApprove= () => navigation.navigate('ManagerApproveApplicationScreen')
 
   const handleApply = () => {goToApply()}
+  const handleUpload = () => {goToUpload()}
   const handleApprove = () => {goToApprove()}
   const handleView = () => {
     Alert.alert(
@@ -115,6 +117,9 @@ export default function SettingsScreen({ navigation }) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
      
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
@@ -135,6 +140,9 @@ export default function SettingsScreen({ navigation }) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
      
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
@@ -142,6 +150,7 @@ export default function SettingsScreen({ navigation }) {
     <View style={styles.container}>
         
         <Text style={styles.largeTitle}> Welcome Back! </Text>
+
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has an approved application. You may view the application below! If you wish to update any of the information, please speak with a TES manager.
           
@@ -153,8 +162,11 @@ export default function SettingsScreen({ navigation }) {
   
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>    
      
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
@@ -179,11 +191,14 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
+       
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
-  if (userRole == 'administrator') {return (returnForManager)}
+  if (userRole == 'administrator' || userRole == 'superuser') {return (returnForManager)}
   if (appState == 'none') {return (returnForNone)}
   if (appState == 'pending') {return(returnForPending)}
   if (appState == 'approved') {return(returnForApproved)}

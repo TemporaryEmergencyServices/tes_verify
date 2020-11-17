@@ -56,8 +56,12 @@ export default function SignInScreen({ navigation }) {
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
   const goToMainBody = (role) => {
-    if (role == "administrator") {
-      navigation.replace('SECONDBottomTabNavigator')
+    console.log('role', role)
+    if (role == "superuser") {
+      console.log('user', role)
+      navigation.replace('SuperuserBottomTabNavigator')
+    } else if (role == "administrator") {
+      navigation.replace('ManagerBottomTabNavigator')
     } else if (role == "volunteer") {
       navigation.replace('BottomTabNavigator')
     } else if (role == "display_qr") {

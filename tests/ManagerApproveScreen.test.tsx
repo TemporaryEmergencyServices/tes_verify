@@ -14,7 +14,7 @@ describe("<ManagerApproveScreen />", () => {
         expect(wrapper).toMatchSnapshot();
     });
 
-    it('displays not authorized', () => {
+    it('displays manager approve screen', () => {
         const text = wrapper.children[0].children[0]
         expect(text === 'Approve Clock Ins and Outs').toBe(true)
     })
