@@ -108,7 +108,52 @@ export default function ManagerQRcodesScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-      <View style={{height:'60%'}}> 
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+        }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+            <View style={{height:'90%',backgroundColor:'white',alignItems:'center',flexDirection:'column'}}>
+              <Text style={modalstyles.textStyle}>QR code nickname: {detailCode.nickname}</Text>
+              <Text style={modalstyles.textStyle}>Status: {detailCode.active}</Text>
+              <View style={styles.space}></View>
+              <Text style={modalstyles.textStyle}>Scan me!</Text>
+              <View style={styles.space}></View>
+              {/* https://www.npmjs.com/package/react-native-qrcode-svg */}
+              <View style={{ width:Dimensions.get('window').width*0.8,height:Dimensions.get('window').width*0.8,flexDirection:'column',alignSelf:"center"}}>
+                {showQR && 
+                    <QRCode value={qrValue} size={Dimensions.get('window').width*0.8}
+                      getRef={(ref) => setQRdata(ref)}  
+                    />
+                }
+              </View>
+            </View>
+            <View style={{height:"5%", alignItems:'center',backgroundColor:'white',width:'50%'}}>
+              <TouchableOpacity style={styles.approveButton} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.backText}>Close</Text>
+              </TouchableOpacity>
+            </View>
+            {/* <View style={{height:"5%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+              <TouchableOpacity style={styles.approveButton} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.backText}>Close</Text>
+              </TouchableOpacity>
+            </View> */}
+        
+            
+          </View>
+        </View>
+      </Modal>
+
+
+
+
+
+      <View style={{height:'40%'}}> 
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
         
             <View style={{height:'60%',alignItems:'center'}}> 
@@ -122,13 +167,7 @@ export default function ManagerQRcodesScreen({navigation}) {
                   </RadioButton.Group>
               </View>
               <View style={styles.space}></View>
-              <View>
-                {showQR && 
-                  <QRCode value={qrValue}
-                    getRef={(ref) => setQRdata(ref)}  
-                  />
-                }
-              </View>
+              
               <View style={styles.row}>
                 <Text style={styles.header}>Nickname</Text>
                 <Text style={styles.header}>Actions</Text>
@@ -150,7 +189,7 @@ export default function ManagerQRcodesScreen({navigation}) {
                   <Text style={{fontSize: 16}}>
                     <Text style={{fontWeight: 'bold'}}>
                       {item.nickname}</Text>
-                      <Text >Status: {item.active}</Text> </Text>
+                       </Text>
                   <View>
 
                     <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setQRvalue(item.key); setShowQR(true); setModalVisible(true)}}>
@@ -291,7 +330,7 @@ const styles = StyleSheet.create({
     // marginBottom:15
   },
   approveButton: {
-    width:"60%",
+    width:"80%",
     backgroundColor:"#1C5A7D",
     borderRadius:25,
     height:"100%",
@@ -349,13 +388,16 @@ const modalstyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 5,
+    flexDirection:'column'
   },
   modalView: {
-    margin: 20,
+    width: '95%',
+    height: '95%',
+    margin: 5,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 5,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -364,7 +406,7 @@ const modalstyles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 2
   },
   openButton: {
     backgroundColor: "#F194FF",
