@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react'
+import { TextInput } from 'react-native'
 
 import firebase from '../firebase.js'
 import '@firebase/firestore';
@@ -14,6 +15,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
   const [appRef, setAppRef] = useState({})
+  const [searchText, setSearchText] = useState('')
   
   const[hasAccess,setHasAccess] = useState(false)
   const[viewtype,setViewType] = useState('pending')
@@ -75,6 +77,28 @@ export default function ManagerApproveApplicationScreen({navigation}) {
     - allow for editing (separate screen?)
   */
 //  console.log(viewtype)
+
+  const search = (userid) => {
+    // determine if they entered email or name
+    const isEmail = userid.includes("@") && userid.includes(".com") ? true : false
+    if (isEmail) {
+      // pull up records by email 
+        // firebase.collection("volunteers").userid == userid
+      appRef.where("userid", "==", userid)
+      .onSnapshot((snap) => { 
+        snap.forEach((doc) => { 
+          console.log(doc.data())
+        })
+      })
+    } else {
+      
+
+      // pull up records by name
+      // get all results matching first name and all results matching last name
+    }
+
+  }
+
  if (!hasAccess){
    return (
    <View style={styles.container}>
@@ -199,7 +223,15 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                   }
             
               </View> 
-              <View style={styles.space}></View>
+              {/* <View style={styles.space}></View> */}
+              <TextInput
+                style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '80%' }}
+                onChangeText={text => setSearchText(text)}
+                value={searchText}
+              />
+              <TouchableOpacity onPress={() => { search(searchText) }}>
+                <Text style={styles.backText}>Search</Text>
+              </TouchableOpacity>
               <View style={styles.row}>
                 <Text style={styles.header}>Application</Text>
                 <Text style={styles.header}>Actions</Text>
