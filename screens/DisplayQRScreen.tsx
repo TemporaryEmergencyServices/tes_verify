@@ -1,19 +1,16 @@
 import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView, TextInput, Share } from 'react-native';
 import { useEffect, useState } from 'react'
-
+import { logout } from '../actions'
 import firebase from '../firebase.js'
 import '@firebase/firestore';
 
 import { Text, View } from '../components/Themed';
-// import { ManagerStatusButtons } from '../components/ManagerStatusButtons'
+
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 import { RadioButton } from 'react-native-paper';
 import  QRCode  from 'react-native-qrcode-svg';
-// import {CameraRoll, ToastAndroid } from "react-native";
-// import RNFS from "react-native-fs"
-// import svg from 'react-native-svg';
-// import ViewShot from 'react-native-view-shot';
+
 
 export default function ManagerQRcodesScreen({navigation}) {
 
@@ -32,6 +29,13 @@ export default function ManagerQRcodesScreen({navigation}) {
   const [qrValue, setQRvalue] = useState('Default QR')
   const [showQR, setShowQR] = useState(false)
   const [qrData, setQRdata] = useState([] as any) 
+
+//   const user = useSelector((state: RootStateOrAny) => state.user)
+//   const userEmail = user.username
+  const userRole = user.role
+  const dispatch = useDispatch()
+
+
   useEffect(() => {
     let unmounted = false
     const roleSubscriber = firebase.firestore()
@@ -45,7 +49,7 @@ export default function ManagerQRcodesScreen({navigation}) {
          else{
            const queryDocumentSnapshot = querySnapshot.docs[0];
            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-           if (queryDocumentSnapshotData.role == 'administrator'){
+           if (queryDocumentSnapshotData.role == 'display_qr'){
               setHasAccess(true)
             
             }
@@ -56,6 +60,8 @@ export default function ManagerQRcodesScreen({navigation}) {
      const subscriber = firebase.firestore()
      .collection('QRcodes')
      setcodeRef(subscriber)
+
+     
 
     const pendingQuery = subscriber
     .where('active','==',viewtype)
@@ -83,104 +89,30 @@ export default function ManagerQRcodesScreen({navigation}) {
    </View>
    )
  }
+ const goToSignIn = () => navigation.replace('SignInScreen')
+ const handleLogout = () => {
+    firebase.auth().signOut()
+    .then(() => dispatch(logout()))
+    .then(goToSignIn)
+    .catch(error => {
+      Alert.alert(
+        "Error",
+        error.message,
+        [
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    })
+  }
 
-//  const saveQR = () => {
-   
-//    qrData.toDataURL((data)=>{
-// // heavy usage of https://github.com/itinance/react-native-fs
-//     RNFS.writeFile(RNFS.CachesDirectoryPath+"/qr-tes.png",data,'base64')
-//         .then((success) => {
-//           return CameraRoll.saveToCameraRoll(RNFS.CachesDirectoryPath+"/some-name.png",'photo')
-//         }).then(()=>{
-//             Alert.alert('saved to gallery?');
-//         })
-//    })
-//  }
- const createQRrecord = async (newNickname,codeRef) => {
-  const today = new Date()
-  const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-   // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-  const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-  const dateTime = date+" " + time
-  var docRef = await firebase.firestore().collection('QRcodes').add({
-          createdBy: userEmail,
-          createDate: dateTime,
-          updatedBy: userEmail,
-          updateDate: dateTime,
-          active: "enabled",
-          nickname: newNickname
-  }).then(function(docRef) {() =>
-    setQRvalue(docRef.id);
-  });
-
-  Alert.alert(
-   'QR code created!',
-   "Press OK to continue.",
-    [
-      {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
-    ],
-    {cancelable: false},
-    );
-  }//do nothing for now
-
-  // console.log(records)
   return (
     <View style={styles.container}>
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {setModalVisible(false);
-        }}
-      >
-        <View style={modalstyles.centeredView}>
-          <View style={modalstyles.modalView}>
-            {/* <TouchableOpacity style={{position:'absolute',right:'5',top:'5'}} onPress = {() => setModalVisible(false)}>
-              <Text style={styles.backText}>X</Text>
-            </TouchableOpacity> */}
-            <ScrollView style={{height:'90%'}}>
-            <Text style={modalstyles.textStyle}>Code nickname: {detailCode.nickname}</Text>
-            <Text style={modalstyles.textStyle}>Status: {detailCode.active}</Text>
-            <Text style={modalstyles.textStyle}>Created at: {detailCode.createDate} </Text>
-            <Text style={modalstyles.textStyle}>Created by: {detailCode.createdBy} </Text>
-            <Text style={modalstyles.textStyle}>Last updated at: {detailCode.updateDate} </Text>
-            <Text style={modalstyles.textStyle}>Last updated by: {detailCode.updatedBy}</Text>
-            {/* https://www.npmjs.com/package/react-native-qrcode-svg */}
-            {showQR && 
-                <QRCode value={qrValue}
-                  getRef={(ref) => setQRdata(ref)}  
-                />
-            }
-            {/* <TouchableOpacity onPress={() => saveQR()}>
-              <Text> save qr code ??? </Text>
-            </TouchableOpacity> */}
-
-            </ScrollView>
-            
-            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-              
-              <TouchableOpacity style={styles.approveButton} onPress={() => {makeActive(detailCode.key,codeRef,userEmail);setModalVisible(false) }}>
-                <Text style={styles.backText}>Enable</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.denyButton} onPress={() => {makeDisabled(detailCode.key,codeRef,userEmail);setModalVisible(false)}}>
-                <Text style={styles.backText}>Disable</Text>
-              </TouchableOpacity>
-            </View>
-        
-            
-          </View>
-        </View>
-      </Modal>
-
-
-
-      <View style={{height:'40%'}}>
-
+      <View style={{height:'60%'}}> 
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
-
-            <View style={{height:'70%',alignItems:'center'}}> 
-              <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+        
+            <View style={{height:'60%',alignItems:'center'}}> 
+              <View>
                 <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
                     <View style={{flexDirection: 'row', paddingLeft: 20}}>
@@ -188,30 +120,20 @@ export default function ManagerQRcodesScreen({navigation}) {
                       <RadioButton.Item labelStyle={styles.disabled} label="Disabled" value="disabled"/>
                     </View>
                   </RadioButton.Group>
-                  
-            
               </View>
-              <View>
-                <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
-                  <Text>Generate new QR code with nickname: </Text>  
-                </TouchableOpacity>  
-                
-                <View style={styles.inputView} >
-                  <TextInput  
-                  style={styles.inputText}
-                  placeholder="Nickname" 
-                  placeholderTextColor="white"
-                  onChangeText={text => setNewNickname(text)}/>
-                  </View>
-
-              </View> 
               <View style={styles.space}></View>
+              <View>
+                {showQR && 
+                  <QRCode value={qrValue}
+                    getRef={(ref) => setQRdata(ref)}  
+                  />
+                }
+              </View>
               <View style={styles.row}>
                 <Text style={styles.header}>Nickname</Text>
                 <Text style={styles.header}>Actions</Text>
               </View>
             </View>
-
       </View>
       { 
         loading ? 
@@ -228,7 +150,7 @@ export default function ManagerQRcodesScreen({navigation}) {
                   <Text style={{fontSize: 16}}>
                     <Text style={{fontWeight: 'bold'}}>
                       {item.nickname}</Text>
-                      <Text style={renderRecordStatus(item.active)}>Status: {item.active}</Text> </Text>
+                      <Text >Status: {item.active}</Text> </Text>
                   <View>
 
                     <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setQRvalue(item.key); setShowQR(true); setModalVisible(true)}}>
@@ -241,58 +163,17 @@ export default function ManagerQRcodesScreen({navigation}) {
             showsVerticalScrollIndicator={false}
           />
         }
-    </View>
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>  
+    </View>  
   )
 }
 
-// FIXME: this may even approve those records that 
-// are no longer displaying or have been previously denied, 
-// must test this
 
 
-function makeActive(key: String, appRef: any, userEmail: String) {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const dateTime = date+ " " + time
-    appRef.doc(key).set({
-      active: "enabled",
-      updatedBy: userEmail,
-      updateDate: dateTime
-    }, { merge: true })
 
-}
 
-function makeDisabled(key: String, appRef: any, userEmail: String) {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const dateTime = date+ " " + time
-    appRef.doc(key).set({
-        active: "disabled",
-        updatedBy: userEmail,
-        updateDate: dateTime
-      }, { merge: true })
-}
-
-function view(key: String, appRef: any, userEmail: String) { 
-  Alert.alert(
-    'test',
-    'this will hopefully work eventually',
-    [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ],
-    {cancelable: false},
-  );
-}
-
-function renderRecordStatus(status: String) {
-  if (status === "enabled") {
-    return styles.enabled
-  } else if (status === "disabled") {
-    return styles.disabled
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -442,6 +323,25 @@ const styles = StyleSheet.create({
     height:50,
     color:"white"
   },
+  signOutBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
+  },
+  signOutText:{
+    marginTop:10,
+    color:"white",
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontWeight :'bold',
+    fontSize: 18, 
+    paddingBottom: 10
+  }
 });
 
 const modalstyles = StyleSheet.create({

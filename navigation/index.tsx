@@ -12,6 +12,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import SECONDBottomTabNavigator from './SECONDBottomTabNavigator';
 import ApplyScreen from '../screens/ApplyScreen';
 import ManagerApproveApplicationScreen from '../screens/ManagerApproveApplicationScreen';
+import DisplayQRScreen from '../screens/DisplayQRScreen';
 import LinkingConfiguration from './LinkingConfiguration';
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -44,6 +45,8 @@ function RootNavigator() {
       <Stack.Screen name="SECONDBottomTabNavigator" component={SECONDBottomTabNavigator} />
       <Stack.Screen name="ApplyScreen" component={ApplyScreen} />
       <Stack.Screen name="ManagerApproveApplicationScreen" component={ManagerApproveApplicationScreen} />
+      <Stack.Screen name="DisplayQRScreen" component={DisplayQRScreen} />
+      
     </Stack.Navigator>
   );
 }
