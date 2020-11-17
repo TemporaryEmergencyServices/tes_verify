@@ -36,9 +36,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
          else{
            const queryDocumentSnapshot = querySnapshot.docs[0];
            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-           if (queryDocumentSnapshotData.role == 'administrator'){
+           if (queryDocumentSnapshotData.role == 'administrator' || queryDocumentSnapshotData.role == 'superuser'){
               setHasAccess(true)
-            
             }
           else {setHasAccess(false)}//FIXME: set to false when not debugging
          }
