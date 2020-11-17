@@ -15,30 +15,30 @@ import SignUpScreen from '../screens/SignUpScreen';
 import ManagerQRcodesScreen from '../screens/ManagerQRcodesScreen';
 import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList} from '../types';
 
-const SECONDBottomTab = createBottomTabNavigator<BottomTabParamList>();
+const ManagerBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function SECONDBottomTabNavigator() {
+export default function ManagerBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
   return (
-    <SECONDBottomTab.Navigator
+    <ManagerBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
-        <SECONDBottomTab.Screen
+        <ManagerBottomTab.Screen
           name="Profile"
           component={SettingsNavigator}
           options={{
             tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
           }}
         />
-      <SECONDBottomTab.Screen
+      <ManagerBottomTab.Screen
         name="ManagerApprove"
         component={ManagerApproveNavigator}
         options={{
           title: "Approve Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
-      <SECONDBottomTab.Screen
+      <ManagerBottomTab.Screen
        name="ManagerApproveApplication"
        
        component={ManagerApproveApplicationNavigator}
@@ -46,7 +46,7 @@ export default function SECONDBottomTabNavigator() {
           title: "Approve Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
-      <SECONDBottomTab.Screen
+      <ManagerBottomTab.Screen
        name="ManagerQRcodes"
        component={ManagerQRcodesNavigator}
        options={{
@@ -77,7 +77,7 @@ export default function SECONDBottomTabNavigator() {
      
       
 
-    </SECONDBottomTab.Navigator>
+    </ManagerBottomTab.Navigator>
   );
 }
 
