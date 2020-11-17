@@ -183,7 +183,7 @@ export default function SettingsScreen({ navigation }) {
       </View>
   )
 
-  if (userRole == 'administrator') {return (returnForManager)}
+  if (userRole == 'administrator' || userRole == 'superuser') {return (returnForManager)}
   if (appState == 'none') {return (returnForNone)}
   if (appState == 'pending') {return(returnForPending)}
   if (appState == 'approved') {return(returnForApproved)}

@@ -15,30 +15,45 @@ import SignUpScreen from '../screens/SignUpScreen';
 import ManagerQRcodesScreen from '../screens/ManagerQRcodesScreen';
 import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList} from '../types';
 
-const ManagerBottomTab = createBottomTabNavigator<BottomTabParamList>();
+const SuperuserBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function ManagerBottomTabNavigator() {
+export default function SuperuserBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
+  console.log('here')
   return (
-    <ManagerBottomTab.Navigator
+    <SuperuserBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
-      <ManagerBottomTab.Screen
-        name="Profile"
-        component={SettingsNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
-        }}
-      />
-      <ManagerBottomTab.Screen
+        <SuperuserBottomTab.Screen
+          name="Profile"
+          component={SettingsNavigator}
+          options={{
+            tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
+          }}
+        />
+      <SuperuserBottomTab.Screen
         name="ManagerApprove"
         component={ManagerApproveNavigator}
         options={{
           title: "Approve Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
-      
+      <SuperuserBottomTab.Screen
+       name="ManagerApproveApplication"
+       
+       component={ManagerApproveApplicationNavigator}
+       options={{
+          title: "Approve Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
+      <SuperuserBottomTab.Screen
+       name="ManagerQRcodes"
+       component={ManagerQRcodesNavigator}
+       options={{
+          title: "Manage QR codes", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+        }}
+      />
        {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
 
 
@@ -63,7 +78,7 @@ export default function ManagerBottomTabNavigator() {
      
       
 
-    </ManagerBottomTab.Navigator>
+    </SuperuserBottomTab.Navigator>
   );
 }
 
