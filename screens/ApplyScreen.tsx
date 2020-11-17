@@ -33,43 +33,72 @@ export default function ApplyScreen({  navigation  }) {
 
   const dispatch = useDispatch()  
   const handleApply = async () => {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-     // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const dateTime = date+" " + time
-    setAppSubmitDate(dateTime)
-    var snap = await firebase.firestore().collection('volunteers').add({
-            userid: userEmail,
-            firstName: firstNameState,
-            lastName: lastNameState,
-            phone: phoneState,
-            sex: sexState,
-            ethnicity: ethnicityState,
-            emergencyName1: emergencyName1State,
-            emergencyPhone1: emergencyPhone1State,
-            emergencyName2: emergencyName2State,
-            emergencyPhone2: emergencyPhone2State,
-            addressLine1: address1State,
-            addressLine2: address2State,
-            addressZip: addressZip,
-            addressCity: addressCity,
-            addressState: addressState,
-            approved: appApproved,
-            approvedBy: appApprovedBy,
-            approvedDate: appApprovedByDate,
-            appSubmitDate: appSubmitDate
- 
-    });
+    
+    var errorMessage = ''
+    if (addressState == '') {errorMessage = 'Please enter your state.'}
+    if (addressCity == '') {errorMessage = 'Please enter your city.'}
+    if (addressZip == '') {errorMessage = 'Please enter your zip code.'}
+    if (address1State == '' && address2State == '') {errorMessage = 'Please enter your address.'}
+    if (emergencyName2State == '' || emergencyPhone2State == '' ) {errorMessage = 'Please enter your second emergency name and phone number.'}
+    if (emergencyName1State == '' || emergencyPhone1State == '' ) {errorMessage = 'Please enter your first emergency name and phone number.'}
+    if (ethnicityState == '') {errorMessage = 'Please enter ethnicity.'}
+    if (sexState != 'M' && sexState != 'F') {errorMessage = 'Please enter sex: M or F.'}
+    if (phoneState == '') {errorMessage = 'Please enter a phone number.'}
+    if (lastNameState == '') {errorMessage = 'Please enter a last name.'}
+    if (firstNameState == '') {errorMessage = 'Please enter a first name.'}
+    
 
-    Alert.alert(
-     'Application Submitted',
-     "Press OK to continue. An administrator will view your submission shortly.",
-      [
-        {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-      ],
-      {cancelable: false},
-    );
+
+    if (errorMessage != '') {
+      Alert.alert(
+        'Error! Incomplete application.',
+        errorMessage,
+         [
+           {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
+         ],
+         {cancelable: false},
+       );
+    }
+
+    else {
+      const today = new Date()
+      const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+      // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+      const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+      const dateTime = date+" " + time
+      setAppSubmitDate(dateTime)
+      var snap = await firebase.firestore().collection('volunteers').add({
+              userid: userEmail,
+              firstName: firstNameState,
+              lastName: lastNameState,
+              phone: phoneState,
+              sex: sexState,
+              ethnicity: ethnicityState,
+              emergencyName1: emergencyName1State,
+              emergencyPhone1: emergencyPhone1State,
+              emergencyName2: emergencyName2State,
+              emergencyPhone2: emergencyPhone2State,
+              addressLine1: address1State,
+              addressLine2: address2State,
+              addressZip: addressZip,
+              addressCity: addressCity,
+              addressState: addressState,
+              approved: appApproved,
+              approvedBy: appApprovedBy,
+              approvedDate: appApprovedByDate,
+              appSubmitDate: appSubmitDate
+  
+      });
+
+      Alert.alert(
+      'Application Submitted',
+      "Press OK to continue. An administrator will view your submission shortly.",
+        [
+          {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+        ],
+        {cancelable: false},
+      );
+    }
   }//do nothing for now
     
   /* back button; should no longer be necessary
