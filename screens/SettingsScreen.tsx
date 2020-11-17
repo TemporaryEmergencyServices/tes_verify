@@ -117,10 +117,9 @@ export default function SettingsScreen({ navigation }) {
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
      
-     <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-       <Text style={styles.signOutText} >Upload Profile Image</Text>
-     </TouchableOpacity>
-     
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
@@ -163,8 +162,11 @@ export default function SettingsScreen({ navigation }) {
   
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
-        </TouchableOpacity>  
+        </TouchableOpacity>    
      
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
@@ -189,7 +191,10 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
+       
+        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
+          <Text style={styles.signOutText} >Upload Profile Image</Text>
+        </TouchableOpacity>
       </View>
   )
 
