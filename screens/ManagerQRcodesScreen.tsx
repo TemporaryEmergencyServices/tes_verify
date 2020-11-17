@@ -39,7 +39,7 @@ export default function ManagerQRcodesScreen({navigation}) {
          else{
            const queryDocumentSnapshot = querySnapshot.docs[0];
            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
-           if (queryDocumentSnapshotData.role == 'administrator'){
+           if (queryDocumentSnapshotData.role == 'administrator' || queryDocumentSnapshotData.role == 'superuser'){
               setHasAccess(true)
             
             }
