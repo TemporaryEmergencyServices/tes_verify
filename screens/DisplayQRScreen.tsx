@@ -339,29 +339,7 @@ const styles = StyleSheet.create({
     // marginTop:30,
     // marginBottom:15
   },
-  input: {
-    margin: 5,
-    padding: 6,
-    borderRadius: 8,
-    marginBottom: 8,
-    paddingHorizontal: 10,
-    backgroundColor: "#eceff1",
-  },
-  inputView:{
-    width:"90%",
-    backgroundColor:"#2B2E32",
-    borderRadius:25,
-    height:50,
-    marginBottom:20,
-    justifyContent:"center",
-    padding: 20,
-    paddingRight: 40,
-    
-  },
-  inputText:{
-    height:50,
-    color:"white"
-  },
+
   signOutBtn:{
     width:"80%",
     backgroundColor:"#E11383",
@@ -408,22 +386,14 @@ const modalstyles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 2
   },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
+
   textStyle: {
     color: "black",
     fontWeight: "bold",
     textAlign: "left",
     fontSize: 18
   },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center"
-  },
+
 
 
 });

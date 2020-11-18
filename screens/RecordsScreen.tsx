@@ -7,7 +7,8 @@ import firebase from '../firebase.js'
 import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
-
+import * as Print from 'expo-print';
+import { CSVLink } from "react-csv";
 /*
 Inspired By:
 
@@ -67,12 +68,22 @@ export default function RecordsScreen() {
     return () => subscriber();
   } ,[]);
 
+  // const exportPDF = () => {
+  //   Print.printToFileAsync()
+  // }
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
-      <TouchableOpacity style={styles.exportBtn}>
+      {/* <TouchableOpacity style={styles.exportBtn} onPress={() => {exportPDF()}}>
         <Text style={styles.exportText} >Export as PDF</Text>
-      </TouchableOpacity> 
+      </TouchableOpacity>  */}
+
+      <CSVLink data={records} filename={"my-file.csv"} className="btn btn-primary" target="_blank">
+        <View>
+          <Text>Export everything to CSV</Text> 
+        </View>
+      </CSVLink>
+      
       <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
