@@ -28,6 +28,7 @@
     "@react-navigation/bottom-tabs": "^5.6.1",
     "@react-navigation/native": "^5.6.1",
     "@react-navigation/stack": "^5.6.2",
+    "@types/react-csv": "^1.1.1",
     "expo": "^38.0.10",
     "expo-asset": "~8.1.7",
     "expo-barcode-scanner": "^8.2.1",
@@ -38,6 +39,7 @@
     "expo-location": "~8.2.1",
     "expo-permissions": "~9.0.1",
     "expo-print": "~9.0.1",
+    "expo-sharing": "^8.4.1",
     "expo-splash-screen": "~0.5.0",
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
@@ -46,6 +48,7 @@
     "pushid": "^1.0.0",
     "react": "~16.11.0",
     "react-csv": "^2.0.3",
+    "react-csv-downloader": "^2.2.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-dotenv": "^2.4.1",
@@ -66,7 +69,8 @@
     "react-redux-firebase": "^3.7.0",
     "react-scripts": "^4.0.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "xlsx": "^0.16.8"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
