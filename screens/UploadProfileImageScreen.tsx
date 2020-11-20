@@ -34,7 +34,26 @@ export default function UploadProfileImageScreen() {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      uploadImage(result.uri)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
     }
+  };
+  
+  const uploadImage = async (uri) => {
+    //const imageName = useSelector((state: RootStateOrAny) => state.user).username;
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase.storage().ref().child(`my-image`);
+    return ref.put(blob);
   };
 
   return (
