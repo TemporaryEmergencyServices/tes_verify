@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert, TouchableOpacity } from 'react-native';
+import { StyleSheet, Button, Alert, Image, TouchableOpacity } from 'react-native';
 import firebase from '../firebase.js'
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -14,14 +14,14 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const userRole = user.role
+  const userStorageRef = firebase.storage().ref().child(`my-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
   
   //appState gives application status. Can be none (has not submitted before), pending, approved, or denied.
   //the status of appState is determined in the below useEffect.
 
   const [appState, setAppState] = useState("none")
-  
-
+  const [imgState, setImgState] = useState("none")
   useEffect(() => {
     const subscriber = firebase.firestore()
        .collection('volunteers')
@@ -106,7 +106,6 @@ export default function SettingsScreen({ navigation }) {
         <Text style={styles.largeTitle}> Welcome! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> does not have an associated application. Please submit one below.
-          
         </Text>
 
         <TouchableOpacity style={styles.appBtns} onPress = {handleApply}>
@@ -150,7 +149,9 @@ export default function SettingsScreen({ navigation }) {
     <View style={styles.container}>
         
         <Text style={styles.largeTitle}> Welcome Back! </Text>
-
+        <View style={styles.container}>
+          <Image style={styles.profileImg} source={{uri: imgState}}/> 
+        </View>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has an approved application. You may view the application below! If you wish to update any of the information, please speak with a TES manager.
           
@@ -176,7 +177,6 @@ export default function SettingsScreen({ navigation }) {
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a denied application. You may view the denied application and re-apply below.
-          
         </Text>
 
         <TouchableOpacity style={styles.appBtns} onPress = {handleView}>
@@ -237,6 +237,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  logo: {
+    width: 66,
+    height: 58,
+  },
+  profileImg: {
+    width: 200,
+    height: 200,
   },
   title: {
     fontSize: 20,
