@@ -8,7 +8,7 @@ import { useEffect, useState, Component, useLayoutEffect} from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 
-export default function UploadProfileImageScreen() {
+export default function UploadProfileImageScreen({  navigation  }) {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -22,10 +22,11 @@ export default function UploadProfileImageScreen() {
     })();
   }, []);
 
+  const goToProfile = () => {navigation.replace('SignInScreen') }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
@@ -57,9 +58,25 @@ export default function UploadProfileImageScreen() {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    <View style={styles.container}>    
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      </View>
+      <TouchableOpacity onPress = {goToProfile}>
+        <Text style={styles.returnToProfileText}>Return to Profile</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  returnToProfileText:{
+    color:"black"
+  }
+})
