@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert, TouchableOpacity, Image, View, Platform } from 'react-native';
+import { StyleSheet, Button, Alert, TouchableOpacity, Image, View, Platform, Text } from 'react-native';
 import firebase from '../firebase.js'
 
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'

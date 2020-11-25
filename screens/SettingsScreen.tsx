@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Button, Alert, TouchableOpacity, Modal, ScrollView, Image } from 'react-native';
 import firebase from '../firebase.js'
 
 import EditScreenInfo from '../components/EditScreenInfo';
@@ -16,6 +16,9 @@ export default function SettingsScreen({ navigation }) {
   const userRole = user.role
   const userStorageRef = firebase.storage().ref().child(`my-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
+
+  const[modalVisible,setModalVisible] = useState(false);
+  const [detailApp,setDetailApp] = useState([] as any)
   
   //appState gives application status. Can be none (has not submitted before), pending, approved, or denied.
   //the status of appState is determined in the below useEffect.
@@ -32,6 +35,7 @@ export default function SettingsScreen({ navigation }) {
         } else {
          const queryDocumentSnapshot = querySnapshot.docs[0];
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+         setDetailApp(queryDocumentSnapshotData)
          setAppState(queryDocumentSnapshotData.approved)
         }
      });
@@ -48,14 +52,15 @@ export default function SettingsScreen({ navigation }) {
   const handleUpload = () => {goToUpload()}
   const handleApprove = () => {goToApprove()}
   const handleView = () => {
-    Alert.alert(
+    /*Alert.alert(
       ":)",
       "this will be to view submitted, approved, and denied applications but isnt functional yet",
       [
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ],
       { cancelable: false }
-    );
+    );*/
+    setModalVisible(true)
   }
 
   //reapply needs to be a separate thing i think since it will be updated records.... but i could be wrong
@@ -124,6 +129,60 @@ export default function SettingsScreen({ navigation }) {
 
   const returnForPending = (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+        }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+            {/* <TouchableOpacity style={{position:'absolute',right:'5',top:'5'}} onPress = {() => setModalVisible(false)}>
+              <Text style={styles.backText}>X</Text>
+            </TouchableOpacity> */}
+            <ScrollView style={{height:'90%'}}>
+            <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+            <Text style={modalstyles.textStyle}>Application submitted: {detailApp.appSubmitDate}</Text>
+            {(detailApp.approved == 'approved' || detailApp.approved == 'denied') && 
+              
+                <Text style={modalstyles.textStyle}>Application {detailApp.approved} by {detailApp.approvedBy} {"\n"}
+                {detailApp.approved} at {detailApp.approvedDate}</Text>
+              
+            }
+            <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+            <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+            <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+            <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+            <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+            <Text style={modalstyles.textStyle}>Address: </Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+              <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.signOutText}>Back</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* <TouchableHighlight
+              style={{ ...modalstyles.openButton, backgroundColor: "#2196F3" }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={modalstyles.textStyle}>Hide Modal</Text>
+            </TouchableHighlight> */}
+            
+          </View>
+        </View>
+      </Modal>
         
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
@@ -147,6 +206,60 @@ export default function SettingsScreen({ navigation }) {
 
   const returnForApproved = (
     <View style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+        }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+            {/* <TouchableOpacity style={{position:'absolute',right:'5',top:'5'}} onPress = {() => setModalVisible(false)}>
+              <Text style={styles.backText}>X</Text>
+            </TouchableOpacity> */}
+            <ScrollView style={{height:'90%'}}>
+            <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+            <Text style={modalstyles.textStyle}>Application submitted: {detailApp.appSubmitDate}</Text>
+            {(detailApp.approved == 'approved' || detailApp.approved == 'denied') && 
+              
+                <Text style={modalstyles.textStyle}>Application {detailApp.approved} by {detailApp.approvedBy} {"\n"}
+                {detailApp.approved} at {detailApp.approvedDate}</Text>
+              
+            }
+            <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+            <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+            <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+            <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+            <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+            <Text style={modalstyles.textStyle}>Address: </Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+              <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.signOutText}>Back</Text>
+              </TouchableOpacity>
+            </View>
+            
+            {/* <TouchableHighlight
+              style={{ ...modalstyles.openButton, backgroundColor: "#2196F3" }}
+              onPress={() => {
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <Text style={modalstyles.textStyle}>Hide Modal</Text>
+            </TouchableHighlight> */}
+            
+          </View>
+        </View>
+      </Modal>
         
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <View style={styles.container}>
@@ -173,6 +286,52 @@ export default function SettingsScreen({ navigation }) {
 
   const returnForDenied = (
     <View style={styles.container}>
+
+<Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+        }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+            {/* <TouchableOpacity style={{position:'absolute',right:'5',top:'5'}} onPress = {() => setModalVisible(false)}>
+              <Text style={styles.backText}>X</Text>
+            </TouchableOpacity> */}
+            <ScrollView style={{height:'90%'}}>
+            <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+            <Text style={modalstyles.textStyle}>Application submitted: {detailApp.appSubmitDate}</Text>
+            {(detailApp.approved == 'approved' || detailApp.approved == 'denied') && 
+              
+                <Text style={modalstyles.textStyle}>Application {detailApp.approved} by {detailApp.approvedBy} {"\n"}
+                {detailApp.approved} at {detailApp.approvedDate}</Text>
+              
+            }
+            <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+            <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+            <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+            <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+            <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+            <Text style={modalstyles.textStyle}>Address: </Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+            <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+            <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+              <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.signOutText}>Back</Text>
+              </TouchableOpacity>
+            </View>
+            
+          </View>
+        </View>
+      </Modal>
         
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
@@ -306,5 +465,45 @@ const styles = StyleSheet.create({
     fontWeight :'bold',
     fontSize: 18, 
     paddingBottom: 10
+  }
+});
+
+const modalstyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "left",
+    fontSize: 18
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });
