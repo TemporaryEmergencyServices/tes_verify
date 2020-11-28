@@ -138,41 +138,26 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               <Text style={styles.backText}>X</Text>
             </TouchableOpacity> */}
             <ScrollView style={{height:'90%'}}>
-            <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
-            <Text style={modalstyles.textStyle}>Application submitted: {detailApp.appSubmitDate}</Text>
-            {(detailApp.approved == 'approved' || detailApp.approved == 'denied') && 
-              
-                <Text style={modalstyles.textStyle}>Application {detailApp.approved} by {detailApp.approvedBy} {"\n"}
-                {detailApp.approved} at {detailApp.approvedDate}</Text>
-              
-            }
-            <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
-            <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
-            <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
-            <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
-            <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
-            <Text style={modalstyles.textStyle}>Address: </Text>
-            <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
-            <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
-            <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
-            <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
-            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
-            <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
-            <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-
-            {/*<Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-            <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text>
-          <Text style={modalstyles.textStyle}>text for the sake of scrollbar</Text> */}
-
+              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+              <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+              <Text style={modalstyles.textStyle}>Application submitted: {detailApp.appSubmitDate}</Text>
+              {(detailApp.approved == 'approved' || detailApp.approved == 'denied') && 
+                  <Text style={modalstyles.textStyle}>Application {detailApp.approved} by {detailApp.approvedBy} {"\n"}
+                  {detailApp.approved} at {detailApp.approvedDate}</Text>
+              }
+              <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+              <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+              <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+              <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+              <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+              <Text style={modalstyles.textStyle}>Address: </Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.approveButton} onPress={() => {approve(detailApp.key,appRef,userEmail);setModalVisible(false) }}>
