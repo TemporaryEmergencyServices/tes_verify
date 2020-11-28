@@ -20,7 +20,6 @@ const SuperuserBottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function SuperuserBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
-  console.log('here')
   return (
     <SuperuserBottomTab.Navigator
       initialRouteName="Profile"

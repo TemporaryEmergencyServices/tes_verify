@@ -10,11 +10,12 @@ import { Text, View } from '../components/Themed';
 // import { ManagerStatusButtons } from '../components/ManagerStatusButtons'
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 import { RadioButton } from 'react-native-paper';
+
 export default function ManagerApproveApplicationScreen({navigation}) {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
-  const [appRef, setAppRef] = useState({})
+  const [appRef, setAppRef] = useState({where: (a, b, c) => {}})
   const [searchText, setSearchText] = useState('')
   
   const[hasAccess,setHasAccess] = useState(false)
@@ -22,7 +23,6 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const[modalVisible,setModalVisible] = useState(false);
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
-
 
   const [detailApp,setDetailApp] = useState([] as any)
   useEffect(() => {
@@ -41,31 +41,16 @@ export default function ManagerApproveApplicationScreen({navigation}) {
            if (queryDocumentSnapshotData.role == 'administrator' || queryDocumentSnapshotData.role == 'superuser'){
               setHasAccess(true)
             }
-          else {setHasAccess(false)}//FIXME: set to false when not debugging
+          else {setHasAccess(false)}
          }
      });
 
-     const subscriber = firebase.firestore()
-     .collection('volunteers')
+     const subscriber = firebase.firestore().collection('volunteers')
      setAppRef(subscriber)
 
-    const pendingQuery = subscriber
-    .where('approved','==',viewtype)
-    .onSnapshot(querySnapshot => {
-        // console.log(viewtype)
-        // console.log("in the query^")
-        const helperRecords = [] as any;
-        querySnapshot.forEach(documentSnapshot => {
-            helperRecords.push({
-                ...documentSnapshot.data(),
-                key: documentSnapshot.id
-            });
-        });
-        setRecords(helperRecords);
-        setLoading(false);
-    });
-    () => pendingQuery();
-    return () => {pendingQuery(); roleSubscriber(); unmounted=false};
+    pendingQuery(subscriber).then(resultRecords => setRecords(resultRecords))
+    setLoading(false) 
+    return () => { roleSubscriber(); unmounted=false};
   }, [viewtype])//need to pass the viewtype variable to useEffect so it uses the latest state value
   // const details = (key) => {
 
@@ -76,27 +61,57 @@ export default function ManagerApproveApplicationScreen({navigation}) {
     - allow for option to approve/deny
     - allow for editing (separate screen?)
   */
-//  console.log(viewtype)
 
-  const search = (userid) => {
+  const pendingQuery = async (ref) => {
+    const resultRecords = await ref.where('approved','==',viewtype)
+    .get().then(querySnapshot => {
+      const helperRecords = [] as any;
+      querySnapshot.forEach(documentSnapshot => {
+          helperRecords.push({
+              ...documentSnapshot.data(),
+              key: documentSnapshot.id
+          })
+      }) 
+      return helperRecords
+    })
+    return await resultRecords
+  }
+
+  const search = async (userid) => {
+    if (!userid) {
+      setRecords(await pendingQuery(appRef))
+      return
+    }
+
     // determine if they entered email or name
     const isEmail = userid.includes("@") && userid.includes(".com") ? true : false
     if (isEmail) {
-      // pull up records by email 
-        // firebase.collection("volunteers").userid == userid
-      appRef.where("userid", "==", userid)
-      .onSnapshot((snap) => { 
-        snap.forEach((doc) => { 
-          console.log(doc.data())
-        })
-      })
+      // pull up records by email
+      var ref = appRef.where("userid", "==", userid)
+      const resultRecords = await pendingQuery(ref)
+      setRecords(resultRecords)
     } else {
-      
-
       // pull up records by name
-      // get all results matching first name and all results matching last name
+      // check if first and last name typed
+      var firstNameMatches, lastNameMatches
+      if (userid.includes(' ')) {
+        const [ firstName, lastName ] = userid.split(' ')
+        firstNameMatches = await pendingQuery(appRef.where("firstName", "==", firstName))
+        lastNameMatches = await pendingQuery(appRef.where("lastName", "==", lastName))
+      } else {
+        // only first name or last name typed
+        firstNameMatches = await pendingQuery(appRef.where("firstName", "==", userid))
+        lastNameMatches = null ? firstNameMatches : await pendingQuery(appRef.where("lastName", "==", userid))
+      }
+      
+      if (firstNameMatches && lastNameMatches) {
+        setRecords(firstNameMatches.concat(lastNameMatches))
+      } else if (firstNameMatches && !lastNameMatches) {
+        setRecords(firstNameMatches)
+      } else {
+        setRecords(lastNameMatches)
+      }
     }
-
   }
 
  if (!hasAccess){
