@@ -46,10 +46,13 @@
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-dotenv": "^2.4.1",
+    "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-image-picker": "^2.3.4",
     "react-native-maps": "0.27.1",
     "react-native-paper": "^4.3.1",
     "react-native-passmeter": "0.0.5",
+    "react-native-progress": "^4.1.2",
     "react-native-qrcode-svg": "^6.0.6",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
@@ -59,7 +62,9 @@
     "react-redux-firebase": "^3.7.0",
     "react-scripts": "^4.0.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "react-native-view-shot": "3.1.2",
+    "expo-image-picker": "~8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

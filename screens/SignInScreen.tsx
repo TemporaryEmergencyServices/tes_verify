@@ -62,6 +62,8 @@ export default function SignInScreen({ navigation }) {
       navigation.replace('ManagerBottomTabNavigator')
     } else if (role == "volunteer") {
       navigation.replace('BottomTabNavigator')
+    } else if (role == "display_qr") {
+      navigation.replace('DisplayQRScreen')
     }
   }
   
