@@ -16,6 +16,7 @@ export default function SettingsScreen({ navigation }) {
   const userRole = user.role
   const userStorageRef = firebase.storage().ref().child(`my-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
+  const [appID, setAppID] = useState('')
 
   const[modalVisible,setModalVisible] = useState(false);
   const [detailApp,setDetailApp] = useState([] as any)
@@ -34,6 +35,7 @@ export default function SettingsScreen({ navigation }) {
           setAppState("none")
         } else {
          const queryDocumentSnapshot = querySnapshot.docs[0];
+         setAppID(queryDocumentSnapshot.id)
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
          setDetailApp(queryDocumentSnapshotData)
          setAppState(queryDocumentSnapshotData.approved)
@@ -66,7 +68,7 @@ export default function SettingsScreen({ navigation }) {
   //reapply needs to be a separate thing i think since it will be updated records.... but i could be wrong
 
   const handleReApply = () => {
-    Alert.alert(
+    /*Alert.alert(
       ":)",
       "this will be to reapply but isnt functional yet.",
       [
@@ -74,6 +76,8 @@ export default function SettingsScreen({ navigation }) {
       ],
       { cancelable: false }
     );
+    */
+   navigation.push('ReApplyScreen', {applicationID: appID})
   }
 
   const handleLogout = () => {

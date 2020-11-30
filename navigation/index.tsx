@@ -16,6 +16,7 @@ import UploadProfileImageScreen from '../screens/UploadProfileImageScreen';
 import ManagerApproveApplicationScreen from '../screens/ManagerApproveApplicationScreen';
 import DisplayQRScreen from '../screens/DisplayQRScreen';
 import LinkingConfiguration from './LinkingConfiguration';
+import ReApplyScreen from '../screens/ReApplyScreen';
 
 // If you are not familiar with React Navigation, we recommend going through the
 // "Fundamentals" guide: https://reactnavigation.org/docs/getting-started
@@ -50,6 +51,8 @@ function RootNavigator() {
       <Stack.Screen name="UploadProfileImageScreen" component={UploadProfileImageScreen} />
       <Stack.Screen name="ManagerApproveApplicationScreen" component={ManagerApproveApplicationScreen} />
       <Stack.Screen name="DisplayQRScreen" component={DisplayQRScreen} />
+      <Stack.Screen name="ReApplyScreen" component={ReApplyScreen} />
+
       
     </Stack.Navigator>
   );
