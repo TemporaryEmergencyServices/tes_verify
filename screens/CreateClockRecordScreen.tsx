@@ -25,7 +25,10 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
     if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
     if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
-
+    const today = new Date()
+    const dateRaw = today.toISOString().substring(0,10)
+  
+    
     if (errorMessage != '') {
       Alert.alert(
         'Error! Incomplete submission.',
@@ -44,7 +47,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       
       var snap = await firebase.firestore().collection('ClockInsOuts').add({
               currently_clocked_in: currently_clocked_in,
-              date: dateState,
+              date: dateRaw,
               in_approved: in_approved,
               in_time: inTimeState,
               out_approved: out_approved,

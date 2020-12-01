@@ -145,8 +145,8 @@ export default function ClockInScreen() {
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
      // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    if (!clockedIn) {handleClockIn(date, time)}
+     const date = today.toISOString().substring(0,10)
+     if (!clockedIn) {handleClockIn(date, time)}
 
     else { handleClockOut(date, time)}
 
