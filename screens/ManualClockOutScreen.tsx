@@ -85,17 +85,17 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                     data={records}
                     renderItem={({ item }) => (
                         <View style={styles.itemStyle}>
-                            <View style={styles.row}>
-                                <Text style={{fontWeight: 'bold'}}>
-                                    {item.firstName} {item.lastName}
-                                </Text>
-                                <Text>{"\n"}{item.userid}{"\n"}</Text>
-                            <View>
-                                <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
-                                    <Text style={styles.signUpText}>CLOCK OUT</Text>
-                                </TouchableOpacity> 
-                            </View>
-                            </View>
+                                <View style={styles.row}>
+                                    <Text>
+                                    <Text>{item.userid}</Text>
+                                    {"\n"}{item.date}{"\n"}
+                                    <Text>{item.in_time}</Text>
+                                    </Text>
+                                    
+                                    <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
+                                        <Text style={styles.signUpText}>Clock Out</Text>
+                                    </TouchableOpacity>
+                                </View>
                         </View>
                     )}
                     showsVerticalScrollIndicator={false}
