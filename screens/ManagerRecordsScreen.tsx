@@ -11,6 +11,9 @@ export default function ManagerRecordsScreen({ navigation }) {
       <TouchableOpacity style={styles.appBtns} onPress={() => {navigation.push('CreateClockRecordScreen') }}>
         <Text style={styles.signOutText}>Create Clock In/Out Record</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.appBtns} onPress={() => { navigation.push('ManualClockOutScreen') }}>
+        <Text style={styles.signOutText}>Manual Clock Out Volunteer</Text>
+      </TouchableOpacity>
     </View>
     
   );

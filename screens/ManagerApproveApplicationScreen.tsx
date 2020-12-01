@@ -160,10 +160,9 @@ export default function ManagerApproveApplicationScreen({navigation}) {
           </View>
         </View>
       </Modal>
-      <View style={{height:'40%'}}>
+      <View style={styles.column}>
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
-          
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', alignItems:'center' }}> 
+            <View style={styles.column}> 
               <View style={{ width:'100%', alignItems: 'center' }}>
                 <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
@@ -218,9 +217,11 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                 <View style={styles.row}>
                   <Text style={{fontSize: 16}}>
                     <Text style={{fontWeight: 'bold'}}>
-                      {item.firstName} {item.lastName}</Text>
-                      {"\n"}{item.userid}{"\n"}
-                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> </Text>
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    {"\n"}{item.userid}{"\n"}
+                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
+                  </Text>
                   <View>
                     <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.view}>VIEW</Text>
@@ -323,7 +324,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   exportBtn:{
-    width:"60%",
+    paddingHorizontal: 100,
     backgroundColor:"#13AA52",
     borderRadius:15,
     height:40,
@@ -365,6 +366,12 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20
   }, 
+  column: {
+    flex: 1, 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    alignItems:'center' 
+  },
   space: {
     margin: 15
   }, 
