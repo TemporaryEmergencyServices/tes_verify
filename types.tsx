@@ -13,6 +13,7 @@ export type BottomTabParamList = {
   SignIn: undefined;
   SignUp: undefined;
   ManagerQRcodes: undefined;
+  ManagerRecords: undefined;
 };
 
 export type ClockInParamList = {
@@ -37,6 +38,10 @@ export type ManagerApproveApplicationParamList = {
 
 export type ManagerQRcodesParamList = {
   ManagerQRcodesScreen: undefined;
+}
+
+export type ManagerRecordsParamList = {
+  ManagerRecordsScreen: undefined;
 }
 //Ben added for testing auth. TODO: remove
 export type SignInParamList = {
