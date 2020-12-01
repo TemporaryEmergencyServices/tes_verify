@@ -14,7 +14,7 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const userRole = user.role
-  const userStorageRef = firebase.storage().ref().child(`my-image`).getDownloadURL().then((url) => setImgState(url))
+  const userStorageRef = firebase.storage().ref().child(userEmail + `-profile-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
   const [appID, setAppID] = useState('')
 
@@ -51,7 +51,6 @@ export default function SettingsScreen({ navigation }) {
   const goToApprove= () => navigation.navigate('ManagerApproveApplicationScreen')
 
   const handleApply = () => {goToApply()}
-  const handleUpload = () => {goToUpload()}
   const handleApprove = () => {goToApprove()}
   const handleView = () => {
     /*Alert.alert(
@@ -237,9 +236,6 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-            <TouchableOpacity style={styles.uploadProfileImageBtn} onPress={() => {setModalVisible(false) }}>
-                <Text style={styles.signOutText}>Back</Text>
-            </TouchableOpacity>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
