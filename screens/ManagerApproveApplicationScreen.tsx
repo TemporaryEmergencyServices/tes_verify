@@ -45,22 +45,13 @@ export default function ManagerApproveApplicationScreen({navigation}) {
          }
      });
 
-     const subscriber = firebase.firestore().collection('volunteers')
-     setAppRef(subscriber)
+    const subscriber = firebase.firestore().collection('volunteers')
+    setAppRef(subscriber)
 
     pendingQuery(subscriber).then(resultRecords => setRecords(resultRecords))
     setLoading(false) 
     return () => { roleSubscriber(); unmounted=false};
   }, [viewtype])//need to pass the viewtype variable to useEffect so it uses the latest state value
-  // const details = (key) => {
-
-  // }
-  /*
-    TODO: 
-    - capture all pending
-    - allow for option to approve/deny
-    - allow for editing (separate screen?)
-  */
 
   const pendingQuery = async (ref) => {
     const resultRecords = await ref.where('approved','==',viewtype)
@@ -121,7 +112,6 @@ export default function ManagerApproveApplicationScreen({navigation}) {
    </View>
    )
  }
-  // console.log(records)
   return (
     <View style={styles.container}>
 
@@ -172,13 +162,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
       </Modal>
       <View style={{height:'40%'}}>
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
-                  {/* TODO: show "no pending records" when records empty. 
-                      for some reason, it's currently populating records and then 
-                      immediately become empty currently
-                  */}
-                  {
-                    records != [] ?
-                      <> 
+          
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', alignItems:'center' }}> 
               <View style={{ width:'100%', alignItems: 'center' }}>
                 <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
@@ -206,16 +190,20 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                   <Text style={styles.backText}>Search</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.row}>
-                <Text style={styles.header}>Application</Text>
-                <Text style={styles.header}>Actions</Text>
-              </View>
+
+              {
+                records.length !== 0 && 
+                <View style={styles.row}>
+                  <Text style={styles.header}>Application</Text>
+                  <Text style={styles.header}>Actions</Text>
+                </View>
+              }
             </View>
-          </>
-        :
-          <Text style={styles.container}>No Pending Records!</Text>
-      }
       </View>
+      {
+          records.length === 0 &&
+          <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} records!</Text>
+      }
       { 
         loading ? 
           <View style={styles.centerContainer}>
