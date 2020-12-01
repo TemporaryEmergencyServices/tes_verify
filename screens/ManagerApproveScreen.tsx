@@ -224,7 +224,7 @@ export default function ManagerApproveScreen() {
               <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
            </View>
           </RadioButton.Group>
-          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef)}>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef, viewtype)}>
             <Text style={styles.exportText}>Approve All</Text>
           </TouchableOpacity> 
     </View> 
@@ -325,7 +325,7 @@ export default function ManagerApproveScreen() {
               <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
            </View>
           </RadioButton.Group>
-          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef)}>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef, viewtype)}>
             <Text style={styles.exportText}>Approve All</Text>
           </TouchableOpacity> 
     </View> 
@@ -413,7 +413,7 @@ export default function ManagerApproveScreen() {
                 <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
              </View>
             </RadioButton.Group>
-            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
+            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef, viewtype)}>
               <Text style={styles.exportText}>Approve All</Text>
             </TouchableOpacity> 
       </View> 
@@ -470,12 +470,12 @@ export default function ManagerApproveScreen() {
 // FIXME: this may even approve those records that 
 // are no longer displaying or have been previously denied, 
 // must test this
-function approveAllAlert(records: any, clockRef: any) {
+function approveAllAlert(records: any, clockRef: any, viewtype: any) {
   Alert.alert(
     'Are you sure?!',
     'You are about to approve all pending entries. Are you sure you want to proceed?',
      [
-       {text: 'Approve All', onPress: () => {console.log('Approve Pressed'); approveAll(records, clockRef)}},
+       {text: 'Approve All', onPress: () => {console.log('Approve Pressed'); approveAll(records, clockRef, viewtype)}},
        {text: 'CANCEL', onPress: () => console.log('cancel pressed')}
       ],
      {cancelable: false},
@@ -483,11 +483,18 @@ function approveAllAlert(records: any, clockRef: any) {
 }
 
 
-function approveAll(records: any, clockRef: any) {
-  records.forEach(record => {
-    approve(record.key, "in", clockRef)
-    approve(record.key, "out", clockRef)
-  })
+function approveAll(records: any, clockRef: any, viewtype: any) {
+  if(viewtype == 'In') {
+    records.forEach(record => {
+      approve(record.key, "in", clockRef)
+    })
+  }
+
+  else {
+    records.forEach(record => {
+      approve(record.key, "out", clockRef)
+    })
+  }
 }
 
 function approve(key: String, type: String, clockRef: any) {
