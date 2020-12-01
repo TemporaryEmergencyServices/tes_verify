@@ -202,7 +202,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
       </View>
       {
           records.length === 0 &&
-          <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} records!</Text>
+          <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} applications!</Text>
       }
       { 
         loading ? 
