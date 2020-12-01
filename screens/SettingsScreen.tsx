@@ -124,10 +124,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -188,6 +184,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a pending application. You may view the application using the button below. If you are waiting on approval, please speak with a TES employee.
@@ -201,10 +198,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -244,7 +237,9 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-
+            <TouchableOpacity style={styles.uploadProfileImageBtn} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.signOutText}>Back</Text>
+            </TouchableOpacity>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
@@ -265,6 +260,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <View style={styles.container}>
           <Image style={styles.profileImg} source={{uri: imgState}}/> 
@@ -281,10 +277,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>    
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -337,6 +329,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a denied application. You may view the denied application and re-apply below.
@@ -354,10 +347,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-       
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -408,6 +397,7 @@ const styles = StyleSheet.create({
   profileImg: {
     width: 200,
     height: 200,
+    marginBottom: 20
   },
   title: {
     fontSize: 20,
