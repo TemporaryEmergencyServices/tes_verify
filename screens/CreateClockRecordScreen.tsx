@@ -22,9 +22,14 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     
     var errorMessage = ''
     if (dateState == '') {errorMessage = 'Please enter the record date.'}
+    if (dateState.length != 10) {errorMessage = 'Please enter date in format YYYY-MM-DD.'}
+    if (dateState.substring(4,5) != '-' || dateState.substring(7,8) != '-') {
+      errorMessage = 'Please enter date in format YYYY-MM-DD.'
+    }
     if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
     if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
     if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
+    if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
     const today = new Date()
     const dateRaw = today.toISOString().substring(0,10)
   
@@ -87,7 +92,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
-          placeholder="Date (MM/DD/YYYY)" 
+          placeholder="Date (YYYY-MM-DD)" 
           placeholderTextColor="white"
           onChangeText={text => setDateState(text)}/>
       </View>
