@@ -32,6 +32,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
     const today = new Date()
     const dateRaw = today.toISOString().substring(0,10)
+    const timeRaw = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric',hour12: true })
+
   
     
     if (errorMessage != '') {
@@ -54,7 +56,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
               currently_clocked_in: currently_clocked_in,
               date: dateRaw,
               in_approved: in_approved,
-              in_time: inTimeState,
+              in_time: timeRaw,
               out_approved: out_approved,
               out_date: dateState,
               out_time: outTimeState,
