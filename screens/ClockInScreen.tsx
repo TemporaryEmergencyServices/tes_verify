@@ -223,7 +223,22 @@ export default function ClockInScreen() {
       return <Text>No access to camera</Text>;
     }
   }
+  if (showScanner){
+    return (
+      <View style={{flex:1, flexDirection:'column',justifyContent:'flex-end',alignItems:'center'}}>
+          
+              <BarCodeScanner style={StyleSheet.absoluteFillObject}
+                              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              />
 
+          
+          
+            <TouchableOpacity style={styles.scannerCloseButton} onPress={() => setShowScanner(false)}  >
+                  <Text>Close Camera</Text>
+            </TouchableOpacity>
+          
+      </View> 
+    )}
   if (clockedIn) {return (
 
     <View style={styles.container}>
@@ -241,7 +256,7 @@ export default function ClockInScreen() {
         }}>
         <Text style={styles.clockInOutText}>Clock Out</Text>
       </TouchableOpacity>
-      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      {/* {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
       : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
       : hasCamPermission === false ? <Text> no camera permission :( </Text>
       : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
@@ -252,7 +267,7 @@ export default function ClockInScreen() {
           <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           />
         </View>
-      }
+      } */}
 
     </View>
   )}
@@ -272,7 +287,7 @@ export default function ClockInScreen() {
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
 
-      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      {/* {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
       : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
       : hasCamPermission === false ? <Text> no camera permission :( </Text>
       : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
@@ -283,7 +298,7 @@ export default function ClockInScreen() {
           <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           />
         </View>
-      }
+      } */}
     </View>
   )}
 }
@@ -362,12 +377,17 @@ const styles = StyleSheet.create({
 
   scannerView: {
     height: "90%",
-    alignItems: "center"
+    alignItems: "center",
   },
-
   scannerCloseButton: {
-    height: "10%",
-    alignContent: "center"
+    width:"40%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:"10%",
+    alignItems:"center",
+    justifyContent:"center",
+    // marginTop:30,
+    marginBottom:15
   },
 
   scanner: {
