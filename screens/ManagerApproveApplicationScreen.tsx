@@ -167,47 +167,20 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                 <Text style={styles.backText}>Deny</Text>
               </TouchableOpacity>
             </View>
-            
-            {/* <TouchableHighlight
-              style={{ ...modalstyles.openButton, backgroundColor: "#2196F3" }}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <Text style={modalstyles.textStyle}>Hide Modal</Text>
-            </TouchableHighlight> */}
-            
           </View>
         </View>
       </Modal>
-
-      {/* <TouchableHighlight
-        style={modalstyles.openButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Text style={modalstyles.textStyle}>Show Modal</Text>
-      </TouchableHighlight> */}
-
       <View style={{height:'40%'}}>
-        {/* <View style={{flex: 1,flexDirection: 'row', alignSelf:'flex-start'}}>
-          
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backText}>Back</Text>
-          </TouchableOpacity>
-        </View> */}
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
                   {/* TODO: show "no pending records" when records empty. 
                       for some reason, it's currently populating records and then 
                       immediately become empty currently
                   */}
-                  {/* {
+                  {
                     records != [] ?
-                      <>  */}
-            {/* <View style={styles.space}></View> */}
-            <View style={{height:'70%',alignItems:'center'}}> 
-              <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+                      <> 
+            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', alignItems:'center' }}> 
+              <View style={{ width:'100%', alignItems: 'center' }}>
                 <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
                     <View style={{flexDirection: 'row', paddingLeft: 20}}>
@@ -216,31 +189,32 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                       <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
                     </View>
                   </RadioButton.Group>
-                  { viewtype === 'pending' &&
+                  { 
+                    viewtype === 'pending' &&
                     <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
                       <Text style={styles.exportText}>Approve All</Text>
                     </TouchableOpacity>
                   }
-            
               </View> 
-              {/* <View style={styles.space}></View> */}
-              <TextInput
-                style={{ height: 40, borderColor: 'gray', borderWidth: 1, width: '80%' }}
-                onChangeText={text => setSearchText(text)}
-                value={searchText}
-              />
-              <TouchableOpacity onPress={() => { search(searchText) }}>
-                <Text style={styles.backText}>Search</Text>
-              </TouchableOpacity>
+              <View style={styles.row}>
+                <TextInput
+                  style={styles.searchBox}
+                  onChangeText={text => setSearchText(text)}
+                  value={searchText}
+                />
+                <TouchableOpacity style={styles.searchBtn} onPress={() => { search(searchText) }}>
+                  <Text style={styles.backText}>Search</Text>
+                </TouchableOpacity>
+              </View>
               <View style={styles.row}>
                 <Text style={styles.header}>Application</Text>
                 <Text style={styles.header}>Actions</Text>
               </View>
             </View>
-          {/* </>
+          </>
         :
           <Text style={styles.container}>No Pending Records!</Text>
-      } */}
+      }
       </View>
       { 
         loading ? 
@@ -260,17 +234,6 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                       {"\n"}{item.userid}{"\n"}
                       <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> </Text>
                   <View>
-                    {/*<Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text>*/}
-                    {/* TODO: modularize approve/deny component */}
-                    {/* <TouchableOpacity onPress={() => {approve(item.key, appRef,userEmail)}}>
-                      <Text style={styles.approved}>approve</Text>
-                    </TouchableOpacity> 
-                    <TouchableOpacity onPress={() => {deny(item.key,  appRef, userEmail)}}>
-                      <Text style={styles.denied}>deny</Text>
-                    </TouchableOpacity>  */}
-                    {/* <TouchableOpacity onPress={() => {setDetailApp(item); setModalVisible(true)}}>
-                      <Text style={styles.pending}>details</Text>
-                    </TouchableOpacity>  */}
                     <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.view}>VIEW</Text>
                     </TouchableOpacity> 
@@ -381,6 +344,27 @@ const styles = StyleSheet.create({
     marginTop:0,
     marginBottom:10,
   },
+  searchBox: {
+    height: 40, 
+    borderColor: 'gray', 
+    borderWidth: 1, 
+    borderRadius: 10,
+    fontSize: 20,
+    flex: 3, 
+    marginTop: 10,
+    marginBottom: 10, 
+    marginRight: 10,
+  },
+  searchBtn: {
+    paddingHorizontal: 5,
+    backgroundColor:"#13AA52",
+    borderRadius:15,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
+    marginBottom:10,
+    flex: 1
+  },
   itemStyle: {
     height: 100,
     alignItems: 'center', 
@@ -391,7 +375,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     justifyContent: 'space-between',
     paddingRight: 20,
-    paddingLeft: 20,
+    paddingLeft: 20
   }, 
   space: {
     margin: 15
