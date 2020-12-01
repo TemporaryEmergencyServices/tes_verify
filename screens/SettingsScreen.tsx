@@ -124,10 +124,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -241,7 +237,9 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-
+            <TouchableOpacity style={styles.uploadProfileImageBtn} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.signOutText}>Back</Text>
+            </TouchableOpacity>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
