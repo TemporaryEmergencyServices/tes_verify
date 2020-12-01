@@ -13,7 +13,8 @@ import RecordsScreen from '../screens/RecordsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import ManagerQRcodesScreen from '../screens/ManagerQRcodesScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList} from '../types';
+import ManagerRecordsScreen from '../screens/ManagerRecordsScreen';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList, ManagerRecordsParamList} from '../types';
 
 const SuperuserBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -35,7 +36,7 @@ export default function SuperuserBottomTabNavigator() {
         name="ManagerApprove"
         component={ManagerApproveNavigator}
         options={{
-          title: "Approve Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
+          title: "Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
       <SuperuserBottomTab.Screen
@@ -43,38 +44,23 @@ export default function SuperuserBottomTabNavigator() {
        
        component={ManagerApproveApplicationNavigator}
        options={{
-          title: "Approve Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+          title: "Apps", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
         }}
       />
       <SuperuserBottomTab.Screen
        name="ManagerQRcodes"
        component={ManagerQRcodesNavigator}
        options={{
-          title: "Manage QR codes", tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
+          title: "QR", tabBarIcon: ({ color }) => <TabBarIcon name="ios-barcode" color={color} />,
         }}
-      />
-       {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
-
-
-      {/* Marie commented these out since SignUp and SignIn ~should~ be working sort of now. But they could still be useful.
-
-      <BottomTab.Screen
-        name="SignIn"
-        component={SignInNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
+      /> 
+      <SuperuserBottomTab.Screen
+       name="ManagerRecords"
+       component={ManagerRecordsScreen}
+       options={{
+          title: "Records", tabBarIcon: ({ color }) => <TabBarIcon name="ios-archive" color={color} />,
         }}
-      />
-
-      <BottomTab.Screen
-        name="SignUp"
-        component={SignUpNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color} />,
-        }}
-      />
-      */}
-     
+      /> 
       
 
     </SuperuserBottomTab.Navigator>
@@ -174,6 +160,20 @@ function ManagerQRcodesNavigator() {
         options={{ headerShown: false }}
       />
     </ManagerQRcodesStack.Navigator>
+  )
+}
+
+const ManagerRecordsStack = createStackNavigator<ManagerRecordsParamList>()
+
+function ManagerRecordsNavigator() {
+  return (
+    <ManagerRecordsStack.Navigator>
+      <ManagerRecordsStack.Screen
+        name="ManagerRecordsScreen"
+        component={ManagerRecordsScreen}
+        options={{ headerShown: false }}
+      />
+    </ManagerRecordsStack.Navigator>
   )
 }
 
