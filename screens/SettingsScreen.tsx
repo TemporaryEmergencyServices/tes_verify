@@ -188,6 +188,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a pending application. You may view the application using the button below. If you are waiting on approval, please speak with a TES employee.
@@ -201,10 +202,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -265,6 +262,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <View style={styles.container}>
           <Image style={styles.profileImg} source={{uri: imgState}}/> 
@@ -281,10 +279,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>    
-     
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -337,6 +331,7 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
+        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a denied application. You may view the denied application and re-apply below.
@@ -354,10 +349,6 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>  
-       
-        <TouchableOpacity style={styles.signOutBtn} onPress={handleUpload}>
-          <Text style={styles.signOutText} >Upload Profile Image</Text>
-        </TouchableOpacity>
       </View>
   )
 
@@ -408,6 +399,7 @@ const styles = StyleSheet.create({
   profileImg: {
     width: 200,
     height: 200,
+    marginBottom: 20
   },
   title: {
     fontSize: 20,
