@@ -3,7 +3,7 @@ import '@firebase/firestore'
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, Platform } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, TouchableOpacity, Alert, Button, Platform } from 'react-native';
 
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
@@ -260,10 +260,13 @@ export default function ApplyScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setAddressStateState(text)}/>
       </View>
-      <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
-          <Text style={styles.uploadImgText} >Upload Profile Image</Text>
-      </TouchableOpacity>
-     
+      <View>
+        { profileImage
+          ? <Image source={{ uri: profileImage }} style={styles.profileImg}/>
+          : <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
+              <Text style={styles.uploadImgText} >Upload Profile Image</Text>
+            </TouchableOpacity> }
+      </View>
 
       </ScrollView>
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
@@ -407,6 +410,10 @@ const styles = StyleSheet.create({
     fontWeight :'bold',
     fontSize: 18, 
     paddingBottom: 10
+  },
+  profileImg: {
+    width: 200,
+    height: 200
   }
 })
 
