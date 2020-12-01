@@ -347,7 +347,7 @@ export default function ManagerApproveScreen() {
               <View style={styles.row2}>
             <Text style={styles.dateTimeText}>
               {item.date}{"\n"}
-              {item.in_time}{"\n"}
+              {item.out_time}{"\n"}
               <Text style={renderRecordStatus(item.out_approved)}>Out: {item.out_approved}</Text>
             </Text>
                 <View>
