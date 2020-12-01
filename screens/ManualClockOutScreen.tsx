@@ -1,150 +1,129 @@
 import firebase from '../firebase.js'
-import '@firebase/firestore'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, Dimensions, ActivityIndicator, FlatList } from 'react-native';
 
-import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
+import { Item } from 'react-native-paper/lib/typescript/src/components/List/List';
 
 export default function CreateClockRecordsScreen({  navigation  }) {
-  const [dateState,setDateState] = useState('')
-  const[inTimeState,setInTimeState] = useState('')
-  const[outTimeState,setOutTimeState] = useState('')
-  const[userIdState,setUserIdState] = useState('')
-  
-  const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.username
+    const [clockedInRecords, setClockedInRecords] = useState({})
+    const [outTime, setOutTime] = useState('')
+    const [searchText, setSearchText] = useState('')
+    const [loading, setLoading] = useState(true)
+    const [modalVisible, setModalVisible] = useState(true)
+    const [records, setRecords] = useState([])
+    const [detailRecord, setDetailRecord] = useState({})
 
-  const dispatch = useDispatch()  
-  const handleApply = async () => {
-    
-    var errorMessage = ''
-    if (dateState == '') {errorMessage = 'Please enter the record date.'}
-    if (dateState.length != 10) {errorMessage = 'Please enter date in format YYYY-MM-DD.'}
-    if (dateState.substring(4,5) != '-' || dateState.substring(7,8) != '-') {
-      errorMessage = 'Please enter date in format YYYY-MM-DD.'
-    }
-    if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
-    if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
-    if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
-    if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
-    const today = new Date()
-    const dateRaw = today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
+    useEffect(() => {
+        // automatically get all currently clocked in records
+        // where currently_clocked_in == true
+        const subscriber = firebase.firestore().collection('ClockInsOuts')
+        .where('currently_clocked_in', '==', true)
+        .get().then(querySnapshot => {
+            var helperRecords = []
+            querySnapshot.forEach(doc => {
+                helperRecords.push(doc.data())
+            })
+            return helperRecords
+        }).then(result => {
+            setRecords(result)
+            setLoading(false)
+        })
+    }, [])
 
-    const timeRaw = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-
-  
-    
-    if (errorMessage != '') {
-      Alert.alert(
-        'Error! Incomplete submission.',
-        errorMessage,
-         [
-           {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
-         ],
-         {cancelable: false},
-       );
+    // search through currently clocked in records to find matching name (client side)
+    const search = async (userid) => {
+        
     }
 
-    else {
-      const currently_clocked_in =  false
-      const in_approved = "pending"
-      const out_approved = "pending"
-      
-      var snap = await firebase.firestore().collection('ClockInsOuts').add({
-              currently_clocked_in: currently_clocked_in,
-              date: dateRaw,
-              in_approved: in_approved,
-              in_time: timeRaw,
-              out_approved: out_approved,
-              out_date: dateState,
-              out_time: outTimeState,
-              userid: userIdState
-      });
+    return (
+        // displays searchbar and list of clocked in people
+        <View style={styles.container}>
+            <Text style={styles.logo}>Manually Clock Out a Volunteer</Text>
+            <Text>Search for volunteer by email address</Text>
+            <View style={styles.row}>
+                <TextInput
+                  style={styles.inputText}
+                  onChangeText={text => setSearchText(text)}
+                  value={searchText}
+                />
+                <TouchableOpacity style={styles.loginBtn} onPress={() => { search(searchText) }}>
+                  <Text style={styles.signUpText}>Search</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView 
+                style={styles.scrollView}
+                centerContent={true} 
+                contentContainerStyle={styles.contentContainer} 
+            >
+                <View style={styles.inputView} >
+                <TextInput  
+                    style={styles.inputText}
+                    placeholder="Out Time" 
+                    placeholderTextColor="white"
+                    onChangeText={text => setOutTime(text)}/>
+                </View>
+            </ScrollView>
+            {/* <TouchableOpacity style={styles.loginBtn} onPress={}>
+                <Text style={styles.signUpText} >SUBMIT</Text>
+            </TouchableOpacity> */}
+            {
+                records.length === 0 &&
+                <Text style={{marginTop: 30}}>No one is currently clocked in!</Text>
+            }
+            { 
+                loading ? 
+                <View style={styles.centerContainer}>
+                    <ActivityIndicator size="large" color="#E11383" />
+                </View>
+                :
+                // will render: userid, first/last name, clocked in time and date, button to clock out
+                // clock out button will display modal for user
+                <FlatList
+                    data={records}
+                    renderItem={({ item }) => (
+                        <View style={styles.itemStyle}>
+                            <View style={styles.row}>
+                                <Text style={{fontWeight: 'bold'}}>
+                                    {item.firstName} {item.lastName}
+                                </Text>
+                                <Text>{"\n"}{item.userid}{"\n"}</Text>
+                            <View>
+                                <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
+                                    <Text style={styles.signUpText}>CLOCK OUT</Text>
+                                </TouchableOpacity> 
+                            </View>
+                            </View>
+                        </View>
+                    )}
+                    showsVerticalScrollIndicator={false}
+                />
+            }
 
-      Alert.alert(
-      'Record Submitted',
-      "Record must still be approved. Press OK to continue.",
-        [
-          {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-        ],
-        {cancelable: false},
-      );
-    }
-  }
+            <Button 
+                title="LEAVE PAGE" 
+                color = "#1C5A7D" 
+                onPress={() => { Alert.alert('Leave Page?',
+                "Are you sure you want to leave the page? All progress will be lost.",
+                [
+                    {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+                    {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
+                ],
+                    {cancelable: false},
+                );
+                }} 
+            />
+        </View>
+    );
 
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Manually Clock Out a Volunteer</Text>
-
-      <ScrollView 
-        style={styles.scrollView}
-        centerContent={true} 
-        contentContainerStyle={styles.contentContainer} >
-
-      <View style={styles.inputView} >
-        <TextInput  
-          style={styles.inputText}
-          placeholder="Volunteer Email" 
-          placeholderTextColor="white"
-          onChangeText={text => setUserIdState(text)}/>
-      </View>
-      <View style={styles.inputView} >
-        <TextInput  
-          style={styles.inputText}
-          placeholder="Date (YYYY-MM-DD)" 
-          placeholderTextColor="white"
-          onChangeText={text => setDateState(text)}/>
-      </View>
-      <View style={styles.inputView} >
-        <TextInput  
-          style={styles.inputText}
-          placeholder="In Time (HH:MM)" 
-          placeholderTextColor="white"
-          onChangeText={text => setInTimeState(text)}/>
-      </View>
-      <View style={styles.inputView} >
-        <TextInput  
-          style={styles.inputText}
-          placeholder="Out Time" 
-          placeholderTextColor="white"
-          onChangeText={text => setOutTimeState(text)}/>
-      </View>
-
-      </ScrollView>
-      <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
-        <Text style={styles.signUpText} >SUBMIT</Text>
-      </TouchableOpacity>
-
-      <Button 
-        title="LEAVE PAGE" 
-        color = "#1C5A7D" 
-        onPress={() => 
-          {Alert.alert(
-            'Leave Page?',
-            "Are you sure you want to leave the page? All progress will be lost.",
-             [
-               {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-               {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
-
-             ],
-             {cancelable: false},
-           );
-           
-          }} />
-    </View>
-  );
-  
 }
 
 const styles = StyleSheet.create({
-  scrollview: {
+  scrollView: {
     fontSize: 20,
     fontWeight: 'bold',
-    justifyContent: 'center',
     textAlign: 'center',
     paddingTop: 60,
     paddingBottom: 15,
@@ -163,7 +142,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 300
   },
-
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
+    justifyContent: 'center',
+  },
   logo:{
     fontWeight:"bold",
     fontSize:24,
@@ -174,7 +156,19 @@ const styles = StyleSheet.create({
     paddingRight: 30, 
     paddingLeft: 30
   },
-
+  row: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-between',
+    paddingRight: 20,
+    paddingLeft: 20
+  }, 
+  column: {
+    flex: 1, 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    alignItems:'center' 
+  },
   instructions:{
     fontSize:18,
     color:"#1C5A7D",
@@ -198,6 +192,11 @@ const styles = StyleSheet.create({
     height:50,
     color:"white"
   },
+  itemStyle: {
+    height: 100,
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
   forgot:{
     color:"white",
     fontSize:11
@@ -211,6 +210,12 @@ const styles = StyleSheet.create({
     justifyContent:"center",
 
     marginBottom:10
+  },
+  clockOutBtn: {
+    backgroundColor: "red", 
+    fontSize: 20,
+    borderRadius: 10,
+    padding: 10
   },
   createAccountBtn:{
     width:"80%",
