@@ -31,8 +31,9 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
     if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
     const today = new Date()
-    const dateRaw = today.toISOString().substring(0,10)
-    const timeRaw = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric',hour12: true })
+    const dateRaw = today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
+
+    const timeRaw = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
 
   
     
@@ -101,7 +102,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
-          placeholder="In Time" 
+          placeholder="In Time (HH:MM)" 
           placeholderTextColor="white"
           onChangeText={text => setInTimeState(text)}/>
       </View>
