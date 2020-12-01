@@ -18,7 +18,7 @@ import DisplayQRScreen from '../screens/DisplayQRScreen';
 import LinkingConfiguration from './LinkingConfiguration';
 import ReApplyScreen from '../screens/ReApplyScreen';
 import ManagerRecordsScreen from '../screens/ManagerRecordsScreen';
-import CreateClockRecordScreen from '../screens/CreatClockRecordScreen';
+// import CreateClockRecordScreen from '../screens/CreateClockRecordScreen';
 
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -56,7 +56,7 @@ function RootNavigator() {
       <Stack.Screen name="DisplayQRScreen" component={DisplayQRScreen} />
       <Stack.Screen name="ReApplyScreen" component={ReApplyScreen} />
       <Stack.Screen name="ManagerRecordsScreen" component={ManagerRecordsScreen} />
-      <Stack.Screen name="CreateClockRecordScreen" component={CreateClockRecordScreen} />
+      {/* <Stack.Screen name="CreateClockRecordScreen" component={CreateClockRecordScreen} /> */}
 
 
       
