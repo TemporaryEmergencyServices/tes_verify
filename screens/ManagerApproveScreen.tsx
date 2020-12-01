@@ -204,13 +204,15 @@ export default function ManagerApproveScreen() {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-            <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
+            </TouchableOpacity>
             </View>
             
           </View>
         </View>
       </Modal>
-    <View style={{height:'40%'}}>
+    <View style={{height:'34%'}}>
     <View style={{height:'70%',alignItems:'center'}}> 
 
     <Text style={styles.titleFlatList}>Pending Clock {viewtype}s </Text>
@@ -222,7 +224,7 @@ export default function ManagerApproveScreen() {
               <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
            </View>
           </RadioButton.Group>
-          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef)}>
             <Text style={styles.exportText}>Approve All</Text>
           </TouchableOpacity> 
     </View> 
@@ -303,13 +305,15 @@ export default function ManagerApproveScreen() {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-            <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
+            </TouchableOpacity>
             </View>
             
           </View>
         </View>
       </Modal>
-    <View style={{height:'40%'}}>
+    <View style={{height:'34%'}}>
     <View style={{height:'70%',alignItems:'center'}}> 
 
     <Text style={styles.titleFlatList}>Pending Clock {viewtype}s </Text>
@@ -321,7 +325,7 @@ export default function ManagerApproveScreen() {
               <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
            </View>
           </RadioButton.Group>
-          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef)}>
             <Text style={styles.exportText}>Approve All</Text>
           </TouchableOpacity> 
     </View> 
@@ -466,6 +470,19 @@ export default function ManagerApproveScreen() {
 // FIXME: this may even approve those records that 
 // are no longer displaying or have been previously denied, 
 // must test this
+function approveAllAlert(records: any, clockRef: any) {
+  Alert.alert(
+    'Are you sure?!',
+    'You are about to approve all pending entries. Are you sure you want to proceed?',
+     [
+       {text: 'Approve All', onPress: () => {console.log('Approve Pressed'); approveAll(records, clockRef)}},
+       {text: 'CANCEL', onPress: () => console.log('cancel pressed')}
+      ],
+     {cancelable: false},
+   );
+}
+
+
 function approveAll(records: any, clockRef: any) {
   records.forEach(record => {
     approve(record.key, "in", clockRef)
@@ -682,9 +699,10 @@ const modalstyles = StyleSheet.create({
   },
   openButton: {
     backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    width: 100
   },
   textStyle: {
     color: "black",
