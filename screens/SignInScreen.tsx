@@ -9,7 +9,7 @@ import SignUpScreen from '../screens/SignUpScreen'
 import ForgotPassword from '../screens/ForgotPasswordScreen'
 
 import { login } from '../actions'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
 
 /*
  * Code is loosely based on the following tutorials: 
@@ -21,15 +21,26 @@ import { useDispatch } from 'react-redux'
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
 export default function SignInScreen({ navigation }) {
   const dispatch = useDispatch()
-
-  
   const [emailState, setEmailState] = useState('')
   const [passwordState, setPasswordState] = useState('')
+
   const handleLogin = () => {
     firebase.auth()
-      .signInWithEmailAndPassword(emailState,passwordState)
-      .then((response) => dispatch(login(response.user)))
-      .then(goToMainBody)
+      .signInWithEmailAndPassword(emailState.toLowerCase(),passwordState)
+      .then((response) => {
+        firebase.firestore()
+        .collection('roles')
+        .where('username' , '==', response.user.email)
+        .limit(1)
+        .onSnapshot(querySnapshot => {
+          if (!querySnapshot.empty) {
+            const queryDocumentSnapshot = querySnapshot.docs[0];
+            const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+            dispatch(login(queryDocumentSnapshotData))
+            goToMainBody(queryDocumentSnapshotData.role)
+          }
+        })
+      })
       .catch(error => {
         Alert.alert(
           "Error",
@@ -41,15 +52,28 @@ export default function SignInScreen({ navigation }) {
         );
       })
   }
+
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
-  const goToMainBody = () => navigation.replace('BottomTabNavigator')
+  const goToMainBody = (role) => {
+    if (role == "superuser") {
+      navigation.replace('SuperuserBottomTabNavigator')
+    } else if (role == "administrator") {
+      navigation.replace('ManagerBottomTabNavigator')
+    } else if (role == "volunteer") {
+      navigation.replace('BottomTabNavigator')
+    } else if (role == "display_qr") {
+      navigation.replace('DisplayQRScreen')
+    }
+  }
   
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
@@ -57,10 +81,12 @@ export default function SignInScreen({ navigation }) {
       </View>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="visible-password"
           secureTextEntry
           style={styles.inputText}
           placeholder="Password..." 
           placeholderTextColor="white"
+          value={passwordState}
           onChangeText={text => setPasswordState(text)}/>
       </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>

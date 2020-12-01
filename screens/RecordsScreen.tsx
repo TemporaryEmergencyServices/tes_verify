@@ -17,12 +17,16 @@ https://medium.com/react-native-development/how-to-use-the-flatlist-component-re
 export default function RecordsScreen() {
 
   const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
+  const userEmail = user.username
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
 
-  useEffect(() => {
+  //OLD USE EFFECT WITH REALTIME DATABASE
+  //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
+  //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
+  
+  /*  useEffect(() => {
     var ref = firebase.database().ref("ClockInsOuts/")
     let isCancelled = false
     ref.once("value", function(snapshot){
@@ -34,18 +38,34 @@ export default function RecordsScreen() {
           recorddata['id'] = id
           help.push(recorddata)
         }
-        
       });
 
       if(!isCancelled){
         setRecords(help) 
+        setLoading(false)
       }
-
-      setLoading(false)
     });
 
     return () => {isCancelled = true}
-  });
+  }); */
+
+  useEffect(() => {
+    const subscriber = firebase.firestore()
+       .collection('ClockInsOuts')
+       .where('userid' , '==', userEmail)
+       .onSnapshot(querySnapshot => {
+         const helperRecords = [] as any;
+         querySnapshot.forEach(documentSnapshot => {
+           helperRecords.push({
+           ...documentSnapshot.data(),
+           key: documentSnapshot.id
+           });
+         });
+         setRecords(helperRecords);
+         setLoading(false);
+     });
+    return () => subscriber();
+  } ,[]);
 
   return (
     <View style={styles.container}>
@@ -62,7 +82,7 @@ export default function RecordsScreen() {
       { 
         loading ? 
           <View style={styles.centerContainer}>
-            <ActivityIndicator size="large" color="white" />
+            <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
           <FlatList
@@ -73,11 +93,11 @@ export default function RecordsScreen() {
                   <Text>{item.date}</Text>
                   <View>
                     <Text>{item.in_time}</Text>
-                    <Text style={renderApproved(item.in_approved)}>{item.in_approved}</Text>
+                    <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
                   </View>
                   <View>
                     <Text>{item.out_time}</Text>
-                    <Text style={renderApproved(item.out_approved)}>{item.out_approved}</Text>
+                    <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                   </View>
                 </View>
               </View>
@@ -85,11 +105,12 @@ export default function RecordsScreen() {
             showsVerticalScrollIndicator={false}
           />
       }
+      <View style={styles.bigSpace}></View>
     </View>
   )
 }
 
-function renderApproved(status: String) {
+function renderRecordStatus(status: String) {
   if (status === "approved") {
     return styles.approved
   } else if (status === "pending") {
@@ -156,14 +177,23 @@ const styles = StyleSheet.create({
   space: {
     margin: 15
   }, 
+  bigSpace: {
+    margin: 100
+  }, 
   pending: {
-    color: 'orange'
+    color: 'orange',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   approved: {
-    color: 'green'
+    color: 'green',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   denied: {
-    color: 'red'
+    color: 'red',
+    fontSize: 15,
+    fontWeight: 'bold'
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,

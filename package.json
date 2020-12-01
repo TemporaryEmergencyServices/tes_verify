@@ -9,7 +9,18 @@
     "test": "jest --watchAll"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx",
+      "node"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
@@ -19,6 +30,7 @@
     "@react-navigation/stack": "^5.6.2",
     "expo": "^38.0.10",
     "expo-asset": "~8.1.7",
+    "expo-barcode-scanner": "^8.2.1",
     "expo-constants": "~9.1.1",
     "expo-font": "~8.2.1",
     "expo-linking": "^1.0.1",
@@ -28,28 +40,47 @@
     "expo-status-bar": "^1.0.2",
     "expo-web-browser": "~8.3.1",
     "firebase": "7.9.0",
+    "firebase-admin": "^9.3.0",
     "pushid": "^1.0.0",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
     "react-native-dotenv": "^2.4.1",
+    "react-native-fs": "^2.16.6",
     "react-native-gesture-handler": "^1.8.0",
+    "react-native-image-picker": "^2.3.4",
     "react-native-maps": "0.27.1",
+    "react-native-paper": "^4.3.1",
+    "react-native-passmeter": "0.0.5",
+    "react-native-progress": "^4.1.2",
+    "react-native-qrcode-svg": "^6.0.6",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
+    "react-native-svg": "^12.1.0",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.1",
+    "react-redux-firebase": "^3.7.0",
+    "react-scripts": "^4.0.0",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "react-native-view-shot": "3.1.2",
+    "expo-image-picker": "~8.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
+    "@testing-library/jest-native": "^3.4.3",
+    "@testing-library/react-native": "^7.1.0",
+    "@types/jest": "^26.0.15",
     "@types/react": "~16.9.23",
     "@types/react-native": "~0.62.13",
     "@types/react-redux": "^7.1.9",
     "babel-preset-expo": "~8.1.0",
-    "jest-expo": "~38.0.0",
-    "typescript": "~3.9.5"
+    "enzyme-adapter-react-16": "^1.15.5",
+    "jest": "^25.5.4",
+    "jest-expo": "^37.0.0",
+    "react-test-renderer": "^17.0.1",
+    "ts-jest": "^26.4.3",
+    "typescript": "^3.9.7"
   },
   "private": true
 }

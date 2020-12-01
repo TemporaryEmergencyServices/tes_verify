@@ -12,40 +12,34 @@ import SettingsScreen from '../screens/SettingsScreen';
 import RecordsScreen from '../screens/RecordsScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
-import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList} from '../types';
+import ManagerQRcodesScreen from '../screens/ManagerQRcodesScreen';
+import { BottomTabParamList, ClockInParamList, SettingsParamList, RecordsParamList, ManagerApproveParamList, ManagerApproveApplicationParamList, SignInParamList, SignUpParamList, ManagerQRcodesParamList} from '../types';
 
-const BottomTab = createBottomTabNavigator<BottomTabParamList>();
+const ManagerBottomTab = createBottomTabNavigator<BottomTabParamList>();
 
-export default function BottomTabNavigator() {
+export default function ManagerBottomTabNavigator() {
   const colorScheme = useColorScheme();
 
-
   return (
-    <BottomTab.Navigator
+    <ManagerBottomTab.Navigator
       initialRouteName="Profile"
       tabBarOptions={{ activeTintColor: "#1C5A7D"}}>
-      <BottomTab.Screen
+      <ManagerBottomTab.Screen
         name="Profile"
         component={SettingsNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="ios-settings" color={color}  />,
         }}
       />
-      <BottomTab.Screen
-        name="ClockIn"
-        component={ClockInNavigator}
+      <ManagerBottomTab.Screen
+        name="ManagerApprove"
+        component={ManagerApproveNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
+          title: "Approve Clocks", tabBarIcon: ({ color }) => <TabBarIcon name="ios-clock" color={color} />,
         }}
       />
-      <BottomTab.Screen
-        name="Records"
-        component={RecordsNavigator}
-        options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-paper" color={color} />,
-        }}
-      />
-      {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
+      
+       {/* Ben added SignIn and SignUp here for easy testing of sign in and sign up. TODO: remove them */}
 
 
       {/* Marie commented these out since SignUp and SignIn ~should~ be working sort of now. But they could still be useful.
@@ -66,7 +60,10 @@ export default function BottomTabNavigator() {
         }}
       />
       */}
-    </BottomTab.Navigator>
+     
+      
+
+    </ManagerBottomTab.Navigator>
   );
 }
 
@@ -147,6 +144,22 @@ function ManagerApproveApplicationNavigator() {
         options={{ headerShown: false }}
       />
     </ManagerApproveApplicationStack.Navigator>
+  )
+}
+
+
+const ManagerQRcodesStack = createStackNavigator<ManagerQRcodesParamList>()
+
+
+function ManagerQRcodesNavigator() {
+  return (
+    <ManagerQRcodesStack.Navigator>
+      <ManagerQRcodesStack.Screen
+        name="ManagerQRcodesScreen"
+        component={ManagerQRcodesScreen}
+        options={{ headerShown: false }}
+      />
+    </ManagerQRcodesStack.Navigator>
   )
 }
 

@@ -15,7 +15,7 @@ import { updateEmail, updatePassword, signup } from '../actions/user';
 
 //gives warning for navigation - this goes away if you uncomments the 'noImplicitAny' line from tsconfig
 //unsure of other impacts of having that line, so uncommenting may be a bad idea
-function ForgotPasswordScreen( {  navigation  }) {
+function ForgotPasswordScreen({  navigation  }) {
   const [emailState, setEmailState] = useState('')
   const goToSignIn = () => navigation.replace('SignInScreen')
   const handlePasswordReset = () => {
@@ -27,9 +27,12 @@ function ForgotPasswordScreen( {  navigation  }) {
       <Text style={styles.logo}>TES Verify</Text>
       <View style={styles.inputView} >
         <TextInput  
+          keyboardType="email-address"
+          autoCapitalize="none"
           style={styles.inputText}
           placeholder="Email..." 
           placeholderTextColor="white"
+          value={emailState}
           onChangeText={text => setEmailState(text)}/>
       </View>
       <TouchableOpacity style={styles.loginBtn} onPress={handlePasswordReset}>

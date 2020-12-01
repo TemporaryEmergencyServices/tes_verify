@@ -1,12 +1,17 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, Platform } from 'react-native';
+import {  ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
 import { YellowBox } from 'react-native';
 import firebase from '../firebase.js'
+import '@firebase/firestore';
 
 import { Text, View } from '../components/Themed';
-// import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
+import SettingsScreen from './SettingsScreen.js';
+
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Permissions } from 'expo';
 
 export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
@@ -17,43 +22,118 @@ export default function ClockInScreen() {
   const [fbClockedIn, setFbClockedIn] = useState('')
   const [fbInTime, setFbInTime] = useState('')
   const [fbOutTime, setFbOutTime] = useState('')
-  // TODO: change this to global var using Redux
-  //const [username, setUsername] = useState('brandon@brandon.com')
-  const user = useSelector((state: RootStateOrAny) => state.user)
-  const userEmail = user.email
 
   YellowBox.ignoreWarnings(['Setting a timer']);
+  const[hasAccess,setHasAccess] = useState(false)
+  const user = useSelector((state: RootStateOrAny) => state.user)
+  const userEmail = user.username
+  const [loading, setLoading] = useState(true)
+  
+  const [appState, setAppState] = useState("none")
+
+  const [hasCamPermission, setHasCamPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [validQR, setValidQR] = useState(false);
+  const [showScanner, setShowScanner] = useState(false);
   useEffect(() => {
 
-  }, [])
+    // QR scanning permissions
+    if (Platform.OS !== 'web'){
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasCamPermission(status === 'granted');
+    })();}
 
-  const determineAlreadyClockedIn = async () => {
-    var isAlreadyClockedIn = false
-    const clockInsRef = firebase.database().ref('ClockInsOuts/')
-    await clockInsRef.orderByChild('currently_clocked_in').equalTo(true).limitToLast(1).on("child_added", function(snapshot) {
-      var session = snapshot.val()
-      if (session.userid == userEmail) {
-        setClockedIn(true)
-        setInTime(session.in_time)
-        setUniqueClockID(snapshot.key)
-        isAlreadyClockedIn = true
-      }
-    });
+    let unmounted = false
 
-    if (isAlreadyClockedIn == false) {
-      Alert.alert(
-        'Sorry...',
-        'You are not currently in a volunteer session. Please clock in.',
-        [
-          {text: 'OK', onPress: () => console.log('OK Pressed')},
-        ],
-        {cancelable: false},
-      );  
+    //clock ins
+    const subscriber = firebase.firestore()
+       .collection('ClockInsOuts')
+       .where('userid' , '==', userEmail)
+       .where('currently_clocked_in', '==', true)
+       .limit(1)
+       .onSnapshot(querySnapshot => {
+         if(querySnapshot.empty) {
+          setClockedIn(false)
 
-    }
+         }
+         else{
+           const queryDocumentSnapshot = querySnapshot.docs[0];
+           const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+           setUniqueClockID(queryDocumentSnapshot.id)
+           setInTime(queryDocumentSnapshotData.in_time)
+           setClockedIn(true)
+           
+           //do stuff for resume - set clocked in to true
+           //set in time
+           //set unique clock id
+         }
+     });
+     let unmounted2 = false
+     /*const roleSubscriber = firebase.firestore()
+       .collection('roles')
+       .where('username' , '==', userEmail)
+       .limit(1)
+       .onSnapshot(querySnapshot => {
+         if(querySnapshot.empty) {
+          setHasAccess(false)
+         }
+         else{
+           const queryDocumentSnapshot = querySnapshot.docs[0];
+           const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+           if (queryDocumentSnapshotData.role == 'volunteer'){
+              setHasAccess(true)
+              setLoading(false)
+            }
+          else {
+            setHasAccess(false)
+            setLoading(false)
+          }
+         }
+     }); */
+     const appStateSubscriber = firebase.firestore()
+       .collection('volunteers')
+       .where('userid' , '==', userEmail)
+       .onSnapshot(querySnapshot => {
+        if(querySnapshot.empty) {
+          setAppState("none")
+          setLoading(false)
+        } else {
+         const queryDocumentSnapshot = querySnapshot.docs[0];
+         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+         setAppState(queryDocumentSnapshotData.approved)
+         setLoading(false)
+        }
+     });
+    return () => {subscriber(); appStateSubscriber(); unmounted = true; unmounted2 = true };
+  } ,[]);
+
+  const isValidQR = (data : string) => {
+    var isValid = false;
+    const docRef = firebase.firestore()
+         .collection('QRcodes')
+         .doc(data).get()
+         .then((doc) => {console.log(doc.data().active);setValidQR("enabled" == doc.data().active)})
+         .then(() => {
+            if (validQR){
+              toggleClockIn();
+              alert(`valid QR code!`);
+            }
+            else {
+              alert(`QR code not valid!`);
+            }
+         });
   }
 
-  //var isAlreadyClockedIn = determineAlreadyClockedIn()
+  const handleBarCodeScanned = ({type, data}) => {
+    setScanned(true);
+    isValidQR(data);
+    
+    setShowScanner(false);
+    setScanned(false);
+  };
+
+  
 
   const toggleClockIn = () => {
     //get the time
@@ -64,9 +144,9 @@ export default function ClockInScreen() {
         //set in time
         //create firebase entry
     const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
      // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const date = today.toISOString().substring(0,10)
     if (!clockedIn) {handleClockIn(date, time)}
 
     else { handleClockOut(date, time)}
@@ -87,18 +167,18 @@ export default function ClockInScreen() {
   }
 
   const writeFBClockIn = async (date: any, time: any) => {
-    var snap = await firebase.database().ref('ClockInsOuts').push({
+    var snap = await firebase.firestore().collection('ClockInsOuts').add({
       userid: userEmail,
       in_time: time,
       date: date,
       in_approved: "pending",
       currently_clocked_in: true,
     });
-    setUniqueClockID(snap.key)
+    setUniqueClockID(snap.id)
   }
 
   const writeFBClockOut = async (date: any, time: any) => {
-    var snap = await firebase.database().ref('ClockInsOuts/' + uniqueClockID).update({
+    var snap = await firebase.firestore().collection('ClockInsOuts').doc(uniqueClockID).update({
       out_time: time,
       out_approved: "pending",
       currently_clocked_in: false,
@@ -116,24 +196,33 @@ export default function ClockInScreen() {
       {cancelable: false},
     );
 
-    
-  /* const getClockFB = () => {
-    firebase.database().ref(userEmail).on('value', (snapshot: any) => {
-      setFbClockedIn(snapshot.val().clocked_in)
-      setFbInTime(snapshot.val().in_time)
-      setFbOutTime(snapshot.val().out_time)
-    })
-  } */
+  if (loading) {
+      return (
+            <View style={styles.centerContainer}>
+              <ActivityIndicator size="large" color="#E11383" />
+            </View>
+      )
+  }
 
-    /* REMOVED BUTTONS 
-     <Button
-        title="Get FB Data"
-        color="#13AA52"
-        onPress={getClockFB}
-      />
-      <Text>{fbClockedIn ? "Clocked In: True" : "Clocked In: False"}</Text>
+  else {
+    if (appState != 'approved'){
+    return (
+    <View style={styles.container}>
+      <Text style={styles.instructionsText}> You must have an approved volunteer application to clock in. Please speak with a TES manager.</Text>
+    </View>
+    )
+  }
 
-    */
+  // based on https://docs.expo.io/versions/latest/sdk/bar-code-scanner/
+  // if on mobile, check permissions
+  if (Platform.OS !== 'web'){
+    if (hasCamPermission === null){
+      return <Text> Requesting for camera permission</Text>;
+    }
+    if (hasCamPermission === false) {
+      return <Text>No access to camera</Text>;
+    }
+  }
 
   if (clockedIn) {return (
 
@@ -142,26 +231,71 @@ export default function ClockInScreen() {
       <Text style={styles.instructionsText}> {inTime}. </Text>
       <Text style={styles.instructionsText}> Use the button below to clock out and end your volunteer session. </Text>
       <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockOutButton]} onPress={() => {toggleClockIn()}}>
+        style={[styles.clockInOutButton, styles.clockOutButton]} onPress={() => {
+          if (hasCamPermission){
+            setShowScanner(true);
+          }
+          else if (Platform.OS === 'web'){
+            toggleClockIn();
+          }
+        }}>
         <Text style={styles.clockInOutText}>Clock Out</Text>
       </TouchableOpacity>
+      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
+      : hasCamPermission === false ? <Text> no camera permission :( </Text>
+      : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
+      : <View style={styles.scanner}> 
+          <TouchableOpacity style={styles.scannerCloseButton} onPress={() => setShowScanner(false)}  >
+            <Text>Close Camera</Text>
+          </TouchableOpacity>
+          <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          />
+        </View>
+      }
+
     </View>
   )}
   else {
     return (
     <View style={styles.container}>
-      <Text style={styles.instructionsText}> If you are checking in, press the clock in button. Alternatively, if you have already checked in today, select resume session. </Text>
-      <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockInButton]} onPress={toggleClockIn}>
+      <Text style={styles.instructionsText}> If you are checking in, press the clock in button! </Text>
+      <TouchableOpacity accessibilityLabel="clock in button"
+        style={[styles.clockInOutButton, styles.clockInButton]} onPress={() => {
+          if (hasCamPermission){
+            setShowScanner(true);
+          }
+          else if (Platform.OS === 'web'){
+            toggleClockIn();
+          }
+        }}>
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
-      <TouchableOpacity 
-        style={[styles.clockInOutButton, styles.clockInResumeButton]} onPress={determineAlreadyClockedIn}>
-        <Text style={styles.clockInOutText}>Resume</Text>
-      </TouchableOpacity>
+
+      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
+      : hasCamPermission === false ? <Text> no camera permission :( </Text>
+      : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
+      : <View style={styles.scannerView}> 
+          <TouchableOpacity style={styles.scannerCloseButton} onPress={() => setShowScanner(false)}  >
+            <Text>Close Camera</Text>
+          </TouchableOpacity>
+          <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+          />
+        </View>
+      }
     </View>
   )}
 }
+}
+
+
+
+/* was resume button 
+<TouchableOpacity 
+        style={[styles.clockInOutButton, styles.clockInResumeButton]} onPress={determineAlreadyClockedIn}>
+        <Text style={styles.clockInOutText}>Resume</Text>
+      </TouchableOpacity> */
 
 const styles = StyleSheet.create({
   container: {
@@ -221,6 +355,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     textAlign: "center",
   },
+  centerContainer: {
+    height: Dimensions.get('window').height / 2,
+    justifyContent: 'center',
+  },
 
+  scannerView: {
+    height: "90%",
+    alignItems: "center"
+  },
 
+  scannerCloseButton: {
+    height: "10%",
+    alignContent: "center"
+  },
+
+  scanner: {
+    height: "100%",
+    alignContent:"center"
+  },
 });
