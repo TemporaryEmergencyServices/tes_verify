@@ -2,7 +2,8 @@ import firebase from '../firebase.js'
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, Dimensions, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, 
+  Dimensions, ActivityIndicator, FlatList, Modal } from 'react-native';
 
 import { ScrollView } from 'react-native-gesture-handler';
 import { Item } from 'react-native-paper/lib/typescript/src/components/List/List';
@@ -12,7 +13,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     const [outTime, setOutTime] = useState('')
     const [searchText, setSearchText] = useState('')
     const [loading, setLoading] = useState(true)
-    const [modalVisible, setModalVisible] = useState(true)
+    const [modalVisible, setModalVisible] = useState(false)
     const [records, setRecords] = useState([])
     const [detailRecord, setDetailRecord] = useState({})
 
@@ -38,6 +39,21 @@ export default function CreateClockRecordsScreen({  navigation  }) {
         
     }
 
+    const submitOutTime = async (userid, date, inTime) => {
+      const recordRef = firebase.firestore().collection('ClockInsOuts')
+      .where('userid', '==', userid)
+      .where('date', '==', date)
+      .where('in_time', '==', inTime)
+      
+      recordRef.get().then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          doc.ref.update({
+            out_time: outTime
+          })
+        })
+      })
+    }
+
     return (
         // displays searchbar and list of clocked in people
         <View style={styles.container}>
@@ -53,19 +69,37 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                   <Text style={styles.signUpText}>Search</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView 
-                style={styles.scrollView}
-                centerContent={true} 
-                contentContainerStyle={styles.contentContainer} 
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {setModalVisible(false);
+              }}
             >
-                <View style={styles.inputView} >
-                <TextInput  
-                    style={styles.inputText}
-                    placeholder="Out Time" 
-                    placeholderTextColor="white"
-                    onChangeText={text => setOutTime(text)}/>
+              <View style={modalstyles.centeredView}>
+                <View style={modalstyles.modalView}>
+                  <ScrollView style={{height:'90%'}}>
+                    <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+                    <Text style={modalstyles.textStyle}>Username: {detailRecord.userid}</Text>
+                    <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
+                    <View style={styles.inputView} >
+                      <TextInput
+                          style={styles.inputText}
+                          placeholder="Out Time (HH:MM) AM/PM" 
+                          placeholderTextColor="white"
+                          onChangeText={text => setOutTime(text)}
+                      />
+                    </View>
+                    <TouchableOpacity 
+                        style={styles.loginBtn} 
+                        onPress={() => submitOutTime(detailRecord.userid, detailRecord.date, detailRecord.in_time)}
+                      >
+                        <Text>Submit Out Time</Text>
+                      </TouchableOpacity>
+                  </ScrollView>
                 </View>
-            </ScrollView>
+              </View>
+            </Modal>
             {/* <TouchableOpacity style={styles.loginBtn} onPress={}>
                 <Text style={styles.signUpText} >SUBMIT</Text>
             </TouchableOpacity> */}
@@ -87,11 +121,10 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                         <View style={styles.itemStyle}>
                                 <View style={styles.row}>
                                     <Text>
-                                    <Text>{item.userid}</Text>
-                                    {"\n"}{item.date}{"\n"}
-                                    <Text>{item.in_time}</Text>
+                                      <Text>{item.userid}</Text>
+                                      {"\n"}{item.date}{"\n"}
+                                      <Text>{item.in_time}</Text>
                                     </Text>
-                                    
                                     <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
                                         <Text style={styles.signUpText}>Clock Out</Text>
                                     </TouchableOpacity>
@@ -105,15 +138,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
             <Button 
                 title="LEAVE PAGE" 
                 color = "#1C5A7D" 
-                onPress={() => { Alert.alert('Leave Page?',
-                "Are you sure you want to leave the page? All progress will be lost.",
-                [
-                    {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-                    {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
-                ],
-                    {cancelable: false},
-                );
-                }} 
+                onPress={() => {  navigation.goBack() }}
             />
         </View>
     );
@@ -283,4 +308,4 @@ const modalstyles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   }
-});
+})
