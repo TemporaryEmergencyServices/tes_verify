@@ -7,6 +7,8 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } fr
 
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-datepicker';
+
 
 export default function CreateClockRecordsScreen({  navigation  }) {
   const [dateState,setDateState] = useState('')
@@ -27,7 +29,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
 
     const appStateSubscriber = await firebase.firestore()
        .collection('volunteers')
-       .where('userid' , '==', userIdState)
+       .where('userid' , '==', userIdState.toLowerCase())
        .onSnapshot(querySnapshot => {
         if(querySnapshot.empty) {
           setIsValidEmail(false)
@@ -54,11 +56,11 @@ export default function CreateClockRecordsScreen({  navigation  }) {
          }
          else{
           var errorMessage = ''
-          if (dateState == '') {errorMessage = 'Please enter the record date.'}
           if (dateState.length != 10) {errorMessage = 'Please enter date in format YYYY-MM-DD.'}
           if (dateState.substring(4,5) != '-' || dateState.substring(7,8) != '-') {
             errorMessage = 'Please enter date in format YYYY-MM-DD.'
           }
+          if (dateState == '') {errorMessage = 'Please enter the record date.'}
           if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
           if (inTimeState.substring(2, 3) != ':' || inTimeState.length != 8 || outTimeState.substring(5,6) != ' ' || (inTimeState.substring(6,8) != 'AM' && inTimeState.substring(6,8) != 'PM')) 
             {errorMessage = 'Please enter the clock in time in the format HH:MM AM/PM. Example: 01:35 PM'}
@@ -134,13 +136,37 @@ export default function CreateClockRecordsScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setUserIdState(text)}/>
       </View>
-      <View style={styles.inputView} >
+      {/*<View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
           placeholder="Date (YYYY-MM-DD)" 
           placeholderTextColor="white"
           onChangeText={text => setDateState(text)}/>
-      </View>
+      </View> */}
+      <DatePicker
+          style={styles.datePickerStyle}
+          date = {dateState}
+          mode="date" //The enum of date, datetime and time
+          placeholder="Date"
+          format="YYYY-MM-DD"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setDateState(date);
+          }}
+        />
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
@@ -193,6 +219,11 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     color: "#1C5A7D",
     
+  },
+  datePickerStyle: {
+    width: 200,
+    marginTop: 0,
+    marginBottom: 20,
   },
   container: {
     flex: 1,
