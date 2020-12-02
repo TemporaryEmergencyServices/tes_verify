@@ -3,21 +3,23 @@ import '@firebase/firestore'
 import React, { useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, Dimensions, TouchableOpacity, ActivityIndicator, Alert, Button, FlatList } from 'react-native';
+import { StyleSheet, Modal, Text, View, TextInput, Dimensions, TouchableOpacity, ActivityIndicator, Alert, Button, FlatList } from 'react-native';
 import { useEffect, Component, useLayoutEffect} from 'react'
 
 
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function DisplayQueryClcokScreen({ route, navigation }) {
+export default function DisplayQueryClockScreen({ route, navigation }) {
     
-const [loading, setLoading] = useState(true)
-const [records, setRecords] = useState([] as any)
+  const [loading, setLoading] = useState(true)
+  const [records, setRecords] = useState([] as any)
+  const[modalVisible,setModalVisible] = useState(false)
+  const [detailApp,setDetailApp] = useState([] as any)
 
- const {firstName, lastName, userId, ethnicity, sex, startDate, stopDate} = route.params
+  const {firstName, lastName, userId, ethnicity, sex, startDate, stopDate} = route.params
 
- useEffect(() => {
+  useEffect(() => {
     
     let query = firebase.firestore()
        .collection('ClockInsOuts')
@@ -48,11 +50,60 @@ const [records, setRecords] = useState([] as any)
     return () => subscriber();
   } ,[]);
 
+  const handleView =  (recordkey) => {
+    //console.log(recordkey)
+    const subscriber = firebase.firestore()
+    .collection('ClockInsOuts')
+       .doc(recordkey)
+       .onSnapshot(querySnapshot => {
+         const queryDocumentSnapshotData = querySnapshot.data()
+         setDetailApp(queryDocumentSnapshotData)
+        });
+
+     setModalVisible(true) 
+  }
+
 
 return (
     
 
     <View style={styles.container}>
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {setModalVisible(false);
+        }}
+        >
+
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+           
+            <ScrollView style={{height:'90%'}}>              
+              <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+              <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+              <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+              <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+              <Text style={modalstyles.textStyle}>In Date: {detailApp.date}</Text>
+              <Text style={modalstyles.textStyle}>Out Date: {detailApp.out_date}</Text>
+              <Text style={modalstyles.textStyle}>In Time: {detailApp.in_time}</Text>
+              <Text style={modalstyles.textStyle}>Out Time: {detailApp.out_time}</Text>
+              <Text style={modalstyles.textStyle}>Out Time: {detailApp.out_time}</Text>
+              <Text style={modalstyles.textStyle}>Time Elapsed: {detailApp.hoursElapsed}:{detailApp.minutesElapsed}</Text>
+
+
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
+            </TouchableOpacity>
+            </View>
+            
+          </View>
+        </View>
+      </Modal>
+
+
         <Text style={styles.titleFlatList}>Searching: {firstName} {lastName} {userId} {ethnicity} {sex} {startDate} {stopDate}</Text>
 
         <TouchableOpacity style={styles.exportBtn} onPress={() => {}}>
@@ -90,7 +141,7 @@ return (
                     <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.viewBtn} onPress={() => {}}>
+                <TouchableOpacity style={styles.viewBtn} onPress={() => {handleView(item.key)}}>
                     <Text style={styles.actionText}>view</Text>
                   </TouchableOpacity> 
                 </View>
@@ -301,7 +352,7 @@ const styles = StyleSheet.create({
       viewBtn: {
         backgroundColor: "#1C5A7D", 
         borderRadius: 10,
-        height: 25,
+        height: 30,
         justifyContent: 'center',
         width: 200,
         marginTop: 15,
