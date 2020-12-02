@@ -88,9 +88,6 @@ return (
               <Text style={modalstyles.textStyle}>Out Date: {detailApp.out_date}</Text>
               <Text style={modalstyles.textStyle}>In Time: {detailApp.in_time}</Text>
               <Text style={modalstyles.textStyle}>Out Time: {detailApp.out_time}</Text>
-              <Text style={modalstyles.textStyle}>Out Time: {detailApp.out_time}</Text>
-              <Text style={modalstyles.textStyle}>Time Elapsed: {detailApp.hoursElapsed}:{detailApp.minutesElapsed}</Text>
-
 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
