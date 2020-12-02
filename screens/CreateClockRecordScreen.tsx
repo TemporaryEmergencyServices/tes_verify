@@ -13,66 +13,108 @@ export default function CreateClockRecordsScreen({  navigation  }) {
   const[inTimeState,setInTimeState] = useState('')
   const[outTimeState,setOutTimeState] = useState('')
   const[userIdState,setUserIdState] = useState('')
+  const[isValidEmail, setIsValidEmail] = useState(false)
+  const [ethnicityState, setEthnicityState] = useState('')
+  const [sexState, setSexState] = useState('')
+  const [firstNameState, setFirstNameState] = useState('')
+  const [lastNameState, setLastNameState] = useState('')
   
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
 
   const dispatch = useDispatch()  
   const handleApply = async () => {
-    
-    var errorMessage = ''
-    if (dateState == '') {errorMessage = 'Please enter the record date.'}
-    if (dateState.length != 10) {errorMessage = 'Please enter date in format YYYY-MM-DD.'}
-    if (dateState.substring(4,5) != '-' || dateState.substring(7,8) != '-') {
-      errorMessage = 'Please enter date in format YYYY-MM-DD.'
-    }
-    if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
-    if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
-    if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
-    if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
-    const today = new Date()
-    const dateRaw = today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
 
-    const timeRaw = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
+    const appStateSubscriber = await firebase.firestore()
+       .collection('volunteers')
+       .where('userid' , '==', userIdState)
+       .onSnapshot(querySnapshot => {
+        if(querySnapshot.empty) {
+          setIsValidEmail(false)
+          Alert.alert(
+            'Error! Invalid Email',
+            'Enter an email address with an approved application.',
+             [
+               {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
+             ],
+             {cancelable: false},
+           );
+        } else {
+         const queryDocumentSnapshot = querySnapshot.docs[0];
+         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+         if (queryDocumentSnapshotData.approved!='approved') {
+          Alert.alert(
+            'Error! Invalid Email',
+            'Enter an email address with an approved application.',
+             [
+               {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
+             ],
+             {cancelable: false},
+           );
+         }
+         else{
+          var errorMessage = ''
+          if (dateState == '') {errorMessage = 'Please enter the record date.'}
+          if (dateState.length != 10) {errorMessage = 'Please enter date in format YYYY-MM-DD.'}
+          if (dateState.substring(4,5) != '-' || dateState.substring(7,8) != '-') {
+            errorMessage = 'Please enter date in format YYYY-MM-DD.'
+          }
+          if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
+          if (inTimeState.substring(2, 3) != ':' || inTimeState.length != 8 || outTimeState.substring(5,6) != ' ' || (inTimeState.substring(6,8) != 'AM' && inTimeState.substring(6,8) != 'PM')) 
+            {errorMessage = 'Please enter the clock in time in the format HH:MM AM/PM. Example: 01:35 PM'}
+          if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
+          if (outTimeState.substring(2, 3) != ':' || outTimeState.length != 8 || outTimeState.substring(5,6) != ' ' || (outTimeState.substring(6,8) != 'AM' && outTimeState.substring(6,8) != 'PM'))
+           {errorMessage = 'Please enter the clock out time in the format HH:MM AM/PM. Example: 01:35 PM'}
+          if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
+          if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
+          
+          if (errorMessage != '') {
+            Alert.alert(
+              'Error! Incomplete submission.',
+              errorMessage,
+               [
+                 {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
+               ],
+               {cancelable: false},
+             );
+          }
+
+          else {
+            const currently_clocked_in =  false
+            const in_approved = "pending"
+            const out_approved = "pending"
+            
+            var snap = firebase.firestore().collection('ClockInsOuts').add({
+                    currently_clocked_in: currently_clocked_in,
+                    date: dateState,
+                    in_approved: in_approved,
+                    in_time: inTimeState,
+                    out_approved: out_approved,
+                    out_date: dateState,
+                    out_time: outTimeState,
+                    userid: userIdState.toLowerCase(),
+                    firstName: queryDocumentSnapshotData.firstName,
+                    lastName: queryDocumentSnapshotData.lastName,
+                    sex: queryDocumentSnapshotData.sex,
+                    ethnicity: queryDocumentSnapshotData.ethnicity,
+            });
+      
+            Alert.alert(
+            'Record Submitted',
+            "Record must still be approved. Press OK to continue.",
+              [
+                {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
+              ],
+              {cancelable: false},
+            );
+          }
+    
+         }
+        }
+     });
+    
 
   
-    
-    if (errorMessage != '') {
-      Alert.alert(
-        'Error! Incomplete submission.',
-        errorMessage,
-         [
-           {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
-         ],
-         {cancelable: false},
-       );
-    }
-
-    else {
-      const currently_clocked_in =  false
-      const in_approved = "pending"
-      const out_approved = "pending"
-      
-      var snap = await firebase.firestore().collection('ClockInsOuts').add({
-              currently_clocked_in: currently_clocked_in,
-              date: dateRaw,
-              in_approved: in_approved,
-              in_time: timeRaw,
-              out_approved: out_approved,
-              out_date: dateState,
-              out_time: outTimeState,
-              userid: userIdState
-      });
-
-      Alert.alert(
-      'Record Submitted',
-      "Record must still be approved. Press OK to continue.",
-        [
-          {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-        ],
-        {cancelable: false},
-      );
-    }
   }
 
 
@@ -102,14 +144,15 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
-          placeholder="In Time (HH:MM)" 
+          placeholder="In Time (HH:MM AM/PM)" 
           placeholderTextColor="white"
           onChangeText={text => setInTimeState(text)}/>
+
       </View>
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
-          placeholder="Out Time" 
+          placeholder="Out Time (HH:MM AM/PM)" 
           placeholderTextColor="white"
           onChangeText={text => setOutTimeState(text)}/>
       </View>
@@ -168,7 +211,6 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     fontSize:24,
     color:"#1C5A7D",
-    marginBottom:10,
     textAlign: 'center',
     marginTop: 60,
     paddingRight: 30, 

@@ -3,10 +3,11 @@ import '@firebase/firestore'
 import React, { useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
+import { StyleSheet, Image, Text, View, TextInput, TouchableOpacity, Alert, Button, Platform } from 'react-native';
 
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function ReApplyScreen({ route, navigation  }) {
   const [firstNameState,setFirstNameState] = useState('')
@@ -27,12 +28,53 @@ export default function ReApplyScreen({ route, navigation  }) {
   const[appApprovedBy,setAppApprovedByState] = useState('')
   const[appApprovedByDate,setAppApprovedByDateState] = useState('')
   const[appSubmitDate,setAppSubmitDate] = useState('')
+  const [profileImage, setProfileImage] = useState(null)
   
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const {applicationID} = route.params
 
   const dispatch = useDispatch()  
+  
+  const pickImage = async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+    else { alert('Sorry, we can only upload on mobile!'); return; }
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setProfileImage(result.uri);
+      uploadImage(result.uri)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase.storage().ref().child(userEmail + `-profile-image`);
+    return ref.put(blob);
+  };
   const handleReApply = async () => {
     
     var errorMessage = ''
@@ -220,7 +262,14 @@ export default function ReApplyScreen({ route, navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setAddressStateState(text)}/>
       </View>
-
+      { profileImage
+        ? <><Image source={{ uri: profileImage }} style={styles.profileImg} />
+            <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
+              <Text style={styles.uploadImgText}>Change Profile Image</Text>
+            </TouchableOpacity></>
+        : <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
+            <Text style={styles.uploadImgText} >Upload Profile Image</Text>
+          </TouchableOpacity> }
      
 
       </ScrollView>
@@ -321,6 +370,16 @@ const styles = StyleSheet.create({
     marginTop:15,
     marginBottom:10
   },
+  uploadImgBtn:{
+    width:"80%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:40,
+    marginBottom:10
+  },
   createAccountBtn:{
     width:"80%",
     backgroundColor:"#E11383",
@@ -346,6 +405,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 10,
     backgroundColor: "#eceff1",
+  },
+  uploadImgText:{
+    marginTop:10,
+    color:"white",
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontWeight :'bold',
+    fontSize: 18, 
+    paddingBottom: 10
+  },
+  profileImg: {
+    width: 200,
+    height: 200
   }
 })
 

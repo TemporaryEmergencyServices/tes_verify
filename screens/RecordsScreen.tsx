@@ -7,7 +7,13 @@ import firebase from '../firebase.js'
 import { Text, View } from '../components/Themed';
 // import { analytics } from 'firebase';
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
+import * as Print from 'expo-print'; //might be needed for pdf
 
+import XLSX from 'xlsx';
+import {writeFile, readFile} from 'react-native-fs';//might be needed for pdf
+import { PermissionsAndroid } from 'react-native';//might be needed for pdf
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system'
 /*
 Inspired By:
 
@@ -21,7 +27,10 @@ export default function RecordsScreen() {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
-
+  const [totalHours,setTotalHours] = useState(0)
+  const [totalMinutes, setTotalMinutes] = useState(0)
+  const [totalApprovedHours,setTotalApprovedHours] = useState(0)
+  const [totalApprovedMinutes, setTotalApprovedMinutes] = useState(0)
   //OLD USE EFFECT WITH REALTIME DATABASE
   //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
   //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
@@ -50,29 +59,117 @@ export default function RecordsScreen() {
   }); */
 
   useEffect(() => {
+    
+    // var temptotalHours = 0;
+    // var temptotalMinutes = 0;
+    // var temptotalApprovedHours = 0;
+    // var temptotalApprovedMinutes = 0;
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
        .onSnapshot(querySnapshot => {
          const helperRecords = [] as any;
+         var temptotalHours = 0;
+        var temptotalMinutes = 0;
+        var temptotalApprovedHours = 0;
+        var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
            helperRecords.push({
            ...documentSnapshot.data(),
            key: documentSnapshot.id
            });
+           temptotalHours += documentSnapshot.data().hoursElapsed;
+           console.log(documentSnapshot.data().hoursElapsed);
+           temptotalMinutes += documentSnapshot.data().minutesElapsed;
+           console.log(documentSnapshot.data().minutesElapsed);
+           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
+             temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
+             temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+           }
          });
          setRecords(helperRecords);
+         temptotalHours += Math.floor(temptotalMinutes/60);//integer division
+         temptotalMinutes = temptotalMinutes % 60;//modulo
+         temptotalApprovedHours += Math.floor(temptotalApprovedMinutes/60);//integer division
+         temptotalApprovedMinutes = temptotalApprovedMinutes % 60;//modulo
+
+         setTotalHours(temptotalHours);
+         setTotalMinutes(temptotalMinutes);
+         setTotalApprovedHours(temptotalApprovedHours);
+         setTotalApprovedMinutes(temptotalApprovedMinutes);
          setLoading(false);
      });
+
     return () => subscriber();
   } ,[]);
+ 
+//array of arrays format
+  const get_aoa_data = () => {
+    const header = ['email','is currently clocked in','clock in date','clock in time',
+              'clock out date','clock out time','clock in approved','clock out approved','Hours Elapsed','Minutes Elapsed'];
+    var aoa = [header];
+    records.forEach(element => {
+      var cur = [];
+      //there's probably a toString-like thing I could do, but this was easier
+      cur.push(element.userid);
+      cur.push(element.currently_clocked_in);
+      cur.push(element.date);
+      cur.push(element.in_time);
+      cur.push(element.out_date);
+      cur.push(element.out_time);
+      cur.push(element.in_approved);
+      cur.push(element.out_approved);
+      cur.push(element.hoursElapsed);
+      cur.push(element.minutesElapsed);
+  
+      aoa.push(cur);
+    });
+    return aoa;
+  }
+  
+  async function writeToCSV () {
 
+    // https://stackoverflow.com/a/60926972 was used to create this function
+    
+    //get data as an array of arrays
+    const aoa_data = get_aoa_data();
+
+    //convert to an individual sheet
+    var worksheet = XLSX.utils.aoa_to_sheet(aoa_data);
+    
+    //make new workbook
+    var workbook = XLSX.utils.book_new();
+    
+    //add the sheet to the workbook (name only matters if xlsx format)
+    XLSX.utils.book_append_sheet(workbook,worksheet,"Volunteer Records");
+    
+    //create file, see https://docs.sheetjs.com/#writing-options
+    const wbout = XLSX.write(workbook, {type:'base64',bookType:'csv'});
+    
+    //write file to a cache file
+    const uri = FileSystem.cacheDirectory + 'tesverify.csv'
+    await FileSystem.writeAsStringAsync(uri,wbout, {encoding: FileSystem.EncodingType.Base64});
+    
+    //open share dialog
+    await Sharing.shareAsync(uri, {
+      mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      dialogTitle: 'MyWater data',
+      UTI: 'com.microsoft.excel.xlsx'
+    });
+  }
   return (
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
-      <TouchableOpacity style={styles.exportBtn}>
-        <Text style={styles.exportText} >Export as PDF</Text>
+
+      <TouchableOpacity style={styles.exportBtn} onPress={() => {writeToCSV();}}>
+        <Text style={styles.exportText} >Export as CSV</Text>
       </TouchableOpacity> 
+      <View>
+        <Text>Total time logged: {totalHours} hours and {totalMinutes} minutes</Text>
+      </View>
+      <View>
+        <Text>Total approved time logged: {totalApprovedHours} hours and {totalApprovedMinutes} minutes</Text>
+      </View>
       <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
