@@ -18,6 +18,11 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
   const [detailApp,setDetailApp] = useState([] as any)
   const [recordKey, setRecordKey] = useState('')
 
+  const [totalHours,setTotalHours] = useState(0)
+  const [totalMinutes, setTotalMinutes] = useState(0)
+  const [totalApprovedHours,setTotalApprovedHours] = useState(0)
+  const [totalApprovedMinutes, setTotalApprovedMinutes] = useState(0)
+
   const {firstName, lastName, userId, ethnicity, sex, startDate, stopDate} = route.params
 
   useEffect(() => {
@@ -39,14 +44,35 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
     const subscriber = constQuery
        .onSnapshot(querySnapshot => {
          const helperRecords = [] as any;
+         var temptotalHours = 0;
+         var temptotalMinutes = 0;
+         var temptotalApprovedHours = 0;
+          var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
            helperRecords.push({
            ...documentSnapshot.data(),
            key: documentSnapshot.id
            });
+           temptotalHours += documentSnapshot.data().hoursElapsed;
+           temptotalMinutes += documentSnapshot.data().minutesElapsed;
+           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
+            temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
+            temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+          }
          });
          setRecords(helperRecords);
+
+         temptotalHours += Math.floor(temptotalMinutes/60);//integer division
+         temptotalMinutes = temptotalMinutes % 60;//modulo
+         temptotalApprovedHours += Math.floor(temptotalApprovedMinutes/60);//integer division
+         temptotalApprovedMinutes = temptotalApprovedMinutes % 60;//modulo
+
+         setTotalHours(temptotalHours);
+         setTotalMinutes(temptotalMinutes);
+         setTotalApprovedHours(temptotalApprovedHours);
+         setTotalApprovedMinutes(temptotalApprovedMinutes);
          setLoading(false);
+
      });
     return () => subscriber();
   } ,[]);
@@ -117,7 +143,12 @@ return (
         <TouchableOpacity style={styles.exportBtn} onPress={() => {}}>
             <Text style={styles.exportText} >Export as CSV</Text>
         </TouchableOpacity> 
-
+        <View>
+          <Text>Total time logged: {totalHours} hours and {totalMinutes} minutes</Text>
+        </View>
+        <View>
+          <Text>Total approved time logged: {totalApprovedHours} hours and {totalApprovedMinutes} minutes</Text>
+        </View>
         <View style={styles.space}></View>
         <View style={styles.row}>
             <Text style={styles.header}>Date</Text>
