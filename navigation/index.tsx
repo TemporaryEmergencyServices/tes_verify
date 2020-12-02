@@ -40,7 +40,6 @@ export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeNa
 //const Stack = createStackNavigator<RootStackParamList>();
 const Stack = createStackNavigator();
 
-
 function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>

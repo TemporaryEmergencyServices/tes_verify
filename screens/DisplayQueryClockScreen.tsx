@@ -75,10 +75,10 @@ return (
             <FlatList
             data={records}
             renderItem={({ item }) => (
-                <View style={styles.itemStyle}>
-                <View>
-                    <Text>{item.userid}</Text>
-                </View>
+                <View style={styles.itemStyle2}>
+                    <View>
+                        <Text style = {styles.userIdText}>{item.userid}</Text>
+                    </View>
                 <View style={styles.row}>
                     <Text>{item.date}</Text>
                     <View>
@@ -90,6 +90,9 @@ return (
                     <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
                     </View>
                 </View>
+                <TouchableOpacity style={styles.viewBtn} onPress={() => {}}>
+                    <Text style={styles.actionText}>view</Text>
+                  </TouchableOpacity> 
                 </View>
             )}
             showsVerticalScrollIndicator={false}
@@ -143,6 +146,10 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: 300
     },
+    itemStyle2: {
+        height: 150,
+     
+      },
     titleFlatList: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -209,6 +216,11 @@ const styles = StyleSheet.create({
       marginTop: 20,
       marginBottom: 5
     },
+    userIdText: {
+        fontSize: 16,
+        margin: 15,
+        fontWeight: 'bold',
+      },
     createAccountBtn:{
       width:"80%",
       backgroundColor:"#E11383",
@@ -259,7 +271,7 @@ const styles = StyleSheet.create({
         margin: 15
       }, 
       bigSpace: {
-        margin: 100
+        margin: 30
       }, 
       pending: {
         color: 'orange',
@@ -285,6 +297,21 @@ const styles = StyleSheet.create({
         justifyContent:"center",
         marginTop:0,
         marginBottom:10,
+      },
+      viewBtn: {
+        backgroundColor: "#1C5A7D", 
+        borderRadius: 10,
+        height: 25,
+        justifyContent: 'center',
+        width: 200,
+        marginTop: 15,
+        alignSelf: 'center'
+      }, 
+      actionText:{
+        fontSize: 16,
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
       },
   })
   
