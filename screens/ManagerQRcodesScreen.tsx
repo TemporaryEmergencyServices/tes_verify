@@ -231,7 +231,7 @@ export default function ManagerQRcodesScreen({navigation}) {
 // must test this
 
 
-function makeActive(key: String, appRef: any, userEmail: String) {
+export function makeActive(key: String, appRef: any, userEmail: String) {
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
     const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
@@ -244,7 +244,7 @@ function makeActive(key: String, appRef: any, userEmail: String) {
 
 }
 
-function makeDisabled(key: String, appRef: any, userEmail: String) {
+export function makeDisabled(key: String, appRef: any, userEmail: String) {
     const today = new Date()
     const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
     const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()

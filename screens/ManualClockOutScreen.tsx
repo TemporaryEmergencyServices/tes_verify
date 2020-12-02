@@ -15,7 +15,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     const [loading, setLoading] = useState(true)
     const [modalVisible, setModalVisible] = useState(false)
     const [records, setRecords] = useState([])
-    const [detailRecord, setDetailRecord] = useState({})
+    const [detailRecord, setDetailRecord] = useState({userid: null, date: null, in_time: null})
 
     useEffect(() => {
         const subscriber = firebase.firestore().collection('ClockInsOuts')

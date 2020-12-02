@@ -46,11 +46,23 @@ export default function ManagerApproveApplicationScreen({navigation}) {
      });
 
     const subscriber = firebase.firestore().collection('volunteers')
+    
     setAppRef(subscriber)
+    console.log('VIEWTYPE', viewtype)
+    subscriber
+    .onSnapshot(querySnapshot => {
+      const helperRecords = [] as any;
+      querySnapshot.forEach(documentSnapshot => {
+          helperRecords.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id
+          })
+      }) 
+      setRecords(helperRecords)
+    })
 
-    pendingQuery(subscriber).then(resultRecords => setRecords(resultRecords))
     setLoading(false) 
-    return () => { roleSubscriber(); unmounted=false};
+    return () => { roleSubscriber(); unmounted=false };
   }, [viewtype])//need to pass the viewtype variable to useEffect so it uses the latest state value
 
   const pendingQuery = async (ref) => {
@@ -147,10 +159,16 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-              <TouchableOpacity style={styles.approveButton} onPress={() => {approve(detailApp.key,appRef,userEmail);setModalVisible(false) }}>
+              <TouchableOpacity style={styles.approveButton} onPress={async () => {
+                await approve(detailApp.key,appRef,userEmail); 
+                setModalVisible(false);
+              }}>
                 <Text style={styles.backText}>Approve</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.denyButton} onPress={() => {deny(detailApp.key,appRef,userEmail);setModalVisible(false)}}>
+              <TouchableOpacity style={styles.denyButton} onPress={async () => {
+                await deny(detailApp.key,appRef,userEmail); 
+                setModalVisible(false);
+              }}>
                 <Text style={styles.backText}>Deny</Text>
               </TouchableOpacity>
             </View>
@@ -161,7 +179,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
         <View style={{ width:'100%', alignItems: 'center' }}>
           <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
-          <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
+          <RadioButton.Group onValueChange={value=> {console.log('SETTING VIEWTYPE'); setViewType(value)}} value={viewtype}>
             <View style={{flexDirection: 'row', paddingLeft: 20}}>
               <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
               <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
@@ -206,25 +224,30 @@ export default function ManagerApproveApplicationScreen({navigation}) {
           <View style={{height: '50%'}}>
             <FlatList
               data={records}
-              renderItem={({ item }) => (
-                <View style={styles.itemStyle}>
-                  <View style={styles.row}>
-                    <Text style={{fontSize: 16}}>
-                      <Text style={{fontWeight: 'bold'}}>
-                        {item.firstName} {item.lastName}
-                      </Text>
-                      {"\n"}{item.userid}{"\n"}
-                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
-                    </Text>
-                    <View>
-                      <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
-                        <Text style={styles.view}>VIEW</Text>
-                      </TouchableOpacity> 
+              renderItem={({ item }) => {
+                if (item.approved === viewtype) {
+                  return (
+                    <View style={styles.itemStyle}>
+                      <View style={styles.row}>
+                        <Text style={{fontSize: 16}}>
+                          <Text style={{fontWeight: 'bold'}}>
+                            {item.firstName} {item.lastName}
+                          </Text>
+                          {"\n"}{item.userid}{"\n"}
+                          <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
+                        </Text>
+                        <View>
+                          <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
+                            <Text style={styles.view}>VIEW</Text>
+                          </TouchableOpacity> 
+                        </View>
+                      </View>
                     </View>
-                  </View>
-                </View>
-              )}
+                  )
+                }
+              }}
               showsVerticalScrollIndicator={false}
+              keyExtractor={item => item.key}
             />
           </View>
         }
@@ -232,39 +255,38 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   )
 }
 
-function approveAll(records: any, appRef: any, userEmail: String) {
+export function approve(key: String, appRef: any, userEmail: String) {
+  const today = new Date()
+  const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+  const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+  const dateTime = date+ " " + time
+  appRef.doc(key).set({
+    approved: "approved",
+    approvedBy: userEmail,
+    approvedDate: dateTime
+  }, { merge: true })
+}
+
+export function approveAll(records: any, appRef: any, userEmail: String)  {
   records.forEach(record => {
     approve(record.key,  appRef, userEmail)
     approve(record.key,  appRef, userEmail)
   })
 }
 
-function approve(key: String, appRef: any, userEmail: String) {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const dateTime = date+ " " + time
-    appRef.doc(key).set({
-      approved: "approved",
+export function deny(key: String, appRef: any, userEmail: String) {
+  const today = new Date()
+  const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
+  const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+  const dateTime = date+ " " + time
+  appRef.doc(key).set({
+      approved: "denied",
       approvedBy: userEmail,
       approvedDate: dateTime
     }, { merge: true })
-
 }
 
-function deny(key: String, appRef: any, userEmail: String) {
-    const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const dateTime = date+ " " + time
-    appRef.doc(key).set({
-        approved: "denied",
-        approvedBy: userEmail,
-        approvedDate: dateTime
-      }, { merge: true })
-}
-
-function renderRecordStatus(status: String) {
+export function renderRecordStatus(status: String) {
   if (status === "approved") {
     return styles.approved
   } else if (status === "pending") {
