@@ -7,12 +7,15 @@ import { RootStackParamList } from '../types';
 export default function ManagerRecordsScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Use this screen as a home base for searching clock ins, creating clock ins, and updated clock ins. </Text>
+      <Text style={styles.title}>Use this screen as a home base for searching clock ins, creating clock ins, and clocking people out. </Text>
       <TouchableOpacity style={styles.appBtns} onPress={() => {navigation.push('CreateClockRecordScreen') }}>
         <Text style={styles.signOutText}>Create Clock In/Out Record</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.appBtns} onPress={() => { navigation.push('ManualClockOutScreen') }}>
         <Text style={styles.signOutText}>Manual Clock Out Volunteer</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.appBtns} onPress={() => { navigation.push('QueryClockScreen') }}>
+        <Text style={styles.signOutText}>Get Volunteer Records</Text>
       </TouchableOpacity>
     </View>
     
