@@ -85,7 +85,20 @@ export default function CreateClockRecordsScreen({  navigation  }) {
             const currently_clocked_in =  false
             const in_approved = "pending"
             const out_approved = "pending"
-            
+
+            var inHours = parseInt(inTimeState.substring(0,2))
+            var inMins = parseInt(inTimeState.substring(3,5))
+
+            var outHours = parseInt(outTimeState.substring(0,2));
+            var outMins = parseInt(outTimeState.substring(3,5));
+
+            var hoursElapsed = outHours - inHours;
+            var minutesElapsed = outMins - inMins;
+            if (minutesElapsed < 0){
+              minutesElapsed += 60;
+              hoursElapsed -= 1;
+            }
+
             var snap = firebase.firestore().collection('ClockInsOuts').add({
                     currently_clocked_in: currently_clocked_in,
                     date: dateState,
@@ -99,6 +112,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                     lastName: queryDocumentSnapshotData.lastName,
                     sex: queryDocumentSnapshotData.sex,
                     ethnicity: queryDocumentSnapshotData.ethnicity,
+                    minutesElapsed: minutesElapsed,
+                    hoursElapsed: hoursElapsed
             });
       
             Alert.alert(
