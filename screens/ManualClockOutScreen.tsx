@@ -56,18 +56,38 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     }
 
     const submitOutTime = async (userid, date, inTime) => {
-      const recordRef = firebase.firestore().collection('ClockInsOuts')
-      .where('userid', '==', userid)
-      .where('date', '==', date)
-      .where('in_time', '==', inTime)
+      var errorMessage
+      if (outTime == '') {errorMessage = 'Please enter the clock out time.'}
+      if (outTime.substring(2, 3) != ':' || outTime.length != 8 || outTime.substring(5,6) != ' ' || (outTime.substring(6,8) != 'AM' && outTime.substring(6,8) != 'PM'))
+      {errorMessage = 'Please enter the clock out time in the format HH:MM AM/PM. Example: 01:35 PM'}
       
-      recordRef.get().then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          doc.ref.update({
-            out_time: outTime
+      if (errorMessage != '') {
+        Alert.alert(
+          'Error! Incomplete submission.',
+          errorMessage,
+           [
+             {text: 'OK', onPress: () => {console.log('OK Pressed'); return }},
+           ],
+           {cancelable: false},
+        )
+      } else {
+        const recordRef = firebase.firestore().collection('ClockInsOuts')
+        .where('userid', '==', userid)
+        .where('date', '==', date)
+        .where('in_time', '==', inTime)
+        
+        recordRef.get().then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            doc.ref.update({
+              out_time: outTime,
+              currently_clocked_in: false
+            })
           })
+        }).then(() => {
+          search(userid)
         })
-      })
+        setModalVisible(false)
+      }
     }
 
     return (
@@ -107,7 +127,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
               </View>
               <TouchableOpacity 
                 style={styles.loginBtn} 
-                onPress={() => submitOutTime(detailRecord.userid, detailRecord.date, detailRecord.in_time)}
+                onPress={() => {submitOutTime(detailRecord.userid, detailRecord.date, detailRecord.in_time) }}
               >
                 <Text style={styles.signUpText}>Submit Out Time</Text>
               </TouchableOpacity>

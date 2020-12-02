@@ -157,42 +157,41 @@ export default function ManagerApproveApplicationScreen({navigation}) {
           </View>
         </View>
       </Modal>
-      <View style={[styles.column]}>
+      <View style={{ }}>
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
-          <View style={{ width:'100%', alignItems: 'center' }}>
-            <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
-            <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
-              <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
-                <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
-                <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
-              </View>
-            </RadioButton.Group>
-            { 
-              viewtype === 'pending' &&
-              <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
-                <Text style={styles.exportText}>Approve All</Text>
-              </TouchableOpacity>
-            }
-            <View style={styles.row}>
-              <TextInput
-                style={styles.searchBox}
-                onChangeText={text => setSearchText(text)}
-                value={searchText}
-              />
-              <TouchableOpacity style={styles.searchBtn} onPress={() => { search(searchText) }}>
-                <Text style={styles.backText}>Search</Text>
-              </TouchableOpacity>
+        <View style={{ width:'100%', alignItems: 'center' }}>
+          <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
+          <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
+            <View style={{flexDirection: 'row', paddingLeft: 20}}>
+              <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
+              <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
+              <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
             </View>
-            {
-              records.length !== 0 && 
-              <View style={styles.row}>
-                <Text style={styles.header}>Application</Text>
-                <Text style={styles.header}>Actions</Text>
-              </View>
-            }
-          </View> 
-          
+          </RadioButton.Group>
+          { 
+            viewtype === 'pending' &&
+            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
+              <Text style={styles.exportText}>Approve All</Text>
+            </TouchableOpacity>
+          }
+          <View style={styles.row}>
+            <TextInput
+              style={styles.searchBox}
+              onChangeText={text => setSearchText(text)}
+              value={searchText}
+            />
+            <TouchableOpacity style={styles.searchBtn} onPress={() => { search(searchText) }}>
+              <Text style={styles.backText}>Search</Text>
+            </TouchableOpacity>
+          </View>
+          {
+            records.length !== 0 && 
+            <View style={styles.row}>
+              <Text style={styles.header}>Application</Text>
+              <Text style={styles.header}>Actions</Text>
+            </View>
+          }
+        </View> 
       </View>
       {
           records.length === 0 &&
@@ -204,7 +203,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
-          <View style={styles.rowNoPadding}>
+          <View style={{height: '50%'}}>
             <FlatList
               data={records}
               renderItem={({ item }) => (
