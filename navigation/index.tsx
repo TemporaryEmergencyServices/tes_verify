@@ -12,7 +12,6 @@ import BottomTabNavigator from './BottomTabNavigator';
 import ManagerBottomTabNavigator from './ManagerBottomTabNavigator';
 import SuperuserBottomTabNavigator from './SuperuserBottomTabNavigator';
 import ApplyScreen from '../screens/ApplyScreen';
-import UploadProfileImageScreen from '../screens/UploadProfileImageScreen';
 import ManagerApproveApplicationScreen from '../screens/ManagerApproveApplicationScreen';
 import DisplayQRScreen from '../screens/DisplayQRScreen';
 import LinkingConfiguration from './LinkingConfiguration';
@@ -54,7 +53,6 @@ function RootNavigator() {
       <Stack.Screen name="ManagerBottomTabNavigator" component={ManagerBottomTabNavigator} />
       <Stack.Screen name="SuperuserBottomTabNavigator" component={SuperuserBottomTabNavigator} />
       <Stack.Screen name="ApplyScreen" component={ApplyScreen} />
-      <Stack.Screen name="UploadProfileImageScreen" component={UploadProfileImageScreen} />
       <Stack.Screen name="ManagerApproveApplicationScreen" component={ManagerApproveApplicationScreen} />
       <Stack.Screen name="DisplayQRScreen" component={DisplayQRScreen} />
       <Stack.Screen name="ReApplyScreen" component={ReApplyScreen} />

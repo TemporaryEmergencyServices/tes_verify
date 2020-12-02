@@ -264,7 +264,10 @@ export default function ApplyScreen({  navigation  }) {
       </View>
       <View>
         { profileImage
-          ? <Image source={{ uri: profileImage }} style={styles.profileImg}/>
+          ? <Image source={{ uri: profileImage }} style={styles.profileImg}/> &&
+            <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
+                <Text style={styles.uploadImgText} >Change Profile Image</Text>
+            </TouchableOpacity>
           : <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
               <Text style={styles.uploadImgText} >Upload Profile Image</Text>
             </TouchableOpacity> }
