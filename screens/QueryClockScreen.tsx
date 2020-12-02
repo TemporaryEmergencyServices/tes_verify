@@ -1,10 +1,22 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import firebase from '../firebase.js'
+import '@firebase/firestore'
+import React, { useState } from 'react';
 
-import { RootStackParamList } from '../types';
+import { useSelector, RootStateOrAny } from 'react-redux'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
+
+import { useDispatch } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function QueryClockScreen({ navigation }) {
+
+  const [startDateState,setStartDateState] = useState('')
+  const [stopDateState,setStopDateState] = useState('')
+  const [userIdState,setUserIdState] = useState('')
+  const [ethnicityState, setEthnicityState] = useState('')
+  const [sexState, setSexState] = useState('')
+  const [firstNameState, setFirstNameState] = useState('')
+  const [lastNameState, setLastNameState] = useState('')
 
   const handleSearch = () => {
     Alert.alert(
@@ -20,7 +32,48 @@ export default function QueryClockScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.instructions}>Search for records by name, userid, gender, ethnicity, and/or date.</Text>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="First Name" 
+          placeholderTextColor="white"
+          onChangeText={text => setFirstNameState(text)}/>
+      </View>
 
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Last Name" 
+          placeholderTextColor="white"
+          onChangeText={text => setLastNameState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Volunteer Email" 
+          placeholderTextColor="white"
+          onChangeText={text => setEthnicityState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Ethnicity" 
+          placeholderTextColor="white"
+          onChangeText={text => setEthnicityState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Gender (M/F)" 
+          placeholderTextColor="white"
+          onChangeText={text => setSexState(text)}/>
+      </View>
+      
+      
+      
       <TouchableOpacity style={styles.loginBtn} onPress={handleSearch}>
         <Text style={styles.signUpText} >SEARCH</Text>
       </TouchableOpacity>
@@ -72,7 +125,7 @@ const styles = StyleSheet.create({
       paddingLeft: 7
     },
     inputView:{
-      width:"90%",
+      width:270,
       backgroundColor:"#2B2E32",
       borderRadius:25,
       height:50,
