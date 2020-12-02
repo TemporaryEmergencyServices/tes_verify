@@ -17,6 +17,7 @@ export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
   const [inTime, setInTime] = useState('')
   const [outTime, setOutTime] = useState('')
+  const [timeElapsed, setTimeElapsed] = useState('')
   const [uniqueClockID, setUniqueClockID] = useState('')
 
   const [fbClockedIn, setFbClockedIn] = useState('')
@@ -120,7 +121,7 @@ export default function ClockInScreen() {
               alert(`valid QR code!`);
             }
             else {
-              alert(`QR code not valid!`);
+              alert(`QR code not valid! If this message keeps appearing, ask for help.`);
             }
          });
   }
@@ -144,9 +145,9 @@ export default function ClockInScreen() {
         //set in time
         //create firebase entry
     const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+    const time = today.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
     const date =  today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
-    //const date = today.toISOString().substring(0,10)
+    
     if (!clockedIn) {handleClockIn(date, time)}
 
     else { handleClockOut(date, time)}
@@ -160,7 +161,9 @@ export default function ClockInScreen() {
   }
 
   const handleClockOut = (date: any, time: any) => {
+    console.log("Handle clock out called... time:",time, 'outTime before: ',outTime);
     setOutTime(time)
+    console.log('outTime after: ',outTime);
     writeFBClockOut(date, time)
     setClockedIn(false)
     alertOutLogged(date, time)
@@ -178,11 +181,31 @@ export default function ClockInScreen() {
   }
 
   const writeFBClockOut = async (date: any, time: any) => {
+    //Assumes times in format "MM:HH AM", e.g. "01:35 PM"
+    //                         01234567
+    var inHours = parseInt(inTime.substring(0,2));
+    console.log(inTime.substring(0,2));
+    console.log("inHours: ",inHours);
+    var inMins = parseInt(inTime.substring(3,5));
+    console.log("inMinutes: ",inMins);
+    
+    var outHours = parseInt(time.substring(0,2));
+    var outMins = parseInt(time.substring(3,5));
+    console.log("outMinutes: ",outMins);
+    var hoursElapsed = outHours - inHours;
+    var minutesElapsed = outMins - inMins;
+    if (minutesElapsed < 0){
+      minutesElapsed += 60;
+      hoursElapsed -= 1;
+    }
+    console.log("Hours elapsed: ",hoursElapsed, "Minutes elapsed: ",minutesElapsed);
     var snap = await firebase.firestore().collection('ClockInsOuts').doc(uniqueClockID).update({
       out_time: time,
       out_approved: "pending",
       currently_clocked_in: false,
-      out_date: date
+      out_date: date,
+      minutesElapsed : minutesElapsed,
+      hoursElapsed : hoursElapsed
     });
   }
 
