@@ -7,6 +7,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } fr
 
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-datepicker';
 
 export default function QueryClockScreen({ navigation }) {
 
