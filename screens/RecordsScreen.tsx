@@ -27,7 +27,10 @@ export default function RecordsScreen() {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
-
+  const [totalHours,setTotalHours] = useState(0)
+  const [totalMinutes, setTotalMinutes] = useState(0)
+  const [totalApprovedHours,setTotalApprovedHours] = useState(0)
+  const [totalApprovedMinutes, setTotalApprovedMinutes] = useState(0)
   //OLD USE EFFECT WITH REALTIME DATABASE
   //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
   //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
@@ -56,27 +59,54 @@ export default function RecordsScreen() {
   }); */
 
   useEffect(() => {
+    
+    // var temptotalHours = 0;
+    // var temptotalMinutes = 0;
+    // var temptotalApprovedHours = 0;
+    // var temptotalApprovedMinutes = 0;
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
        .onSnapshot(querySnapshot => {
          const helperRecords = [] as any;
+         var temptotalHours = 0;
+        var temptotalMinutes = 0;
+        var temptotalApprovedHours = 0;
+        var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
            helperRecords.push({
            ...documentSnapshot.data(),
            key: documentSnapshot.id
            });
+           temptotalHours += documentSnapshot.data().hoursElapsed;
+           console.log(documentSnapshot.data().hoursElapsed);
+           temptotalMinutes += documentSnapshot.data().minutesElapsed;
+           console.log(documentSnapshot.data().minutesElapsed);
+           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
+             temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
+             temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+           }
          });
          setRecords(helperRecords);
+         temptotalHours += Math.floor(temptotalMinutes/60);//integer division
+         temptotalMinutes = temptotalMinutes % 60;//modulo
+         temptotalApprovedHours += Math.floor(temptotalApprovedMinutes/60);//integer division
+         temptotalApprovedMinutes = temptotalApprovedMinutes % 60;//modulo
+
+         setTotalHours(temptotalHours);
+         setTotalMinutes(temptotalMinutes);
+         setTotalApprovedHours(temptotalApprovedHours);
+         setTotalApprovedMinutes(temptotalApprovedMinutes);
          setLoading(false);
      });
+
     return () => subscriber();
   } ,[]);
  
 //array of arrays format
   const get_aoa_data = () => {
     const header = ['email','is currently clocked in','clock in date','clock in time',
-              'clock out date','clock out time','clock in approved','clock out approved'];
+              'clock out date','clock out time','clock in approved','clock out approved','Hours Elapsed','Minutes Elapsed'];
     var aoa = [header];
     records.forEach(element => {
       var cur = [];
@@ -89,6 +119,8 @@ export default function RecordsScreen() {
       cur.push(element.out_time);
       cur.push(element.in_approved);
       cur.push(element.out_approved);
+      cur.push(element.hoursElapsed);
+      cur.push(element.minutesElapsed);
   
       aoa.push(cur);
     });
@@ -132,7 +164,12 @@ export default function RecordsScreen() {
       <TouchableOpacity style={styles.exportBtn} onPress={() => {writeToCSV();}}>
         <Text style={styles.exportText} >Export as CSV</Text>
       </TouchableOpacity> 
-
+      <View>
+        <Text>Total time logged: {totalHours} hours and {totalMinutes} minutes</Text>
+      </View>
+      <View>
+        <Text>Total approved time logged: {totalApprovedHours} hours and {totalApprovedMinutes} minutes</Text>
+      </View>
       <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
