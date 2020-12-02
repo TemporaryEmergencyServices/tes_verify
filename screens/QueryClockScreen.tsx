@@ -73,7 +73,30 @@ export default function QueryClockScreen({ navigation }) {
           onChangeText={text => setSexState(text)}/>
       </View>
       
-      
+      <DatePicker
+          style={styles.datePickerStyle}
+          date = {startDateState}
+          mode="date" //The enum of date, datetime and time
+          placeholder="select date"
+          format="YYYY-MM-DD"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setStartDateState(date);
+          }}
+        />
       
       <TouchableOpacity style={styles.loginBtn} onPress={handleSearch}>
         <Text style={styles.signUpText} >SEARCH</Text>
@@ -179,7 +202,11 @@ const styles = StyleSheet.create({
       marginBottom: 8,
       paddingHorizontal: 10,
       backgroundColor: "#eceff1",
-    }
+    },
+    datePickerStyle: {
+        width: 200,
+        marginTop: 20,
+      },
   })
   
   const modalstyles = StyleSheet.create({
