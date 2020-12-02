@@ -29,6 +29,8 @@ export default function RecordsScreen() {
   const [records, setRecords] = useState([] as any)
   const [totalHours,setTotalHours] = useState(0)
   const [totalMinutes, setTotalMinutes] = useState(0)
+  const [totalApprovedHours,setTotalApprovedHours] = useState(0)
+  const [totalApprovedMinutes, setTotalApprovedMinutes] = useState(0)
   //OLD USE EFFECT WITH REALTIME DATABASE
   //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
   //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
@@ -57,27 +59,44 @@ export default function RecordsScreen() {
   }); */
 
   useEffect(() => {
-    var totalHours = 0;
-    var totalMinutes = 0;
+    
+    // var temptotalHours = 0;
+    // var temptotalMinutes = 0;
+    // var temptotalApprovedHours = 0;
+    // var temptotalApprovedMinutes = 0;
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
        .onSnapshot(querySnapshot => {
          const helperRecords = [] as any;
+         var temptotalHours = 0;
+        var temptotalMinutes = 0;
+        var temptotalApprovedHours = 0;
+        var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
            helperRecords.push({
            ...documentSnapshot.data(),
            key: documentSnapshot.id
            });
-           totalHours += documentSnapshot.data().hoursElapsed;
+           temptotalHours += documentSnapshot.data().hoursElapsed;
            console.log(documentSnapshot.data().hoursElapsed);
-           totalMinutes += documentSnapshot.data().minutesElapsed;
+           temptotalMinutes += documentSnapshot.data().minutesElapsed;
+           console.log(documentSnapshot.data().minutesElapsed);
+           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
+             temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
+             temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+           }
          });
          setRecords(helperRecords);
-         totalHours += totalMinutes/60;//integer division
-         totalMinutes = totalMinutes % 60;//modulo
-         setTotalHours(totalHours);
-         setTotalMinutes(totalMinutes);
+         temptotalHours += Math.floor(temptotalMinutes/60);//integer division
+         temptotalMinutes = temptotalMinutes % 60;//modulo
+         temptotalApprovedHours += Math.floor(temptotalApprovedMinutes/60);//integer division
+         temptotalApprovedMinutes = temptotalApprovedMinutes % 60;//modulo
+
+         setTotalHours(temptotalHours);
+         setTotalMinutes(temptotalMinutes);
+         setTotalApprovedHours(temptotalApprovedHours);
+         setTotalApprovedMinutes(temptotalApprovedMinutes);
          setLoading(false);
      });
 
@@ -146,7 +165,10 @@ export default function RecordsScreen() {
         <Text style={styles.exportText} >Export as CSV</Text>
       </TouchableOpacity> 
       <View>
-        <Text>Total time logged: {totalHours}:{totalMinutes}</Text>
+        <Text>Total time logged: {totalHours} hours and {totalMinutes} minutes</Text>
+      </View>
+      <View>
+        <Text>Total approved time logged: {totalApprovedHours} hours and {totalApprovedMinutes} minutes</Text>
       </View>
       <View style={styles.space}></View>
       <View style={styles.row}>
