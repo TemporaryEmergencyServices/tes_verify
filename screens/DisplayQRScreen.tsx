@@ -138,24 +138,11 @@ export default function ManagerQRcodesScreen({navigation}) {
                 <Text style={styles.backText}>Close</Text>
               </TouchableOpacity>
             </View>
-            {/* <View style={{height:"5%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-              <TouchableOpacity style={styles.approveButton} onPress={() => {setModalVisible(false) }}>
-                <Text style={styles.backText}>Close</Text>
-              </TouchableOpacity>
-            </View> */}
-        
-            
           </View>
         </View>
       </Modal>
-
-
-
-
-
       <View style={{height:'40%'}}> 
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
-        
             <View style={{height:'60%',alignItems:'center'}}> 
               <View>
                 <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
@@ -184,7 +171,6 @@ export default function ManagerQRcodesScreen({navigation}) {
             data={records}
             renderItem={({ item }) => (
               <View style={styles.itemStyle}>
-                
                 <View style={styles.row}>
                   <Text style={{fontSize: 16}}>
                     <Text style={{fontWeight: 'bold'}}>
@@ -208,11 +194,6 @@ export default function ManagerQRcodesScreen({navigation}) {
     </View>  
   )
 }
-
-
-
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -266,6 +247,12 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
   }, 
+  column: {
+    flex: 1, 
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    alignItems:'center' 
+  },
   space: {
     margin: 15
   }, 

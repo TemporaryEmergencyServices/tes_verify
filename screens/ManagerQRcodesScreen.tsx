@@ -152,12 +152,7 @@ export default function ManagerQRcodesScreen({navigation}) {
                   getRef={(ref) => setQRdata(ref)}  
                 />
             }
-            {/* <TouchableOpacity onPress={() => saveQR()}>
-              <Text> save qr code ??? </Text>
-            </TouchableOpacity> */}
-
             </ScrollView>
-            
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               
               <TouchableOpacity style={styles.approveButton} onPress={() => {makeActive(detailCode.key,codeRef,userEmail);setModalVisible(false) }}>
@@ -167,43 +162,33 @@ export default function ManagerQRcodesScreen({navigation}) {
                 <Text style={styles.backText}>Disable</Text>
               </TouchableOpacity>
             </View>
-        
-            
           </View>
         </View>
       </Modal>
-
-
-
-      <View style={{height:'40%'}}>
-
+      <View style={styles.column}>
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
-
-            <View style={{height:'70%',alignItems:'center'}}> 
-              <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+            <View style={styles.column}> 
+              <View style={styles.column}>
                 <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
                   <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
-                    <View style={{flexDirection: 'row', paddingLeft: 20}}>
+                    <View style={styles.row}>
                       <RadioButton.Item labelStyle={styles.enabled} label="Enabled" value="enabled"/>
                       <RadioButton.Item labelStyle={styles.disabled} label="Disabled" value="disabled"/>
                     </View>
                   </RadioButton.Group>
-                  
-            
               </View>
               <View>
                 <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
                   <Text>Generate new QR code with nickname: </Text>  
-                </TouchableOpacity>  
-                
+                </TouchableOpacity>
                 <View style={styles.inputView} >
                   <TextInput  
-                  style={styles.inputText}
-                  placeholder="Nickname" 
-                  placeholderTextColor="white"
-                  onChangeText={text => setNewNickname(text)}/>
-                  </View>
-
+                    style={styles.inputText}
+                    placeholder="Nickname" 
+                    placeholderTextColor="white"
+                    onChangeText={text => setNewNickname(text)}
+                  />
+                </View>
               </View> 
               <View style={styles.space}></View>
               <View style={styles.row}>
@@ -219,27 +204,28 @@ export default function ManagerQRcodesScreen({navigation}) {
             <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
-          <FlatList
-            data={records}
-            renderItem={({ item }) => (
-              <View style={styles.itemStyle}>
-                
-                <View style={styles.row}>
-                  <Text style={{fontSize: 16}}>
-                    <Text style={{fontWeight: 'bold'}}>
-                      {item.nickname}</Text>
-                      <Text style={renderRecordStatus(item.active)}>Status: {item.active}</Text> </Text>
-                  <View>
-
-                    <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setQRvalue(item.key); setShowQR(true); setModalVisible(true)}}>
-                      <Text style={styles.view}>VIEW</Text>
-                    </TouchableOpacity> 
+          <View style={styles.row}>
+            <FlatList
+              data={records}
+              renderItem={({ item }) => (
+                <View style={styles.itemStyle}>
+                  <View style={styles.row}>
+                    <Text style={{fontSize: 16}}>
+                      <Text style={{fontWeight: 'bold', marginHorizontal: 10}}>{item.nickname}</Text>
+                      {"\n"}
+                      <Text style={renderRecordStatus(item.active)}>Status: {item.active}</Text> 
+                    </Text>
+                    <View>
+                      <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailCode(item); setQRvalue(item.key); setShowQR(true); setModalVisible(true)}}>
+                        <Text style={styles.view}>VIEW</Text>
+                      </TouchableOpacity> 
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-            showsVerticalScrollIndicator={false}
-          />
+              )}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
         }
     </View>
   )
@@ -346,6 +332,11 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
   }, 
+  column: {
+    flexDirection: 'column', 
+    justifyContent: 'space-between', 
+    alignItems:'center' 
+  },
   space: {
     margin: 15
   }, 
@@ -428,7 +419,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#eceff1",
   },
   inputView:{
-    width:"90%",
     backgroundColor:"#2B2E32",
     borderRadius:25,
     height:50,
