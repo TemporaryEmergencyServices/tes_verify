@@ -1,10 +1,23 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import * as React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import firebase from '../firebase.js'
+import '@firebase/firestore'
+import React, { useState } from 'react';
 
-import { RootStackParamList } from '../types';
+import { useSelector, RootStateOrAny } from 'react-redux'
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } from 'react-native';
+
+import { useDispatch } from 'react-redux'
+import { ScrollView } from 'react-native-gesture-handler';
+import DatePicker from 'react-native-datepicker';
 
 export default function QueryClockScreen({ navigation }) {
+
+  const [startDateState,setStartDateState] = useState('')
+  const [stopDateState,setStopDateState] = useState('')
+  const [userIdState,setUserIdState] = useState('')
+  const [ethnicityState, setEthnicityState] = useState('')
+  const [sexState, setSexState] = useState('')
+  const [firstNameState, setFirstNameState] = useState('')
+  const [lastNameState, setLastNameState] = useState('')
 
   const handleSearch = () => {
     Alert.alert(
@@ -20,7 +33,96 @@ export default function QueryClockScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.instructions}>Search for records by name, userid, gender, ethnicity, and/or date.</Text>
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="First Name" 
+          placeholderTextColor="white"
+          onChangeText={text => setFirstNameState(text)}/>
+      </View>
 
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Last Name" 
+          placeholderTextColor="white"
+          onChangeText={text => setLastNameState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Volunteer Email" 
+          placeholderTextColor="white"
+          onChangeText={text => setEthnicityState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Ethnicity" 
+          placeholderTextColor="white"
+          onChangeText={text => setEthnicityState(text)}/>
+      </View>
+
+      <View style={styles.inputView} >
+        <TextInput  
+          style={styles.inputText}
+          placeholder="Gender (M/F)" 
+          placeholderTextColor="white"
+          onChangeText={text => setSexState(text)}/>
+      </View>
+      
+      <DatePicker
+          style={styles.datePickerStyle}
+          date = {startDateState}
+          mode="date" //The enum of date, datetime and time
+          placeholder="Start Date"
+          format="YYYY-MM-DD"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setStartDateState(date);
+          }}
+        />
+
+        <DatePicker
+          style={styles.datePickerStyle}
+          date = {stopDateState}
+          mode="date" //The enum of date, datetime and time
+          placeholder="Stop Date"
+          format="YYYY-MM-DD"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setStopDateState(date);
+          }}
+        />
+      
       <TouchableOpacity style={styles.loginBtn} onPress={handleSearch}>
         <Text style={styles.signUpText} >SEARCH</Text>
       </TouchableOpacity>
@@ -72,7 +174,7 @@ const styles = StyleSheet.create({
       paddingLeft: 7
     },
     inputView:{
-      width:"90%",
+      width:270,
       backgroundColor:"#2B2E32",
       borderRadius:25,
       height:50,
@@ -97,7 +199,7 @@ const styles = StyleSheet.create({
       height:50,
       alignItems:"center",
       justifyContent:"center",
-  
+      marginTop: 20,
       marginBottom:10
     },
     createAccountBtn:{
@@ -125,7 +227,12 @@ const styles = StyleSheet.create({
       marginBottom: 8,
       paddingHorizontal: 10,
       backgroundColor: "#eceff1",
-    }
+    },
+    datePickerStyle: {
+        width: 200,
+        marginTop: 15,
+        marginBottom: 5,
+      },
   })
   
   const modalstyles = StyleSheet.create({
