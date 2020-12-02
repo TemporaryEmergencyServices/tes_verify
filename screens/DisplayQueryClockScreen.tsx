@@ -57,15 +57,16 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
          var temptotalApprovedHours = 0;
           var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
+           var data = documentSnapshot.data();
            helperRecords.push({
-           ...documentSnapshot.data(),
+           ...data,
            key: documentSnapshot.id
            });
-           temptotalHours += documentSnapshot.data().hoursElapsed;
-           temptotalMinutes += documentSnapshot.data().minutesElapsed;
-           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
-            temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
-            temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+           temptotalHours += data.hoursElapsed;
+           temptotalMinutes += data.minutesElapsed;
+           if (data.in_approved == 'approved' && data.out_approved == 'approved'){
+            temptotalApprovedHours += data.hoursElapsed;
+            temptotalApprovedMinutes += data.minutesElapsed;
           }
          });
          setRecords(helperRecords);
