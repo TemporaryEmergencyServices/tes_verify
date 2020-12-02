@@ -262,16 +262,14 @@ export default function ApplyScreen({  navigation  }) {
           placeholderTextColor="white"
           onChangeText={text => setAddressStateState(text)}/>
       </View>
-      <View>
-        { profileImage
-          ? <Image source={{ uri: profileImage }} style={styles.profileImg}/> &&
+      { profileImage
+        ? <><Image source={{ uri: profileImage }} style={styles.profileImg} />
             <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
-                <Text style={styles.uploadImgText} >Change Profile Image</Text>
-            </TouchableOpacity>
-          : <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
-              <Text style={styles.uploadImgText} >Upload Profile Image</Text>
-            </TouchableOpacity> }
-      </View>
+              <Text style={styles.uploadImgText}>Change Profile Image</Text>
+            </TouchableOpacity></>
+        : <TouchableOpacity style={styles.uploadImgBtn} onPress={pickImage}>
+            <Text style={styles.uploadImgText} >Upload Profile Image</Text>
+          </TouchableOpacity> }
 
       </ScrollView>
       <TouchableOpacity style={styles.loginBtn} onPress={handleApply}>
