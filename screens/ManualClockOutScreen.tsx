@@ -2,7 +2,8 @@ import firebase from '../firebase.js'
 import React, { useEffect, useState } from 'react';
 
 import { useSelector, RootStateOrAny } from 'react-redux'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, Dimensions, ActivityIndicator, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button, 
+  Dimensions, ActivityIndicator, FlatList, Modal } from 'react-native';
 
 import { ScrollView } from 'react-native-gesture-handler';
 import { Item } from 'react-native-paper/lib/typescript/src/components/List/List';
@@ -15,6 +16,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     const [modalVisible, setModalVisible] = useState(true)
     const [records, setRecords] = useState([])
     const [detailRecord, setDetailRecord] = useState({})
+
 
     useEffect(() => {
         // automatically get all currently clocked in records
@@ -53,19 +55,33 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                   <Text style={styles.signUpText}>Search</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView 
-                style={styles.scrollView}
-                centerContent={true} 
-                contentContainerStyle={styles.contentContainer} 
-            >
-                <View style={styles.inputView} >
-                <TextInput  
+            <View style={styles.container}>
+              <View style={styles.inputView} >
+                <TextInput
                     style={styles.inputText}
-                    placeholder="Out Time" 
+                    placeholder="Out Time (HH:MM)" 
                     placeholderTextColor="white"
-                    onChangeText={text => setOutTime(text)}/>
+                    onChangeText={text => setOutTime(text)}
+                />
+              </View>
+            </View>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {setModalVisible(false);
+              }}
+            >
+              <View style={modalstyles.centeredView}>
+                <View style={modalstyles.modalView}>
+                  <ScrollView style={{height:'90%'}}>
+                    <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+                    <Text style={modalstyles.textStyle}>username{detailRecord.userid}</Text>
+                    <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
+                  </ScrollView>
                 </View>
-            </ScrollView>
+              </View>
+            </Modal>
             {/* <TouchableOpacity style={styles.loginBtn} onPress={}>
                 <Text style={styles.signUpText} >SUBMIT</Text>
             </TouchableOpacity> */}
@@ -108,8 +124,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
                 onPress={() => { Alert.alert('Leave Page?',
                 "Are you sure you want to leave the page? All progress will be lost.",
                 [
-                    {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
-                    {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
+                    {text: 'OK', onPress: () => { console.log('OK Pressed'); navigation.goBack() }},
+                    {text: 'Cancel', onPress: () => { console.log('Cancel Pressed'); }},
                 ],
                     {cancelable: false},
                 );
@@ -283,4 +299,4 @@ const modalstyles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   }
-});
+})
