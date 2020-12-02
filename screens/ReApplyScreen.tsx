@@ -369,7 +369,7 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     marginTop:15,
     marginBottom:10
-  },,
+  },
   uploadImgBtn:{
     width:"80%",
     backgroundColor:"#E11383",
