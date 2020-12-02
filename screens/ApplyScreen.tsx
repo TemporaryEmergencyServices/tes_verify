@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
 import * as ImagePicker from 'expo-image-picker';
 
-export default function ApplyScreen({  navigation  }) {
+export default function ApplyScreen({  navigation  }) {  
   const [firstNameState,setFirstNameState] = useState('')
   const[lastNameState,setLastNameState] = useState('')
   const[phoneState,setPhoneState] = useState('')
@@ -42,6 +42,7 @@ export default function ApplyScreen({  navigation  }) {
         alert('Sorry, we need camera roll permissions to make this work!');
       }
     }
+    else { alert('Sorry, we can only upload on mobile!'); return; }
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -66,10 +67,11 @@ export default function ApplyScreen({  navigation  }) {
       })
     }
   };
+
   const uploadImage = async (uri) => {
     const response = await fetch(uri);
     const blob = await response.blob();
-    const ref = firebase.storage().ref().child(`my-image`);
+    const ref = firebase.storage().ref().child(userEmail + `-profile-image`);
     return ref.put(blob);
   };
 

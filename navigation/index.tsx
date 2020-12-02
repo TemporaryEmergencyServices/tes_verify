@@ -19,6 +19,7 @@ import LinkingConfiguration from './LinkingConfiguration';
 import ReApplyScreen from '../screens/ReApplyScreen';
 import ManagerRecordsScreen from '../screens/ManagerRecordsScreen';
 import CreateClockRecordScreen from '../screens/CreateClockRecordScreen';
+import ManualClockOutScreen from '../screens/ManualClockOutScreen';
 
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -56,10 +57,8 @@ function RootNavigator() {
       <Stack.Screen name="DisplayQRScreen" component={DisplayQRScreen} />
       <Stack.Screen name="ReApplyScreen" component={ReApplyScreen} />
       <Stack.Screen name="ManagerRecordsScreen" component={ManagerRecordsScreen} />
-     <Stack.Screen name="CreateClockRecordScreen" component={CreateClockRecordScreen} /> 
-
-
-      
+      <Stack.Screen name="CreateClockRecordScreen" component={CreateClockRecordScreen} /> 
+      <Stack.Screen name="ManualClockOutScreen" component={ManualClockOutScreen} /> 
     </Stack.Navigator>
   );
 }

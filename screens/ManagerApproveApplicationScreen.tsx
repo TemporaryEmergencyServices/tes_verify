@@ -217,9 +217,11 @@ export default function ManagerApproveApplicationScreen({navigation}) {
                 <View style={styles.row}>
                   <Text style={{fontSize: 16}}>
                     <Text style={{fontWeight: 'bold'}}>
-                      {item.firstName} {item.lastName}</Text>
-                      {"\n"}{item.userid}{"\n"}
-                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> </Text>
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    {"\n"}{item.userid}{"\n"}
+                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
+                  </Text>
                   <View>
                     <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
                       <Text style={styles.view}>VIEW</Text>
