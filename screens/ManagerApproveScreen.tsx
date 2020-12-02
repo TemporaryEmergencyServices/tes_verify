@@ -212,7 +212,7 @@ export default function ManagerApproveScreen() {
           </View>
         </View>
       </Modal>
-    <View style={{height:'34%'}}>
+    <View style={{height:'40%'}}>
     <View style={{height:'70%',alignItems:'center'}}> 
 
     <Text style={styles.titleFlatList}>Pending Clock {viewtype}s </Text>
