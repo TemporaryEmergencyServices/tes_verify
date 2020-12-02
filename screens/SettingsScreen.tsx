@@ -46,7 +46,6 @@ export default function SettingsScreen({ navigation }) {
   } ,[]);
 
   const goToApply = () => navigation.push('ApplyScreen')
-  const goToUpload= () => navigation.push('UploadProfileImageScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
   const goToApprove= () => navigation.navigate('ManagerApproveApplicationScreen')
 
