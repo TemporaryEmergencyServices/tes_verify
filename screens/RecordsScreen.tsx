@@ -71,7 +71,7 @@ export default function RecordsScreen() {
     <View style={styles.container}>
       <Text style={styles.titleFlatList}>Volunteer Records for {userEmail}</Text>
       <TouchableOpacity style={styles.exportBtn}>
-        <Text style={styles.exportText} >Export as PDF</Text>
+        <Text style={styles.exportText} >Export as CSV</Text>
       </TouchableOpacity> 
       <View style={styles.space}></View>
       <View style={styles.row}>
