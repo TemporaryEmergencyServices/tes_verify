@@ -165,7 +165,7 @@ export default function ManagerQRcodesScreen({navigation}) {
           </View>
         </View>
       </Modal>
-      <View style={[styles.row, styles.column, {height: '50%'}]}>
+      <View style={[styles.row, styles.column, {height: '55%'}]}>
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
         <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
         <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
@@ -199,7 +199,7 @@ export default function ManagerQRcodesScreen({navigation}) {
             <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
-          <View style={{height: '50%'}}>
+          <View style={{height: '45%'}}>
             <FlatList
               data={records}
               renderItem={({ item }) => (

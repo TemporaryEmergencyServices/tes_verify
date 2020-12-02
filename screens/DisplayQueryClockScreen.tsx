@@ -43,6 +43,10 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
 
     const subscriber = constQuery
        .onSnapshot(querySnapshot => {
+         setTotalApprovedHours(0);
+         setTotalApprovedMinutes(0);
+         setTotalHours(0);
+         setTotalMinutes(0);
          const helperRecords = [] as any;
          var temptotalHours = 0;
          var temptotalMinutes = 0;
