@@ -18,6 +18,10 @@ export default function ClockInScreen() {
   const [inTime, setInTime] = useState('')
   const [outTime, setOutTime] = useState('')
   const [uniqueClockID, setUniqueClockID] = useState('')
+  const [ethnicityState, setEthnicityState] = useState('')
+  const [sexState, setSexState] = useState('')
+  const [firstNameState, setFirstNameState] = useState('')
+  const [lastNameState, setLastNameState] = useState('')
 
   const [fbClockedIn, setFbClockedIn] = useState('')
   const [fbInTime, setFbInTime] = useState('')
@@ -102,6 +106,12 @@ export default function ClockInScreen() {
          const queryDocumentSnapshot = querySnapshot.docs[0];
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
          setAppState(queryDocumentSnapshotData.approved)
+         if(queryDocumentSnapshotData.approved == 'approved') {
+           setFirstNameState(queryDocumentSnapshotData.firstName)
+           setLastNameState(queryDocumentSnapshotData.lastName)
+           setEthnicityState(queryDocumentSnapshotData.ethnicity)
+           setSexState(queryDocumentSnapshotData.sex)
+         }
          setLoading(false)
         }
      });
@@ -173,6 +183,10 @@ export default function ClockInScreen() {
       date: date,
       in_approved: "pending",
       currently_clocked_in: true,
+      sex: sexState,
+      ethnicity: ethnicityState,
+      firstName: firstNameState,
+      lastName: lastNameState
     });
     setUniqueClockID(snap.id)
   }

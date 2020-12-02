@@ -27,9 +27,11 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       errorMessage = 'Please enter date in format YYYY-MM-DD.'
     }
     if (inTimeState == '') {errorMessage = 'Please enter the clock in time.'}
-    if (inTimeState.substring(2, 3) != ':' || inTimeState.length != 5) {errorMessage = 'Please enter the clock in time in the format HH:MM'}
+    if (inTimeState.substring(2, 3) != ':' || inTimeState.length != 8 || outTimeState.substring(5,6) != ' ' || (inTimeState.substring(6,8) != 'AM' && inTimeState.substring(6,8) != 'PM')) 
+      {errorMessage = 'Please enter the clock in time in the format HH:MM AM/PM. Example: 01:35 PM'}
     if (outTimeState == '') {errorMessage = 'Please enter the clock out time.'}
-    if (outTimeState.substring(2, 3) != ':' || outTimeState.length != 5) {errorMessage = 'Please enter the clock out time in the format HH:MM'}
+    if (outTimeState.substring(2, 3) != ':' || outTimeState.length != 8 || outTimeState.substring(5,6) != ' ' || (outTimeState.substring(6,8) != 'AM' && outTimeState.substring(6,8) != 'PM'))
+     {errorMessage = 'Please enter the clock out time in the format HH:MM AM/PM. Example: 01:35 PM'}
     if (userIdState == '') {errorMessage = 'Please enter the volunteer email address'}
     if (!userIdState.includes('@')) {errorMessage = 'Please enter a valid email address.'}
     //const today = new Date()
@@ -56,13 +58,13 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       
       var snap = await firebase.firestore().collection('ClockInsOuts').add({
               currently_clocked_in: currently_clocked_in,
-              date: dateRaw,
+              date: dateState,
               in_approved: in_approved,
-              in_time: timeRaw,
+              in_time: inTimeState,
               out_approved: out_approved,
               out_date: dateState,
               out_time: outTimeState,
-              userid: userIdState
+              userid: userIdState.toLowerCase()
       });
 
       Alert.alert(
@@ -170,7 +172,6 @@ const styles = StyleSheet.create({
     fontWeight:"bold",
     fontSize:24,
     color:"#1C5A7D",
-    marginBottom:10,
     textAlign: 'center',
     marginTop: 60,
     paddingRight: 30, 

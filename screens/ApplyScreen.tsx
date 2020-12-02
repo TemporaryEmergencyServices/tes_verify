@@ -116,7 +116,7 @@ export default function ApplyScreen({  navigation  }) {
               lastName: lastNameState,
               phone: phoneState,
               sex: sexState,
-              ethnicity: ethnicityState,
+              ethnicity: ethnicityState.toLowerCase(),
               emergencyName1: emergencyName1State,
               emergencyPhone1: emergencyPhone1State,
               emergencyName2: emergencyName2State,
