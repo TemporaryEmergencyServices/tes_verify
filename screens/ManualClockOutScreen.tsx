@@ -69,7 +69,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
              {text: 'OK', onPress: () => {console.log('OK Pressed'); return }},
            ],
            {cancelable: false},
-         );
+        )
       } else {
         const recordRef = firebase.firestore().collection('ClockInsOuts')
         .where('userid', '==', userid)

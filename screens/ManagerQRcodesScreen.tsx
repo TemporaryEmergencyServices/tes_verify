@@ -165,38 +165,33 @@ export default function ManagerQRcodesScreen({navigation}) {
           </View>
         </View>
       </Modal>
-      <View style={styles.column}>
+      <View style={[styles.row, styles.column, {height: '50%'}]}>
         <Text style={styles.titleFlatList}>{viewtype} QR codes</Text>
-            <View style={styles.column}> 
-              <View style={styles.column}>
-                <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
-                  <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
-                    <View style={styles.row}>
-                      <RadioButton.Item labelStyle={styles.enabled} label="Enabled" value="enabled"/>
-                      <RadioButton.Item labelStyle={styles.disabled} label="Disabled" value="disabled"/>
-                    </View>
-                  </RadioButton.Group>
-              </View>
-              <View>
-                <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
-                  <Text>Generate new QR code with nickname: </Text>  
-                </TouchableOpacity>
-                <View style={styles.inputView} >
-                  <TextInput  
-                    style={styles.inputText}
-                    placeholder="Nickname" 
-                    placeholderTextColor="white"
-                    onChangeText={text => setNewNickname(text)}
-                  />
-                </View>
-              </View> 
-              <View style={styles.space}></View>
-              <View style={styles.row}>
-                <Text style={styles.header}>Nickname</Text>
-                <Text style={styles.header}>Actions</Text>
-              </View>
-            </View>
-
+        <Text style={styles.instructionsText}>Select to view enabled or disabled QR codes:</Text>
+        <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
+          <View style={styles.row}>
+            <RadioButton.Item labelStyle={styles.enabled} label="Enabled" value="enabled"/>
+            <RadioButton.Item labelStyle={styles.disabled} label="Disabled" value="disabled"/>
+          </View>
+        </RadioButton.Group>
+        <View>
+          <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
+            <Text>Generate new QR code with nickname: </Text>  
+          </TouchableOpacity>
+          <View style={styles.inputView} >
+            <TextInput  
+              style={styles.inputText}
+              placeholder="Nickname" 
+              placeholderTextColor="white"
+              onChangeText={text => setNewNickname(text)}
+            />
+          </View>
+        </View> 
+        <View style={styles.space}></View>
+        <View style={styles.row}>
+          <Text style={styles.header}>Nickname</Text>
+          <Text style={styles.header}>Actions</Text>
+        </View>
       </View>
       { 
         loading ? 
@@ -204,7 +199,7 @@ export default function ManagerQRcodesScreen({navigation}) {
             <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
-          <View style={styles.row}>
+          <View style={{height: '50%'}}>
             <FlatList
               data={records}
               renderItem={({ item }) => (
