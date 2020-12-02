@@ -18,8 +18,6 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     const [detailRecord, setDetailRecord] = useState({})
 
     useEffect(() => {
-        // automatically get all currently clocked in records
-        // where currently_clocked_in == true
         const subscriber = firebase.firestore().collection('ClockInsOuts')
         .where('currently_clocked_in', '==', true)
         .get().then(querySnapshot => {
@@ -36,7 +34,25 @@ export default function CreateClockRecordsScreen({  navigation  }) {
 
     // search through currently clocked in records to find matching name (client side)
     const search = async (userid) => {
-        
+      var recordRef
+      if (searchText) {
+        recordRef = await firebase.firestore().collection('ClockInsOuts')
+        .where('userid', '==', userid)
+        .where('currently_clocked_in', '==', true)
+      } else {
+        recordRef = firebase.firestore().collection('ClockInsOuts')
+        .where('currently_clocked_in', '==', true)
+      }
+      recordRef
+      .get().then(querySnapshot => {
+          var helperRecords = []
+          querySnapshot.forEach(doc => {
+              helperRecords.push(doc.data())
+          })
+          return helperRecords
+      }).then(result => {
+          setRecords(result)
+      })
     }
 
     const submitOutTime = async (userid, date, inTime) => {
@@ -55,94 +71,86 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     }
 
     return (
-        // displays searchbar and list of clocked in people
-        <View style={styles.container}>
-            <Text style={styles.logo}>Manually Clock Out a Volunteer</Text>
-            <Text>Search for volunteer by email address</Text>
-            <View style={styles.row}>
+    <View style={styles.container}>
+      <Text style={styles.logo}>Manually Clock Out a Volunteer</Text>
+      <View style={styles.inputView} >
+        <TextInput
+          style={styles.inputText}
+          placeholder="Search for volunteer by email" 
+          placeholderTextColor="white"
+          onChangeText={text => setSearchText(text)}
+        />
+      </View>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => { search(searchText) }}>
+        <Text style={styles.signUpText}>Search</Text>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+        }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+            <ScrollView style={{height:'90%'}}>
+              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+              <Text style={modalstyles.textStyle}>Username: {detailRecord.userid}</Text>
+              <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
+              <View style={styles.inputView} >
                 <TextInput
                   style={styles.inputText}
-                  onChangeText={text => setSearchText(text)}
-                  value={searchText}
+                  placeholder="Out Time (HH:MM) AM/PM" 
+                  placeholderTextColor="white"
+                  onChangeText={text => setOutTime(text)}
                 />
-                <TouchableOpacity style={styles.loginBtn} onPress={() => { search(searchText) }}>
-                  <Text style={styles.signUpText}>Search</Text>
-                </TouchableOpacity>
-            </View>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {setModalVisible(false);
-              }}
-            >
-              <View style={modalstyles.centeredView}>
-                <View style={modalstyles.modalView}>
-                  <ScrollView style={{height:'90%'}}>
-                    <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
-                    <Text style={modalstyles.textStyle}>Username: {detailRecord.userid}</Text>
-                    <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
-                    <View style={styles.inputView} >
-                      <TextInput
-                          style={styles.inputText}
-                          placeholder="Out Time (HH:MM) AM/PM" 
-                          placeholderTextColor="white"
-                          onChangeText={text => setOutTime(text)}
-                      />
-                    </View>
-                    <TouchableOpacity 
-                        style={styles.loginBtn} 
-                        onPress={() => submitOutTime(detailRecord.userid, detailRecord.date, detailRecord.in_time)}
-                      >
-                        <Text>Submit Out Time</Text>
-                      </TouchableOpacity>
-                  </ScrollView>
-                </View>
               </View>
-            </Modal>
-            {/* <TouchableOpacity style={styles.loginBtn} onPress={}>
-                <Text style={styles.signUpText} >SUBMIT</Text>
-            </TouchableOpacity> */}
-            {
-                records.length === 0 &&
-                <Text style={{marginTop: 30}}>No one is currently clocked in!</Text>
-            }
-            { 
-                loading ? 
-                <View style={styles.centerContainer}>
-                    <ActivityIndicator size="large" color="#E11383" />
-                </View>
-                :
-                // will render: userid, first/last name, clocked in time and date, button to clock out
-                // clock out button will display modal for user
-                <FlatList
-                    data={records}
-                    renderItem={({ item }) => (
-                        <View style={styles.itemStyle}>
-                                <View style={styles.row}>
-                                    <Text>
-                                      <Text>{item.userid}</Text>
-                                      {"\n"}{item.date}{"\n"}
-                                      <Text>{item.in_time}</Text>
-                                    </Text>
-                                    <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
-                                        <Text style={styles.signUpText}>Clock Out</Text>
-                                    </TouchableOpacity>
-                                </View>
-                        </View>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                />
-            }
-
-            <Button 
-                title="LEAVE PAGE" 
-                color = "#1C5A7D" 
-                onPress={() => {  navigation.goBack() }}
-            />
+              <TouchableOpacity 
+                style={styles.loginBtn} 
+                onPress={() => submitOutTime(detailRecord.userid, detailRecord.date, detailRecord.in_time)}
+              >
+                <Text style={styles.signUpText}>Submit Out Time</Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </View>
-    );
-
+      </Modal>
+      {
+        records.length === 0 &&
+        <Text style={{marginTop: 30}}>No one is currently clocked in!</Text>
+      }
+      { 
+          loading ? 
+          <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color="#E11383" />
+          </View>
+          :
+          <FlatList
+              data={records}
+              renderItem={({ item }) => (
+                  <View style={styles.itemStyle}>
+                          <View style={styles.row}>
+                              <Text>
+                                <Text>{item.userid}</Text>
+                                {"\n"}{item.date}{"\n"}
+                                <Text>{item.in_time}</Text>
+                              </Text>
+                              <TouchableOpacity style={styles.clockOutBtn} onPress={() => {setDetailRecord(item); setModalVisible(true)}}>
+                                  <Text style={styles.signUpText}>Clock Out</Text>
+                              </TouchableOpacity>
+                          </View>
+                  </View>
+              )}
+              showsVerticalScrollIndicator={false}
+          />
+      }
+      <Button 
+          title="LEAVE PAGE" 
+          color = "#1C5A7D" 
+          onPress={() => {  navigation.goBack() }}
+      />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
