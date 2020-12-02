@@ -77,7 +77,7 @@ export default function QueryClockScreen({ navigation }) {
           style={styles.datePickerStyle}
           date = {startDateState}
           mode="date" //The enum of date, datetime and time
-          placeholder="select date"
+          placeholder="Start Date"
           format="YYYY-MM-DD"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
@@ -95,6 +95,31 @@ export default function QueryClockScreen({ navigation }) {
           }}
           onDateChange={(date) => {
             setStartDateState(date);
+          }}
+        />
+
+        <DatePicker
+          style={styles.datePickerStyle}
+          date = {stopDateState}
+          mode="date" //The enum of date, datetime and time
+          placeholder="Stop Date"
+          format="YYYY-MM-DD"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              //display: 'none',
+              position: 'absolute',
+              left: 0,
+              top: 4,
+              marginLeft: 0,
+            },
+            dateInput: {
+              marginLeft: 36,
+            },
+          }}
+          onDateChange={(date) => {
+            setStopDateState(date);
           }}
         />
       
@@ -174,7 +199,7 @@ const styles = StyleSheet.create({
       height:50,
       alignItems:"center",
       justifyContent:"center",
-  
+      marginTop: 20,
       marginBottom:10
     },
     createAccountBtn:{
@@ -205,7 +230,8 @@ const styles = StyleSheet.create({
     },
     datePickerStyle: {
         width: 200,
-        marginTop: 20,
+        marginTop: 15,
+        marginBottom: 5,
       },
   })
   
