@@ -14,7 +14,6 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const userRole = user.role
-  const userStorageRef = firebase.storage().ref().child(userEmail + `-profile-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
   const [appID, setAppID] = useState('')
 
@@ -44,6 +43,16 @@ export default function SettingsScreen({ navigation }) {
 
     return () => subscriber();
   } ,[]);
+
+  const downloadProfileImg = () => {
+    firebase.storage()
+      .ref()
+      .child(String(userEmail) + `-profile-image`)
+      .getDownloadURL()
+      .then((url) => setImgState(url))
+      .catch(() => setImgState("none"))
+  }
+  downloadProfileImg()
 
   const goToApply = () => navigation.push('ApplyScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
