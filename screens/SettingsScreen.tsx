@@ -170,7 +170,8 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-
+            <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+            <Image style={styles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
@@ -243,6 +244,8 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+            <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+            <Image style={styles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
@@ -320,7 +323,8 @@ export default function SettingsScreen({ navigation }) {
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
             <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
             <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
-
+            <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+            <Image style={styles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.signOutBtn} onPress={() => {setModalVisible(false) }}>
