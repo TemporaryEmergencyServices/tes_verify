@@ -94,6 +94,12 @@ return (
             <TouchableOpacity style={modalstyles.openButton} 
               onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.approveButton} onPress={() => {setModalVisible(false) }}>
+                <Text style={styles.backText}>Approve</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.denyButton} onPress={() => {setModalVisible(false)}}>
+                <Text style={styles.backText}>Deny</Text>
+              </TouchableOpacity>
             </View>
             
           </View>
@@ -361,6 +367,38 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
       },
+      
+    denyButton: {
+        width:"30%",
+        backgroundColor:"#E11383",
+        borderRadius:25,
+        height:"100%",
+        alignItems:"center",
+        justifyContent:"center",
+        // marginTop:30,
+        // marginBottom:15
+    },
+    approveButton: {
+        width:"30%",
+        backgroundColor:"#1C5A7D",
+        marginLeft: 10,
+        marginRight: 10,
+        borderRadius:25,
+        height:"100%",
+        alignItems:"center",
+        justifyContent:"center",
+        // marginTop:30,
+        // marginBottom:15
+    },
+    backText: {
+        marginTop:10,
+        color:"white",
+        justifyContent: 'center',
+        alignContent: 'center',
+        fontWeight :'bold',
+        fontSize: 16, 
+        paddingBottom: 10
+      },
   })
   
   const modalstyles = StyleSheet.create({
@@ -386,10 +424,14 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     openButton: {
-      backgroundColor: "#F194FF",
+      width: "50%",
+      backgroundColor: "grey",
       borderRadius: 20,
       padding: 10,
-      elevation: 2
+      elevation: 2,
+      height: "100%",
+      justifyContent: 'center',
+      alignContent: 'center',
     },
     textStyle: {
       color: "black",
