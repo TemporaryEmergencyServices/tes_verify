@@ -143,8 +143,8 @@ export default function ClockInScreen() {
         //set in time
         //create firebase entry
     const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const time = today.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+    const date =  today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
     //const date = today.toISOString().substring(0,10)
     if (!clockedIn) {handleClockIn(date, time)}
 
