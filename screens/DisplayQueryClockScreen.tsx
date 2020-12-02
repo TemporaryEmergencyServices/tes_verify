@@ -91,6 +91,9 @@ return (
               <Text style={modalstyles.textStyle}>In Time: {detailApp.in_time}</Text>
               <Text style={modalstyles.textStyle}>Out Time: {detailApp.out_time}</Text>
 
+              <Text style={modalstyles.textStyle}>In Status: {detailApp.in_approved}</Text>
+              <Text style={modalstyles.textStyle}>Out Status: {detailApp.out_approved}</Text>
+
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
             <TouchableOpacity style={modalstyles.openButton} 

@@ -24,7 +24,7 @@ export default function QueryClockScreen({ navigation }) {
     navigation.push('DisplayQueryClockScreen', {
         firstName: firstNameState,
         lastName: lastNameState,
-        userId: userIdState,
+        userId: userIdState.toLowerCase(),
         ethnicity: ethnicityState,
         sex: sexState,
         startDate: startDateState,
