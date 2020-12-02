@@ -132,7 +132,7 @@ export default function QueryClockScreen({ navigation }) {
       <Button 
         title="LEAVE PAGE" 
         color = "#1C5A7D" 
-        onPress={() => navigation.replace('ManagerRecordsScreen')} />
+        onPress={() => navigation.goBack()} />
 
     </View>
   );
