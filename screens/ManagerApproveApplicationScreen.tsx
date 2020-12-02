@@ -124,9 +124,6 @@ export default function ManagerApproveApplicationScreen({navigation}) {
       >
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
-            {/* <TouchableOpacity style={{position:'absolute',right:'5',top:'5'}} onPress = {() => setModalVisible(false)}>
-              <Text style={styles.backText}>X</Text>
-            </TouchableOpacity> */}
             <ScrollView style={{height:'90%'}}>
               <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
               <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
@@ -160,44 +157,42 @@ export default function ManagerApproveApplicationScreen({navigation}) {
           </View>
         </View>
       </Modal>
-      <View style={styles.column}>
+      <View style={[styles.column]}>
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
-            <View style={styles.column}> 
-              <View style={{ width:'100%', alignItems: 'center' }}>
-                <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
-                  <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
-                    <View style={{flexDirection: 'row', paddingLeft: 20}}>
-                      <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
-                      <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
-                      <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
-                    </View>
-                  </RadioButton.Group>
-                  { 
-                    viewtype === 'pending' &&
-                    <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
-                      <Text style={styles.exportText}>Approve All</Text>
-                    </TouchableOpacity>
-                  }
-              </View> 
-              <View style={styles.row}>
-                <TextInput
-                  style={styles.searchBox}
-                  onChangeText={text => setSearchText(text)}
-                  value={searchText}
-                />
-                <TouchableOpacity style={styles.searchBtn} onPress={() => { search(searchText) }}>
-                  <Text style={styles.backText}>Search</Text>
-                </TouchableOpacity>
+          <View style={{ width:'100%', alignItems: 'center' }}>
+            <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
+            <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
+              <View style={{flexDirection: 'row', paddingLeft: 20}}>
+                <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
+                <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
+                <RadioButton.Item labelStyle={styles.denied} label="Denied" value="denied"/>
               </View>
-
-              {
-                records.length !== 0 && 
-                <View style={styles.row}>
-                  <Text style={styles.header}>Application</Text>
-                  <Text style={styles.header}>Actions</Text>
-                </View>
-              }
+            </RadioButton.Group>
+            { 
+              viewtype === 'pending' &&
+              <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, appRef,userEmail)}>
+                <Text style={styles.exportText}>Approve All</Text>
+              </TouchableOpacity>
+            }
+            <View style={styles.row}>
+              <TextInput
+                style={styles.searchBox}
+                onChangeText={text => setSearchText(text)}
+                value={searchText}
+              />
+              <TouchableOpacity style={styles.searchBtn} onPress={() => { search(searchText) }}>
+                <Text style={styles.backText}>Search</Text>
+              </TouchableOpacity>
             </View>
+            {
+              records.length !== 0 && 
+              <View style={styles.row}>
+                <Text style={styles.header}>Application</Text>
+                <Text style={styles.header}>Actions</Text>
+              </View>
+            }
+          </View> 
+          
       </View>
       {
           records.length === 0 &&
@@ -209,37 +204,35 @@ export default function ManagerApproveApplicationScreen({navigation}) {
             <ActivityIndicator size="large" color="#E11383" />
           </View>
         :
-          <FlatList
-            data={records}
-            renderItem={({ item }) => (
-              <View style={styles.itemStyle}>
-                
-                <View style={styles.row}>
-                  <Text style={{fontSize: 16}}>
-                    <Text style={{fontWeight: 'bold'}}>
-                      {item.firstName} {item.lastName}
+          <View style={styles.rowNoPadding}>
+            <FlatList
+              data={records}
+              renderItem={({ item }) => (
+                <View style={styles.itemStyle}>
+                  <View style={styles.row}>
+                    <Text style={{fontSize: 16}}>
+                      <Text style={{fontWeight: 'bold'}}>
+                        {item.firstName} {item.lastName}
+                      </Text>
+                      {"\n"}{item.userid}{"\n"}
+                      <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
                     </Text>
-                    {"\n"}{item.userid}{"\n"}
-                    <Text style={renderRecordStatus(item.approved)}>Status: {item.approved}</Text> 
-                  </Text>
-                  <View>
-                    <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
-                      <Text style={styles.view}>VIEW</Text>
-                    </TouchableOpacity> 
+                    <View>
+                      <TouchableOpacity style={styles.viewBtn} onPress={() => {setDetailApp(item); setModalVisible(true)}}>
+                        <Text style={styles.view}>VIEW</Text>
+                      </TouchableOpacity> 
+                    </View>
                   </View>
                 </View>
-              </View>
-            )}
-            showsVerticalScrollIndicator={false}
-          />
+              )}
+              showsVerticalScrollIndicator={false}
+            />
+          </View>
         }
     </View>
   )
 }
 
-// FIXME: this may even approve those records that 
-// are no longer displaying or have been previously denied, 
-// must test this
 function approveAll(records: any, appRef: any, userEmail: String) {
   records.forEach(record => {
     approve(record.key,  appRef, userEmail)
@@ -270,17 +263,6 @@ function deny(key: String, appRef: any, userEmail: String) {
         approvedBy: userEmail,
         approvedDate: dateTime
       }, { merge: true })
-}
-
-function view(key: String, appRef: any, userEmail: String) { 
-  Alert.alert(
-    'test',
-    'this will hopefully work eventually',
-    [
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ],
-    {cancelable: false},
-  );
 }
 
 function renderRecordStatus(status: String) {
@@ -356,8 +338,8 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     height: 100,
-    alignItems: 'center', 
-    justifyContent: 'center'
+    // alignItems: 'center', 
+    // justifyContent: 'center'
   },
   row: {
     flexDirection: 'row',
@@ -365,6 +347,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: 20,
     paddingLeft: 20
+  }, 
+  rowNoPadding: {
+    flexDirection: 'row',
+    width: Dimensions.get('window').width,
+    justifyContent: 'space-between'
   }, 
   column: {
     flex: 1, 
