@@ -16,6 +16,7 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
   const [records, setRecords] = useState([] as any)
   const[modalVisible,setModalVisible] = useState(false)
   const [detailApp,setDetailApp] = useState([] as any)
+  const [recordKey, setRecordKey] = useState('')
 
   const {firstName, lastName, userId, ethnicity, sex, startDate, stopDate} = route.params
 
@@ -52,6 +53,7 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
 
   const handleView =  (recordkey) => {
     //console.log(recordkey)
+    setRecordKey(recordkey)
     const subscriber = firebase.firestore()
     .collection('ClockInsOuts')
        .doc(recordkey)
@@ -94,10 +96,10 @@ return (
             <TouchableOpacity style={modalstyles.openButton} 
               onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.approveButton} onPress={() => {setModalVisible(false) }}>
+            <TouchableOpacity style={styles.approveButton} onPress={() => {handleApprove(recordKey); setModalVisible(false) }}>
                 <Text style={styles.backText}>Approve</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.denyButton} onPress={() => {setModalVisible(false)}}>
+              <TouchableOpacity style={styles.denyButton} onPress={() => {handleDeny(recordKey); setModalVisible(false)}}>
                 <Text style={styles.backText}>Deny</Text>
               </TouchableOpacity>
             </View>
@@ -444,3 +446,17 @@ const styles = StyleSheet.create({
       textAlign: "center"
     }
   });
+
+  function handleApprove(recordkey: any) {
+    firebase.firestore().collection('ClockInsOuts').doc(recordkey).set({
+        in_approved: "approved",
+        out_approved: "approved"
+    }, {merge: true})
+  }
+
+  function handleDeny(recordkey: any) {
+    firebase.firestore().collection('ClockInsOuts').doc(recordkey).set({
+        in_approved: "denied",
+        out_approved: "denied"
+    }, {merge: true})
+  }
