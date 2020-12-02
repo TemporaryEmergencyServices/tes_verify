@@ -37,7 +37,7 @@ export default function QueryClockScreen({ navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="First Name" 
-          placeholderTextColor="white"
+          placeholderTextColor="grey"
           onChangeText={text => setFirstNameState(text)}/>
       </View>
 
@@ -45,7 +45,7 @@ export default function QueryClockScreen({ navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Last Name" 
-          placeholderTextColor="white"
+          placeholderTextColor="grey"
           onChangeText={text => setLastNameState(text)}/>
       </View>
 
@@ -53,7 +53,7 @@ export default function QueryClockScreen({ navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Volunteer Email" 
-          placeholderTextColor="white"
+          placeholderTextColor="grey"
           onChangeText={text => setEthnicityState(text)}/>
       </View>
 
@@ -61,7 +61,7 @@ export default function QueryClockScreen({ navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Ethnicity" 
-          placeholderTextColor="white"
+          placeholderTextColor="grey"
           onChangeText={text => setEthnicityState(text)}/>
       </View>
 
@@ -69,7 +69,7 @@ export default function QueryClockScreen({ navigation }) {
         <TextInput  
           style={styles.inputText}
           placeholder="Gender (M/F)" 
-          placeholderTextColor="white"
+          placeholderTextColor="grey"
           onChangeText={text => setSexState(text)}/>
       </View>
       
@@ -126,6 +126,11 @@ export default function QueryClockScreen({ navigation }) {
       <TouchableOpacity style={styles.loginBtn} onPress={handleSearch}>
         <Text style={styles.signUpText} >SEARCH</Text>
       </TouchableOpacity>
+
+      <Button 
+        title="LEAVE PAGE" 
+        color = "#1C5A7D" 
+        onPress={() => navigation.goBack()} />
 
     </View>
   );
@@ -200,7 +205,7 @@ const styles = StyleSheet.create({
       alignItems:"center",
       justifyContent:"center",
       marginTop: 20,
-      marginBottom:10
+      marginBottom: 5
     },
     createAccountBtn:{
       width:"80%",
