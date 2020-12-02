@@ -19,15 +19,17 @@ export default function QueryClockScreen({ navigation }) {
   const [firstNameState, setFirstNameState] = useState('')
   const [lastNameState, setLastNameState] = useState('')
 
+
   const handleSearch = () => {
-    Alert.alert(
-        'HELLO',
-        'HELLO:)',
-         [
-           {text: 'OK', onPress: () => {console.log('OK Pressed'); }},
-         ],
-         {cancelable: false},
-       );
+    navigation.push('DisplayQueryClockScreen', {
+        firstName: firstNameState,
+        lastName: lastNameState,
+        userId: userIdState,
+        ethnicity: ethnicityState,
+        sex: sexState,
+        startDate: startDateState,
+        stopDate: stopDateState
+    })
   }
 
   return (
@@ -54,7 +56,7 @@ export default function QueryClockScreen({ navigation }) {
           style={styles.inputText}
           placeholder="Volunteer Email" 
           placeholderTextColor="grey"
-          onChangeText={text => setEthnicityState(text)}/>
+          onChangeText={text => setUserIdState(text)}/>
       </View>
 
       <View style={styles.inputView} >
@@ -130,7 +132,7 @@ export default function QueryClockScreen({ navigation }) {
       <Button 
         title="LEAVE PAGE" 
         color = "#1C5A7D" 
-        onPress={() => navigation.goBack()} />
+        onPress={() => navigation.replace('ManagerRecordsScreen')} />
 
     </View>
   );

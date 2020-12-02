@@ -21,6 +21,7 @@ import ManagerRecordsScreen from '../screens/ManagerRecordsScreen';
 import CreateClockRecordScreen from '../screens/CreateClockRecordScreen';
 import ManualClockOutScreen from '../screens/ManualClockOutScreen';
 import QueryClockScreen from '../screens/QueryClockScreen';
+import DisplayQueryClockScreen from '../screens/DisplayQueryClockScreen';
 
 
 // If you are not familiar with React Navigation, we recommend going through the
@@ -61,6 +62,7 @@ function RootNavigator() {
       <Stack.Screen name="CreateClockRecordScreen" component={CreateClockRecordScreen} /> 
       <Stack.Screen name="ManualClockOutScreen" component={ManualClockOutScreen} /> 
       <Stack.Screen name="QueryClockScreen" component={QueryClockScreen} /> 
+      <Stack.Screen name="DisplayQueryClockScreen" component={DisplayQueryClockScreen} /> 
 
     </Stack.Navigator>
   );
