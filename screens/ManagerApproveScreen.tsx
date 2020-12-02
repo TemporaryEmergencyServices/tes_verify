@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Dimensions, Button, Modal, ScrollView, TouchableOpacity, Alert, FlatList, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
+import { RadioButton } from 'react-native-paper';
+
 
 import firebase from '../firebase.js'
 import '@firebase/firestore';
@@ -14,7 +16,11 @@ export default function ManagerApproveScreen() {
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
   const [clockRef, setClockRef] = useState({})
+  const[viewtype,setViewType] = useState('In')
+  const[modalVisible,setModalVisible] = useState(false)
 
+  const [detailApp,setDetailApp] = useState([] as any)
+  //var detailApp = [] as any
   const[hasAccess,setHasAccess] = useState(true)
 
 
@@ -46,13 +52,50 @@ export default function ManagerApproveScreen() {
          }
      }); */ 
 
-    const subscriber = firebase.firestore()
-    .collection('ClockInsOuts')
+    const subscriber = firebase.firestore().collection('ClockInsOuts')
     setClockRef(subscriber)
+    
+    /*if(viewtype == 'In') {
+      clockInQuery(subscriber).then(resultRecords => setRecords(resultRecords))
+    }
+    else{
+      clockOutQuery(subscriber).then(resultRecords => setRecords(resultRecords))
+    }
+    setLoading(false) */
+    let clockQuery
+    if(viewtype == 'In') {
+      clockQuery = subscriber
+      .where('in_approved' , '==', 'pending')
+      .onSnapshot(querySnapshot => {
+        const helperRecords = [] as any;
+        querySnapshot.forEach(documentSnapshot => {
+            helperRecords.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id
+          });
+        });
+        setRecords(helperRecords);
+        setLoading(false);
+      });
+    }
 
-    const clockInQuery = subscriber
+    else {
+      clockQuery = subscriber
+      .where('out_approved' , '==', 'pending')
+      .onSnapshot(querySnapshot => {
+        const helperRecords = [] as any;
+        querySnapshot.forEach(documentSnapshot => {
+            helperRecords.push({
+            ...documentSnapshot.data(),
+            key: documentSnapshot.id
+          });
+        });
+        setRecords(helperRecords);
+        setLoading(false);
+      });
+    }
+    /*const clockInQuery = subscriber
     .where('in_approved' , '==', 'pending')
-    // .where('out_approved', '==', 'pending')
     .onSnapshot(querySnapshot => {
       const helperRecords = [] as any;
       querySnapshot.forEach(documentSnapshot => {
@@ -77,29 +120,269 @@ export default function ManagerApproveScreen() {
       });
       setRecords(helperRecords);
       setLoading(false);
-    });
+    }); */
+    //() => clockInQuery()
+    return () => {clockQuery(); unmounted=true};
+  }, [viewtype])
 
-    () => clockInQuery()
-    return () => {clockOutQuery(); unmounted=true};
-  }, [])
+  const clockInQuery = async (subscriber) => {
+    const resultRecords = await subscriber.where('in_approved' , '==', 'pending')
+   .get().then(querySnapshot => {
+    const helperRecords = [] as any;
+    querySnapshot.forEach(documentSnapshot => {
+        helperRecords.push({
+        ...documentSnapshot.data(), 
+        key: documentSnapshot.id
+      })
+    })
+    return helperRecords;
+   })
+   return await resultRecords
+  }
 
-  /*
-    TODO: 
-    - capture all pending
-    - allow for option to approve/deny
-    - allow for editing (separate screen?)
-  */
-//  console.log(hasAccess)
-//  if (!hasAccess){
-//    return (
-//    <View style={styles.container}>
-//      <Text style={styles.header}> You are not authorized :( </Text>
-//    </View>
-//    )
-//  }
-  return (
+  
+  const clockOutQuery = async (subscriber) => {
+    const resultRecords = await subscriber.where('out_approved' , '==', 'pending')
+   .get().then(querySnapshot => {
+    const helperRecords = [] as any;
+    querySnapshot.forEach(documentSnapshot => {
+        helperRecords.push({
+        ...documentSnapshot.data(),
+        key: documentSnapshot.id
+      })
+    })
+    return helperRecords;
+   })
+   return await resultRecords
+  }
+  
+  const handleView =  (volunteerid) => {
+    const subscriber = firebase.firestore()
+    .collection('volunteers')
+       .where('userid' , '==', volunteerid)
+       .onSnapshot(querySnapshot => {
+        if(querySnapshot.empty) {
+        } else {
+         const queryDocumentSnapshot = querySnapshot.docs[0];
+         const queryDocumentSnapshotData = queryDocumentSnapshot.data()
+         setDetailApp(queryDocumentSnapshotData)
+         
+        }
+     });
+
+     setModalVisible(true)
+     
+  }
+  
+  const returnForIn = (
     <View style={styles.container}>
-      <Text style={styles.titleFlatList}>Approve Clock Ins and Outs</Text>
+       <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+       }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+           
+            <ScrollView style={{height:'90%'}}>
+              <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+              
+              <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+              <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+              <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+              <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+              <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+              <Text style={modalstyles.textStyle}>Address: </Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
+            </TouchableOpacity>
+            </View>
+            
+          </View>
+        </View>
+      </Modal>
+    <View style={{height:'34%'}}>
+    <View style={{height:'70%',alignItems:'center'}}> 
+
+    <Text style={styles.titleFlatList}>Pending Clock {viewtype}s </Text>
+     <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+        <Text style={styles.instructionsText}>Select to view pending clock ins or outs:</Text>
+          <RadioButton.Group onValueChange={value=> {setViewType(value); setLoading(true)}} value={viewtype}>
+            <View style={{flexDirection: 'row', paddingLeft: 20}}>
+              <RadioButton.Item labelStyle={styles.pending} label="Clock Ins" value="In"/>
+              <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
+           </View>
+          </RadioButton.Group>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef, viewtype)}>
+            <Text style={styles.exportText}>Approve All</Text>
+          </TouchableOpacity> 
+    </View> 
+    </View>
+    </View>
+    { 
+      loading ? 
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color="#E11383" />
+        </View>
+      :
+        <FlatList
+          data={records}
+          renderItem={({ item }) => (
+            <View style={styles.itemStyle2}>
+              <View>
+                <Text style={styles.userIdText}>{item.userid}</Text>
+              </View>
+              <View style={styles.row2}>
+            <Text style={styles.dateTimeText}>
+              {item.date}{"\n"}
+              {item.in_time}{"\n"}
+              <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
+            </Text>
+                <View>
+                  <TouchableOpacity style={styles.viewBtn} onPress={() => {handleView(item.userid)}}>
+                    <Text style={styles.actionText}>view</Text>
+                  </TouchableOpacity> 
+                </View>
+                <View>
+                  <TouchableOpacity style={styles.approvedBtn} onPress={() => {approve(item.key, "in", clockRef)}}>
+                    <Text style={styles.actionText}>approve</Text>
+                  </TouchableOpacity> 
+                </View>
+                <View>
+                  <TouchableOpacity style={styles.denyBtn} onPress={() => {deny(item.key, "in", clockRef)}}>
+                    <Text style={styles.actionText}>deny</Text>
+                  </TouchableOpacity> 
+                </View>
+                
+              </View>
+            </View>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      }
+  </View>
+  )
+
+
+  const returnForOut = (
+    <View style={styles.container}>
+       <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {setModalVisible(false);
+       }}
+      >
+        <View style={modalstyles.centeredView}>
+          <View style={modalstyles.modalView}>
+           
+            <ScrollView style={{height:'90%'}}>
+              <Text style={modalstyles.textStyle}>Application status: {detailApp.approved}</Text>
+              
+              <Text style={modalstyles.textStyle}>Name: {detailApp.firstName} {detailApp.lastName}</Text>
+              <Text style={modalstyles.textStyle}>Email: {detailApp.userid} </Text>
+              <Text style={modalstyles.textStyle}>Phone: {detailApp.phone} </Text>
+              <Text style={modalstyles.textStyle}>Sex: {detailApp.sex}</Text>
+              <Text style={modalstyles.textStyle}>Ethnicity: {detailApp.ethnicity}</Text>
+              <Text style={modalstyles.textStyle}>Address: </Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine1}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressLine2}</Text>
+              <Text style={modalstyles.textStyle}>    {detailApp.addressCity}, {detailApp.addressState}. {detailApp.addressZip}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 1: {detailApp.emergencyName1}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
+              <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
+              <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+            </ScrollView>
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
+            </TouchableOpacity>
+            </View>
+            
+          </View>
+        </View>
+      </Modal>
+    <View style={{height:'34%'}}>
+    <View style={{height:'70%',alignItems:'center'}}> 
+
+    <Text style={styles.titleFlatList}>Pending Clock {viewtype}s </Text>
+     <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+        <Text style={styles.instructionsText}>Select to view pending clock ins or outs:</Text>
+          <RadioButton.Group onValueChange={value=> {setViewType(value); setLoading(true)}} value={viewtype}>
+            <View style={{flexDirection: 'row', paddingLeft: 20}}>
+              <RadioButton.Item labelStyle={styles.pending} label="Clock Ins" value="In"/>
+              <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
+           </View>
+          </RadioButton.Group>
+          <TouchableOpacity style={styles.exportBtn} onPress={() => approveAllAlert(records, clockRef, viewtype)}>
+            <Text style={styles.exportText}>Approve All</Text>
+          </TouchableOpacity> 
+    </View> 
+    </View>
+    </View>
+    { 
+      loading ? 
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size="large" color="#E11383" />
+        </View>
+      :
+        <FlatList
+          data={records}
+          renderItem={({ item }) => (
+            <View style={styles.itemStyle2}>
+              <View>
+                <Text style={styles.userIdText}>{item.userid}</Text>
+              </View>
+              <View style={styles.row2}>
+            <Text style={styles.dateTimeText}>
+              {item.date}{"\n"}
+              {item.out_time}{"\n"}
+              <Text style={renderRecordStatus(item.out_approved)}>Out: {item.out_approved}</Text>
+            </Text>
+                <View>
+                  <TouchableOpacity style={styles.viewBtn} onPress={() => {handleView(item.userid)}}>
+                    <Text style={styles.actionText}>view</Text>
+                  </TouchableOpacity> 
+                </View>
+                <View>
+                  <TouchableOpacity style={styles.approvedBtn} onPress={() => {approve(item.key, "out", clockRef)}}>
+                    <Text style={styles.actionText}>approve</Text>
+                  </TouchableOpacity> 
+                </View>
+                <View>
+                  <TouchableOpacity style={styles.denyBtn} onPress={() => {deny(item.key, "out", clockRef)}}>
+                    <Text style={styles.actionText}>deny</Text>
+                  </TouchableOpacity> 
+                </View>
+                
+              </View>
+            </View>
+          )}
+          showsVerticalScrollIndicator={false}
+        />
+      }
+  </View>
+    
+  )
+  
+  if(viewtype == 'In') return (returnForIn)
+  else return (returnForOut)
+
+  return (
+    
+    <View style={styles.container}>
+      <Text style={styles.titleFlatList}>Approve Pending {viewtype} </Text>
       {/* TODO: show "no pending records" when records empty. 
           for some reason, it's currently populating records and then 
           immediately become empty currently
@@ -107,6 +390,7 @@ export default function ManagerApproveScreen() {
       {/* {
         records != [] ?
           <>  */}
+          {/*} REMOVED TO !!! FOR RADIO BUTTON. 
             <View style={styles.space}></View>
             <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef)}>
               <Text style={styles.exportText}>Approve All</Text>
@@ -116,12 +400,23 @@ export default function ManagerApproveScreen() {
               <Text style={styles.header}>Date</Text>
               <Text style={styles.header}>In</Text>
               <Text style={styles.header}>Out</Text>
-            </View>
+        </View> !!!*/}
           {/* </>
         :
           <Text style={styles.container}>No Pending Records!</Text>
       } */}
-      
+       <View style={{height:'55%',width:'100%',alignItems:'center'}}>
+          <Text style={styles.instructionsText}>Select to view pending clock ins or outs:</Text>
+            <RadioButton.Group onValueChange={value=> {setViewType(value); setLoading(true)}} value={viewtype}>
+              <View style={{flexDirection: 'row', paddingLeft: 20}}>
+                <RadioButton.Item labelStyle={styles.pending} label="Clock Ins" value="In"/>
+                <RadioButton.Item labelStyle={styles.approved} label="Clock Outs" value="Out"/>
+             </View>
+            </RadioButton.Group>
+            <TouchableOpacity style={styles.exportBtn} onPress={() => approveAll(records, clockRef, viewtype)}>
+              <Text style={styles.exportText}>Approve All</Text>
+            </TouchableOpacity> 
+      </View> 
       { 
         loading ? 
           <View style={styles.centerContainer}>
@@ -131,12 +426,14 @@ export default function ManagerApproveScreen() {
           <FlatList
             data={records}
             renderItem={({ item }) => (
-              <View style={styles.itemStyle}>
+              <View style={styles.itemStyle2}>
                 <View style={styles.row}>
                   <Text style={styles.userIdText}>{item.userid}</Text>
                 </View>
                 <View style={styles.row2}>
-                  <Text>{item.date}</Text>
+              <Text>{item.date}{"\n"}
+                    
+              </Text>
                   <View>
                     <Text>{item.in_time}</Text>
                     <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
@@ -168,14 +465,36 @@ export default function ManagerApproveScreen() {
   )
 }
 
+
+
 // FIXME: this may even approve those records that 
 // are no longer displaying or have been previously denied, 
 // must test this
-function approveAll(records: any, clockRef: any) {
-  records.forEach(record => {
-    approve(record.key, "in", clockRef)
-    approve(record.key, "out", clockRef)
-  })
+function approveAllAlert(records: any, clockRef: any, viewtype: any) {
+  Alert.alert(
+    'Are you sure?!',
+    'You are about to approve all pending entries. Are you sure you want to proceed?',
+     [
+       {text: 'Approve All', onPress: () => {console.log('Approve Pressed'); approveAll(records, clockRef, viewtype)}},
+       {text: 'CANCEL', onPress: () => console.log('cancel pressed')}
+      ],
+     {cancelable: false},
+   );
+}
+
+
+function approveAll(records: any, clockRef: any, viewtype: any) {
+  if(viewtype == 'In') {
+    records.forEach(record => {
+      approve(record.key, "in", clockRef)
+    })
+  }
+
+  else {
+    records.forEach(record => {
+      approve(record.key, "out", clockRef)
+    })
+  }
 }
 
 function approve(key: String, type: String, clockRef: any) {
@@ -251,6 +570,10 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center'
   },
+  itemStyle2: {
+    height: 150,
+ 
+  },
   row: {
     flexDirection: 'row',
     width: Dimensions.get('window').width,
@@ -262,8 +585,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around', 
   }, 
   userIdText: {
-    margin: 15, 
-    fontWeight: 'bold'
+    fontSize: 18,
+    margin: 15,
+    fontWeight: 'bold',
   },
   space: {
     margin: 15, 
@@ -276,6 +600,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   }, 
   actionText:{
+    fontSize: 16,
     color: 'white',
     fontWeight: 'bold',
     textAlign: 'center',
@@ -286,9 +611,11 @@ const styles = StyleSheet.create({
   }, 
   approvedBtn: {
     backgroundColor: 'green',
-    borderRadius: 15,
-    height: 20,
-    marginTop: 5
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    width: 80,
+    marginLeft: -20
   }, 
   denied: {
     color: 'red',
@@ -296,12 +623,102 @@ const styles = StyleSheet.create({
   }, 
   denyBtn: {
     backgroundColor: 'red',
-    borderRadius: 15,
-    height: 20,
-    marginTop: 5
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    width: 60,
+    marginLeft: -20
+  }, 
+  viewBtn: {
+    backgroundColor: "#1C5A7D", 
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    width: 60,
+    marginLeft: 0
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,
     justifyContent: 'center',
+  },
+  instructionsText:{
+    fontSize: 16, 
+    marginRight: '5%',
+    marginLeft: '5%',
+    textAlign: 'center'
+  },
+  dateTimeText:{
+    fontSize: 16,
+  },
+  backText: {
+    marginTop:10,
+    color:"white",
+    justifyContent: 'center',
+    alignContent: 'center',
+    fontWeight :'bold',
+    fontSize: 16, 
+    paddingBottom: 10
+  },
+
+  denyButton: {
+    width:"40%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:"100%",
+    alignItems:"center",
+    justifyContent:"center",
+    // marginTop:30,
+    // marginBottom:15
+  },
+  approveButton: {
+    width:"60%",
+    backgroundColor:"#1C5A7D",
+    borderRadius:25,
+    height:"100%",
+    alignItems:"center",
+    justifyContent:"center",
+    // marginTop:30,
+    // marginBottom:15
+  },
+});
+
+const modalstyles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 10,
+    height: 50,
+    justifyContent: 'center',
+    width: 100
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "left",
+    fontSize: 18
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });

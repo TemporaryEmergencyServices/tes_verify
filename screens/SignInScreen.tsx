@@ -56,9 +56,7 @@ export default function SignInScreen({ navigation }) {
   const goToSignUp = () => navigation.replace('SignUpScreen')
   const goToForgotPassword = () => navigation.replace('ForgotPasswordScreen')
   const goToMainBody = (role) => {
-    console.log('role', role)
     if (role == "superuser") {
-      console.log('user', role)
       navigation.replace('SuperuserBottomTabNavigator')
     } else if (role == "administrator") {
       navigation.replace('ManagerBottomTabNavigator')

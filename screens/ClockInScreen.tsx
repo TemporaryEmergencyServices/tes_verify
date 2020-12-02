@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, Platform } from 'react-native';
 import {  ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
-
+import { YellowBox } from 'react-native';
 import firebase from '../firebase.js'
 import '@firebase/firestore';
 
@@ -17,12 +17,18 @@ export default function ClockInScreen() {
   const [clockedIn, setClockedIn] = useState(false)
   const [inTime, setInTime] = useState('')
   const [outTime, setOutTime] = useState('')
+  const [timeElapsed, setTimeElapsed] = useState('')
   const [uniqueClockID, setUniqueClockID] = useState('')
+  const [ethnicityState, setEthnicityState] = useState('')
+  const [sexState, setSexState] = useState('')
+  const [firstNameState, setFirstNameState] = useState('')
+  const [lastNameState, setLastNameState] = useState('')
 
   const [fbClockedIn, setFbClockedIn] = useState('')
   const [fbInTime, setFbInTime] = useState('')
   const [fbOutTime, setFbOutTime] = useState('')
 
+  YellowBox.ignoreWarnings(['Setting a timer']);
   const[hasAccess,setHasAccess] = useState(false)
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
@@ -101,6 +107,12 @@ export default function ClockInScreen() {
          const queryDocumentSnapshot = querySnapshot.docs[0];
          const queryDocumentSnapshotData = queryDocumentSnapshot.data()
          setAppState(queryDocumentSnapshotData.approved)
+         if(queryDocumentSnapshotData.approved == 'approved') {
+           setFirstNameState(queryDocumentSnapshotData.firstName)
+           setLastNameState(queryDocumentSnapshotData.lastName)
+           setEthnicityState(queryDocumentSnapshotData.ethnicity)
+           setSexState(queryDocumentSnapshotData.sex)
+         }
          setLoading(false)
         }
      });
@@ -119,7 +131,7 @@ export default function ClockInScreen() {
               alert(`valid QR code!`);
             }
             else {
-              alert(`QR code not valid!`);
+              alert(`QR code not valid! If this message keeps appearing, ask for help.`);
             }
          });
   }
@@ -143,9 +155,9 @@ export default function ClockInScreen() {
         //set in time
         //create firebase entry
     const today = new Date()
-    const time = today.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true })
-     // + " " + (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
-    const date = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear()
+    const time = today.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+    const date =  today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0') 
+    
     if (!clockedIn) {handleClockIn(date, time)}
 
     else { handleClockOut(date, time)}
@@ -159,7 +171,9 @@ export default function ClockInScreen() {
   }
 
   const handleClockOut = (date: any, time: any) => {
+    console.log("Handle clock out called... time:",time, 'outTime before: ',outTime);
     setOutTime(time)
+    console.log('outTime after: ',outTime);
     writeFBClockOut(date, time)
     setClockedIn(false)
     alertOutLogged(date, time)
@@ -172,16 +186,40 @@ export default function ClockInScreen() {
       date: date,
       in_approved: "pending",
       currently_clocked_in: true,
+      sex: sexState,
+      ethnicity: ethnicityState,
+      firstName: firstNameState,
+      lastName: lastNameState
     });
     setUniqueClockID(snap.id)
   }
 
   const writeFBClockOut = async (date: any, time: any) => {
+    //Assumes times in format "MM:HH AM", e.g. "01:35 PM"
+    //                         01234567
+    var inHours = parseInt(inTime.substring(0,2));
+    console.log(inTime.substring(0,2));
+    console.log("inHours: ",inHours);
+    var inMins = parseInt(inTime.substring(3,5));
+    console.log("inMinutes: ",inMins);
+    
+    var outHours = parseInt(time.substring(0,2));
+    var outMins = parseInt(time.substring(3,5));
+    console.log("outMinutes: ",outMins);
+    var hoursElapsed = outHours - inHours;
+    var minutesElapsed = outMins - inMins;
+    if (minutesElapsed < 0){
+      minutesElapsed += 60;
+      hoursElapsed -= 1;
+    }
+    console.log("Hours elapsed: ",hoursElapsed, "Minutes elapsed: ",minutesElapsed);
     var snap = await firebase.firestore().collection('ClockInsOuts').doc(uniqueClockID).update({
       out_time: time,
       out_approved: "pending",
       currently_clocked_in: false,
-      out_date: date
+      out_date: date,
+      minutesElapsed : minutesElapsed,
+      hoursElapsed : hoursElapsed
     });
   }
 
@@ -222,7 +260,22 @@ export default function ClockInScreen() {
       return <Text>No access to camera</Text>;
     }
   }
+  if (showScanner){
+    return (
+      <View style={{flex:1, flexDirection:'column',justifyContent:'flex-end',alignItems:'center'}}>
+          
+              <BarCodeScanner style={StyleSheet.absoluteFillObject}
+                              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              />
 
+          
+          
+            <TouchableOpacity style={styles.scannerCloseButton} onPress={() => setShowScanner(false)}  >
+                  <Text>Close Camera</Text>
+            </TouchableOpacity>
+          
+      </View> 
+    )}
   if (clockedIn) {return (
 
     <View style={styles.container}>
@@ -240,7 +293,7 @@ export default function ClockInScreen() {
         }}>
         <Text style={styles.clockInOutText}>Clock Out</Text>
       </TouchableOpacity>
-      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      {/* {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
       : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
       : hasCamPermission === false ? <Text> no camera permission :( </Text>
       : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
@@ -251,7 +304,7 @@ export default function ClockInScreen() {
           <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           />
         </View>
-      }
+      } */}
 
     </View>
   )}
@@ -271,7 +324,7 @@ export default function ClockInScreen() {
         <Text style={styles.clockInOutText}>Clock In</Text>
       </TouchableOpacity>
 
-      {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
+      {/* {Platform.OS === 'web' ? <Text> Barcode scanner ignored for web version!</Text>
       : hasCamPermission === null ? <Text>Requesting for camera permission</Text> 
       : hasCamPermission === false ? <Text> no camera permission :( </Text>
       : showScanner === false ? <Text> Press clock in to scan a QR code</Text>
@@ -282,7 +335,7 @@ export default function ClockInScreen() {
           <BarCodeScanner style={StyleSheet.absoluteFillObject} onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
           />
         </View>
-      }
+      } */}
     </View>
   )}
 }
@@ -361,12 +414,17 @@ const styles = StyleSheet.create({
 
   scannerView: {
     height: "90%",
-    alignItems: "center"
+    alignItems: "center",
   },
-
   scannerCloseButton: {
-    height: "10%",
-    alignContent: "center"
+    width:"40%",
+    backgroundColor:"#E11383",
+    borderRadius:25,
+    height:"10%",
+    alignItems:"center",
+    justifyContent:"center",
+    // marginTop:30,
+    marginBottom:15
   },
 
   scanner: {

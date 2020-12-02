@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Button, Alert, TouchableOpacity, Image, View, Platform } from 'react-native';
+import { StyleSheet, Button, Alert, TouchableOpacity, Image, View, Platform, Text } from 'react-native';
 import firebase from '../firebase.js'
 
 import { useSelector, useDispatch, RootStateOrAny } from 'react-redux'
@@ -8,7 +8,7 @@ import { useEffect, useState, Component, useLayoutEffect} from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 
-export default function UploadProfileImageScreen() {
+export default function UploadProfileImageScreen({  navigation  }) {
   const [image, setImage] = useState(null);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ export default function UploadProfileImageScreen() {
     })();
   }, []);
 
+  const goToProfile = () => {navigation.replace('SignInScreen') }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -34,13 +35,48 @@ export default function UploadProfileImageScreen() {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      uploadImage(result.uri)
+      .catch(error => {
+        Alert.alert(
+          "Error",
+          error.message,
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+      })
     }
+  };
+  
+  const uploadImage = async (uri) => {
+    //const imageName = useSelector((state: RootStateOrAny) => state.user).username;
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const ref = firebase.storage().ref().child(`my-image`);
+    return ref.put(blob);
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+    <View style={styles.container}>    
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+      </View>
+      <TouchableOpacity onPress = {goToProfile}>
+        <Text style={styles.returnToProfileText}>Return to Profile</Text>
+      </TouchableOpacity>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  returnToProfileText:{
+    color:"black"
+  }
+})
