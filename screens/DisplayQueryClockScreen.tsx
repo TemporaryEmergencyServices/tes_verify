@@ -102,6 +102,8 @@ const get_aoa_data = () => {
     cur.push(element.out_approved);
     cur.push(element.hoursElapsed);
     cur.push(element.minutesElapsed);
+    cur.push(element.ethnicity);
+    cur.push(element.sex);
     aoa.push(cur);
   });
   return aoa;
