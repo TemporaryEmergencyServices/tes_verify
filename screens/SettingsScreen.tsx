@@ -14,7 +14,6 @@ export default function SettingsScreen({ navigation }) {
   const user = useSelector((state: RootStateOrAny) => state.user)
   const userEmail = user.username
   const userRole = user.role
-  const userStorageRef = firebase.storage().ref().child(userEmail + `-profile-image`).getDownloadURL().then((url) => setImgState(url))
   const dispatch = useDispatch()
   const [appID, setAppID] = useState('')
 
@@ -44,6 +43,16 @@ export default function SettingsScreen({ navigation }) {
 
     return () => subscriber();
   } ,[]);
+
+  const downloadProfileImg = () => {
+    firebase.storage()
+      .ref()
+      .child(String(userEmail) + `-profile-image`)
+      .getDownloadURL()
+      .then((url) => setImgState(url))
+      .catch(() => setImgState("none"))
+  }
+  downloadProfileImg()
 
   const goToApply = () => navigation.push('ApplyScreen')
   const goToSignIn = () => navigation.replace('SignInScreen')
@@ -182,7 +191,6 @@ export default function SettingsScreen({ navigation }) {
         </View>
       </Modal>
         
-        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a pending application. You may view the application using the button below. If you are waiting on approval, please speak with a TES employee.
@@ -323,8 +331,6 @@ export default function SettingsScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-        
-        <Image style={styles.profileImg} source={{uri: imgState}}/> 
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <Text style={styles.instructions}> Your email 
           <Text style={styles.emph}> {userEmail}</Text> has a denied application. You may view the denied application and re-apply below.
