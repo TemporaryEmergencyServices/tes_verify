@@ -27,7 +27,8 @@ export default function RecordsScreen() {
 
   const [loading, setLoading] = useState(true)
   const [records, setRecords] = useState([] as any)
-
+  const [totalHours,setTotalHours] = useState(0)
+  const [totalMinutes, setTotalMinutes] = useState(0)
   //OLD USE EFFECT WITH REALTIME DATABASE
   //DO NOT DELETE YET - THIS HAS SOME THINGS THAT FIXED SOME WEIRD BUGS
   //DONT WANT TO DELETE UNTIL I KNOW THAT THEY WONT APPEAR WITH FIRESTORE
@@ -56,6 +57,8 @@ export default function RecordsScreen() {
   }); */
 
   useEffect(() => {
+    var totalHours = 0;
+    var totalMinutes = 0;
     const subscriber = firebase.firestore()
        .collection('ClockInsOuts')
        .where('userid' , '==', userEmail)
@@ -66,17 +69,25 @@ export default function RecordsScreen() {
            ...documentSnapshot.data(),
            key: documentSnapshot.id
            });
+           totalHours += documentSnapshot.data().hoursElapsed;
+           console.log(documentSnapshot.data().hoursElapsed);
+           totalMinutes += documentSnapshot.data().minutesElapsed;
          });
          setRecords(helperRecords);
+         totalHours += totalMinutes/60;//integer division
+         totalMinutes = totalMinutes % 60;//modulo
+         setTotalHours(totalHours);
+         setTotalMinutes(totalMinutes);
          setLoading(false);
      });
+
     return () => subscriber();
   } ,[]);
  
 //array of arrays format
   const get_aoa_data = () => {
     const header = ['email','is currently clocked in','clock in date','clock in time',
-              'clock out date','clock out time','clock in approved','clock out approved'];
+              'clock out date','clock out time','clock in approved','clock out approved','Hours Elapsed','Minutes Elapsed'];
     var aoa = [header];
     records.forEach(element => {
       var cur = [];
@@ -89,6 +100,8 @@ export default function RecordsScreen() {
       cur.push(element.out_time);
       cur.push(element.in_approved);
       cur.push(element.out_approved);
+      cur.push(element.hoursElapsed);
+      cur.push(element.minutesElapsed);
   
       aoa.push(cur);
     });
@@ -132,7 +145,9 @@ export default function RecordsScreen() {
       <TouchableOpacity style={styles.exportBtn} onPress={() => {writeToCSV();}}>
         <Text style={styles.exportText} >Export as CSV</Text>
       </TouchableOpacity> 
-
+      <View>
+        <Text>Total time logged: {totalHours}:{totalMinutes}</Text>
+      </View>
       <View style={styles.space}></View>
       <View style={styles.row}>
         <Text style={styles.header}>Date</Text>
