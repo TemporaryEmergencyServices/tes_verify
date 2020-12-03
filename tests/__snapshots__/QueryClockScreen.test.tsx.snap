@@ -251,7 +251,7 @@ exports[`<QueryClockScreen /> renders correctly 1`] = `
             ]
           }
         >
-          2020-12-02
+          2020-12-03
         </Text>
       </View>
       <Image
@@ -356,7 +356,7 @@ exports[`<QueryClockScreen /> renders correctly 1`] = `
                     }
                   >
                     <RCTDatePicker
-                      date={1606888800000}
+                      date={1606975200000}
                       mode="date"
                       onChange={[Function]}
                       onResponderTerminationRequest={[Function]}
@@ -532,7 +532,7 @@ exports[`<QueryClockScreen /> renders correctly 1`] = `
             ]
           }
         >
-          2020-12-02
+          2020-12-03
         </Text>
       </View>
       <Image
@@ -637,7 +637,7 @@ exports[`<QueryClockScreen /> renders correctly 1`] = `
                     }
                   >
                     <RCTDatePicker
-                      date={1606888800000}
+                      date={1606975200000}
                       mode="date"
                       onChange={[Function]}
                       onResponderTerminationRequest={[Function]}
