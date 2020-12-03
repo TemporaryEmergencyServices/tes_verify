@@ -8,11 +8,12 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Button } fr
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
 import DatePicker from 'react-native-datepicker';
+//date picker code from https://snack.expo.io/@aboutreact/date-picker-example?session_id=snack-session-TT5a8E!7q
 
 export default function QueryClockScreen({ navigation }) {
-
-  const [startDateState,setStartDateState] = useState('')
-  const [stopDateState,setStopDateState] = useState('')
+  const today = new Date()
+  const [startDateState,setStartDateState] = useState(today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0'))
+  const [stopDateState,setStopDateState] = useState(today.getFullYear().toString() + '-' + (today.getMonth() + 1).toString().padStart(2, '0') + '-' + today.getDate().toString().padStart(2, '0'))
   const [userIdState,setUserIdState] = useState('')
   const [ethnicityState, setEthnicityState] = useState('')
   const [sexState, setSexState] = useState('')
@@ -74,12 +75,12 @@ export default function QueryClockScreen({ navigation }) {
           placeholderTextColor="grey"
           onChangeText={text => setSexState(text)}/>
       </View>
-      
+      <Text style={styles.dateRange}> Date Range (from, to): </Text>
       <DatePicker
           style={styles.datePickerStyle}
           date = {startDateState}
           mode="date" //The enum of date, datetime and time
-          placeholder="Start Date"
+          placeholder={startDateState}
           format="YYYY-MM-DD"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
@@ -99,12 +100,12 @@ export default function QueryClockScreen({ navigation }) {
             setStartDateState(date);
           }}
         />
-
+       
         <DatePicker
           style={styles.datePickerStyle}
           date = {stopDateState}
           mode="date" //The enum of date, datetime and time
-          placeholder="Stop Date"
+          placeholder={stopDateState}
           format="YYYY-MM-DD"
           confirmBtnText="Confirm"
           cancelBtnText="Cancel"
@@ -180,6 +181,15 @@ const styles = StyleSheet.create({
       paddingRight: 7,
       paddingLeft: 7
     },
+    dateRange:{
+      fontSize:16,
+      fontWeight: 'bold',
+      color:"black",
+      marginBottom:7,
+      textAlign: 'center',
+      paddingRight: 7,
+      paddingLeft: 7
+    },
     inputView:{
       width:270,
       backgroundColor:"#2B2E32",
@@ -237,8 +247,8 @@ const styles = StyleSheet.create({
     },
     datePickerStyle: {
         width: 200,
-        marginTop: 15,
-        marginBottom: 5,
+        marginTop: 7,
+        marginBottom: 7,
       },
   })
   
