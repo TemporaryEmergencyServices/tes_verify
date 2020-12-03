@@ -221,7 +221,7 @@ export default function ApplyScreen({  navigation  }) {
       <View style={styles.inputView} >
         <TextInput  
           style={styles.inputText}
-          placeholder="Emergency contact 1 phone number" 
+          placeholder="Emergency contact 2 phone number" 
           placeholderTextColor="white"
           onChangeText={text => setEmergencyPhone2State(text)}/>
       </View>
