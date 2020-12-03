@@ -102,7 +102,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
               out_time: outTime,
               currently_clocked_in: false,
               hoursElapsed: hoursElapsed,
-              minutesElapsed: minutesElapsed
+              minutesElapsed: minutesElapsed,
+              out_approved: "approved"
             })
           })
         }).then(() => {

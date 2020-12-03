@@ -175,17 +175,17 @@ export default function ManagerQRcodesScreen({navigation}) {
           </View>
         </RadioButton.Group>
         <View>
-          <TouchableOpacity onPress={() => createQRrecord(newNickname,codeRef)}>
-            <Text>Generate new QR code with nickname: </Text>  
-          </TouchableOpacity>
           <View style={styles.inputView} >
             <TextInput  
               style={styles.inputText}
               placeholder="Nickname" 
-              placeholderTextColor="white"
+              placeholderTextColor="grey"
               onChangeText={text => setNewNickname(text)}
             />
           </View>
+          <TouchableOpacity style={styles.generateBtn} onPress={() => createQRrecord(newNickname,codeRef)}>
+            <Text>Generate new QR code with above nickname. </Text>  
+          </TouchableOpacity>
         </View> 
         <View style={styles.space}></View>
         <View style={styles.row}>
@@ -335,6 +335,9 @@ const styles = StyleSheet.create({
   space: {
     margin: 15
   }, 
+  smallerSpace: {
+    margin: 7
+  }, 
   bigSpace: {
     margin: 100
   }, 
@@ -360,6 +363,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     borderRadius: 10,
     padding: 10
+  }, 
+  generateBtn: {
+    backgroundColor: "lightgrey", 
+    fontSize: 20,
+    borderRadius: 10,
+    
   }, 
   centerContainer: {
     height: Dimensions.get('window').height / 2,
