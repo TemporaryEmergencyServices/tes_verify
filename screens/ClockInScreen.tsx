@@ -205,7 +205,10 @@ export default function ClockInScreen() {
       sex: sexState,
       ethnicity: ethnicityState,
       firstName: firstNameState,
-      lastName: lastNameState
+      lastName: lastNameState,
+      hoursElapsed: 0, 
+      minutesElapsed: 0
+
     });
     setUniqueClockID(snap.id)
   }
