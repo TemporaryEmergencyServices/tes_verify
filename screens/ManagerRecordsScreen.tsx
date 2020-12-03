@@ -7,7 +7,9 @@ import { RootStackParamList } from '../types';
 export default function ManagerRecordsScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Use this screen as a home base for searching clock ins, creating clock ins, and clocking people out. </Text>
+      <Text style={styles.title}> Volunteer Records </Text>
+      <Text style={styles.subTitle}> Create and manage volunteer's clock in and out records here. </Text>
+      <View style={styles.bigSpace}></View>
       <TouchableOpacity style={styles.appBtns} onPress={() => {navigation.push('CreateClockRecordScreen') }}>
         <Text style={styles.signOutText}>Create Clock In/Out Record</Text>
       </TouchableOpacity>
@@ -33,7 +35,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 10
   },
+  subTitle: {
+    fontSize: 20,
+    textAlign: 'center'
+  },
+  bigSpace: {
+    margin: 10
+  }, 
   link: {
     marginTop: 15,
     paddingVertical: 15,

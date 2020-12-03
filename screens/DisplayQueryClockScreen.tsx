@@ -142,7 +142,8 @@ return (
       </Modal>
 
 
-        <Text style={styles.titleFlatList}>Searching: {firstName} {lastName} {userId} {ethnicity} {sex} {startDate} {stopDate}</Text>
+        <Text style={styles.titleFlatList}>Searching:</Text>
+        <Text style = {styles.instructions}> {firstName} {lastName} {userId} {ethnicity} {sex} {startDate} {stopDate}</Text>
 
         <TouchableOpacity style={styles.exportBtn} onPress={() => {}}>
             <Text style={styles.exportText} >Export as CSV</Text>
@@ -192,7 +193,13 @@ return (
             showsVerticalScrollIndicator={false}
             />
         }
+       <Button 
+        title="LEAVE PAGE" 
+        color = "#1C5A7D" 
+        onPress={() => navigation.goBack()} />
         <View style={styles.bigSpace}></View>
+  
+
     </View>
 
   );
@@ -250,7 +257,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         textAlign: 'center',
         paddingTop: 60,
-        paddingBottom: 15,
         color: "#1C5A7D",
       },
       separator: {
@@ -279,7 +285,8 @@ const styles = StyleSheet.create({
       color:"#1C5A7D",
       textAlign: 'center',
       paddingRight: 7,
-      paddingLeft: 7
+      paddingLeft: 7, 
+      marginBottom: 5
     },
     inputView:{
       width:270,
@@ -365,7 +372,7 @@ const styles = StyleSheet.create({
         margin: 15
       }, 
       bigSpace: {
-        margin: 30
+        margin: 10
       }, 
       pending: {
         color: 'orange',
