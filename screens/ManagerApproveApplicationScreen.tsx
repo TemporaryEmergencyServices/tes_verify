@@ -213,9 +213,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         </View> 
       </View>
       {
-          console.log('FILT', records.filter((record) => {return record.approved === viewtype}).length)
-          // records.filter((record) => {return record.approved === viewtype}).length === 0 &&
-          // <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} applications!</Text>
+          records.filter((record) => {return record.approved === viewtype}).length === 0 &&
+          <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} applications!</Text>
       }
       { 
         loading ? 
