@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ManagerRecordsScreen /> renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "center",
+      "padding": 20,
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 20,
+        "fontWeight": "bold",
+        "marginBottom": 10,
+        "textAlign": "center",
+      }
+    }
+  >
+     Volunteer Records 
+  </Text>
+  <Text
+    style={
+      Object {
+        "fontSize": 20,
+        "textAlign": "center",
+      }
+    }
+  >
+     Create and manage volunteer's clock in and out records here. 
+  </Text>
+  <View
+    style={
+      Object {
+        "margin": 10,
+      }
+    }
+  />
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1C5A7D",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 13,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignContent": "center",
+          "color": "white",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "justifyContent": "center",
+          "marginTop": 10,
+          "paddingBottom": 10,
+        }
+      }
+    >
+      Create Clock In/Out Record
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1C5A7D",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 13,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignContent": "center",
+          "color": "white",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "justifyContent": "center",
+          "marginTop": 10,
+          "paddingBottom": 10,
+        }
+      }
+    >
+      Manual Clock Out Volunteer
+    </Text>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#1C5A7D",
+        "borderRadius": 25,
+        "height": 50,
+        "justifyContent": "center",
+        "marginBottom": 10,
+        "marginTop": 13,
+        "opacity": 1,
+        "width": "80%",
+      }
+    }
+  >
+    <Text
+      style={
+        Object {
+          "alignContent": "center",
+          "color": "white",
+          "fontSize": 18,
+          "fontWeight": "bold",
+          "justifyContent": "center",
+          "marginTop": 10,
+          "paddingBottom": 10,
+        }
+      }
+    >
+      Get Volunteer Records
+    </Text>
+  </View>
+</View>
+`;

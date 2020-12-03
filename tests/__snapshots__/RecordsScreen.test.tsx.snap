@@ -36,7 +36,7 @@ exports[`<RecordsScreen /> renders correctly 1`] = `
   </Text>
   <View
     accessible={true}
-    focusable={false}
+    focusable={true}
     onClick={[Function]}
     onResponderGrant={[Function]}
     onResponderMove={[Function]}
@@ -72,7 +72,61 @@ exports[`<RecordsScreen /> renders correctly 1`] = `
         ]
       }
     >
-      Export as PDF
+      Export as CSV
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+        },
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+          },
+          undefined,
+        ]
+      }
+    >
+      Total time logged: 
+      0
+       hours and 
+      0
+       minutes
+    </Text>
+  </View>
+  <View
+    style={
+      Array [
+        Object {
+          "backgroundColor": "#fff",
+        },
+        undefined,
+      ]
+    }
+  >
+    <Text
+      style={
+        Array [
+          Object {
+            "color": "#000",
+          },
+          undefined,
+        ]
+      }
+    >
+      Total approved time logged: 
+      0
+       hours and 
+      0
+       minutes
     </Text>
   </View>
   <View
