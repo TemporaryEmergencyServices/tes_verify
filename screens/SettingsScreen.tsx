@@ -265,8 +265,7 @@ export default function SettingsScreen({ navigation }) {
           </View>
         </View>
       </Modal>
-        
-        <Image style={styles.profileImg} source={{uri: imgState}}/> 
+      
         <Text style={styles.largeTitle}> Welcome Back! </Text>
         <View style={styles.container}>
           <Image style={styles.profileImg} source={{uri: imgState}}/> 
@@ -283,7 +282,8 @@ export default function SettingsScreen({ navigation }) {
         <TouchableOpacity style={styles.signOutBtn} onPress={handleLogout}>
           <Text style={styles.signOutText}>Sign Out</Text>
         </TouchableOpacity>    
-      </View>
+        </View>
+     
   )
 
   const returnForDenied = (
@@ -421,7 +421,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     color: "#1C5A7D",
-    marginBottom: 40
+    marginTop:20,
+    marginBottom: 40,
   },
   instructions: {
     fontSize: 20,
