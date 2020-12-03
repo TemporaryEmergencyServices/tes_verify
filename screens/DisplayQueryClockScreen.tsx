@@ -154,6 +154,41 @@ async function writeToCSV () {
      setModalVisible(true) 
   }
 
+  
+  /*const handleDeleteAlert = (recordkey: any) => {
+    Alert.alert(
+      'WARNING',
+      "Are you sure you want to permanently delete this record? This action CANNOT be undone. ",
+       [
+         {text: 'Delete', onPress: () => {handleDelete(recordkey); console.log('Delete Pressed');}},
+         {text: 'Cancel', onPress: () => {console.log('Cancel Pressed'); }},
+
+       ],
+       {cancelable: false},
+     );
+  }
+
+  const handleDelete = (recordkey: any) => {
+    setModalVisible(false)
+    setRecordKey('')
+    setDetailApp({
+      firstName: "deleted",
+      lastName: "deleted",
+      userid: "deleted",
+      in_approved : "deleted",
+      out_approved: "deleted",
+      sex: "deleted",
+      ethnicity: "deleted",
+      date: "deleted",
+      out_date: "deleted",
+      in_time: "deleted",
+      out_time: "deleted",
+      key: "deleted"
+      })
+
+    firebase.firestore().collection('ClockInsOuts').doc(recordkey).delete()
+  } */
+
 
 return (
     
@@ -184,7 +219,8 @@ return (
               <Text style={modalstyles.textStyle}>Out Status: {detailApp.out_approved}</Text>
 
             </ScrollView>
-            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
+            
+            <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white', marginBottom: '5%'}}>
             <TouchableOpacity style={modalstyles.openButton} 
               onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
             </TouchableOpacity>
@@ -195,6 +231,14 @@ return (
                 <Text style={styles.backText}>Deny</Text>
               </TouchableOpacity>
             </View>
+
+            {/* 
+            <View style={{height: "5%", flexDirection:'row',alignItems:'center',backgroundColor:'white', marginTop: "7%"}}>
+            <TouchableOpacity style={styles.deleteButton} 
+              onPress={() => {handleDeleteAlert(recordKey)}}><Text style = {styles.actionText}>PERMANENTLY DELETE</Text>
+            </TouchableOpacity>
+            </View>
+            */}
             
           </View>
         </View>
@@ -484,6 +528,16 @@ const styles = StyleSheet.create({
         // marginTop:30,
         // marginBottom:15
     },
+    deleteButton: {
+      width: "90%",
+      backgroundColor:"darkred",
+      borderRadius:25,
+      height:"100%",
+      alignItems:"center",
+      justifyContent:"center",
+      // marginTop:30,
+      // marginBottom:15
+  },
     approveButton: {
         width:"30%",
         backgroundColor:"#1C5A7D",
