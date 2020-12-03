@@ -214,16 +214,17 @@ export default function ClockInScreen() {
     //Assumes times in format "MM:HH AM", e.g. "01:35 PM"
     //                         01234567
     var inAMPM = inTime.substring(6,8);
-    
     var inHours = parseInt(inTime.substring(0,2));
+
     if(inAMPM == 'PM' && inHours!=12) {inHours = inHours + 12}
     console.log(inTime.substring(0,2));
     console.log("inHours: ",inHours);
     var inMins = parseInt(inTime.substring(3,5));
     console.log("inMinutes: ",inMins);
     
-    var outAMPM = outTime.substring(6,8);
+    var outAMPM = time.substring(6,8);
     var outHours = parseInt(time.substring(0,2));
+
     if(outAMPM == 'PM' && outHours!=12) {outHours = outHours + 12}
     var outMins = parseInt(time.substring(3,5));
     console.log("outMinutes: ",outMins);
