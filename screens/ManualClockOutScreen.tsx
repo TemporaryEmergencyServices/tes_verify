@@ -56,7 +56,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     }
 
     const submitOutTime = async (userid, date, inTime) => {
-      var errorMessage
+      var errorMessage = ''
       if (outTime == '') {errorMessage = 'Please enter the clock out time.'}
       if (outTime.substring(2, 3) != ':' || outTime.length != 8 || outTime.substring(5,6) != ' ' || (outTime.substring(6,8) != 'AM' && outTime.substring(6,8) != 'PM'))
       {errorMessage = 'Please enter the clock out time in the format HH:MM AM/PM. Example: 01:35 PM'}
