@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, Modal, ScrollView, TouchableOpacity, Alert, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Dimensions, Button, Image, Modal, ScrollView, TouchableOpacity, Alert, FlatList, ActivityIndicator } from 'react-native';
 import { useEffect, useState } from 'react'
 import { RadioButton } from 'react-native-paper';
 
@@ -22,6 +22,7 @@ export default function ManagerApproveScreen() {
   const [detailApp,setDetailApp] = useState([] as any)
   //var detailApp = [] as any
   const[hasAccess,setHasAccess] = useState(true)
+  const [imgState, setImgState] = useState("none")
 
 
   const user = useSelector((state: RootStateOrAny) => state.user)
@@ -125,6 +126,15 @@ export default function ManagerApproveScreen() {
     return () => {clockQuery(); unmounted=true};
   }, [viewtype])
 
+  const downloadProfileImg = (email) => {
+    firebase.storage()
+      .ref()
+      .child(String(email) + `-profile-image`)
+      .getDownloadURL()
+      .then((url) => setImgState(url))
+      .catch(() => setImgState("none"))
+  }
+
   const clockInQuery = async (subscriber) => {
     const resultRecords = await subscriber.where('in_approved' , '==', 'pending')
    .get().then(querySnapshot => {
@@ -183,6 +193,7 @@ export default function ManagerApproveScreen() {
         onRequestClose={() => {setModalVisible(false);
        }}
       >
+      {downloadProfileImg(detailApp.userid)}
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
            
@@ -202,6 +213,8 @@ export default function ManagerApproveScreen() {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
               <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+              <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+              <Image style={modalstyles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
             <TouchableOpacity style={modalstyles.openButton} 
@@ -284,6 +297,7 @@ export default function ManagerApproveScreen() {
         onRequestClose={() => {setModalVisible(false);
        }}
       >
+      {downloadProfileImg(detailApp.userid)}
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
            
@@ -303,6 +317,8 @@ export default function ManagerApproveScreen() {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
               <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+              <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+              <Image style={modalstyles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
             <TouchableOpacity style={modalstyles.openButton} 
@@ -720,5 +736,10 @@ const modalstyles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  profileImg: {
+    width: 200,
+    height: 200,
+    marginBottom: 20
   }
 });

@@ -56,7 +56,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
     }
 
     const submitOutTime = async (userid, date, inTime) => {
-      var errorMessage
+      var errorMessage = ''
       if (outTime == '') {errorMessage = 'Please enter the clock out time.'}
       if (outTime.substring(2, 3) != ':' || outTime.length != 8 || outTime.substring(5,6) != ' ' || (outTime.substring(6,8) != 'AM' && outTime.substring(6,8) != 'PM'))
       {errorMessage = 'Please enter the clock out time in the format HH:MM AM/PM. Example: 01:35 PM'}
@@ -71,6 +71,25 @@ export default function CreateClockRecordsScreen({  navigation  }) {
            {cancelable: false},
         )
       } else {
+
+        var inAMPM = inTime.substring(6,8);
+        var inHours = parseInt(inTime.substring(0,2));
+
+        if(inAMPM == 'PM' && inHours!=12) {inHours = inHours + 12}
+        var inMins = parseInt(inTime.substring(3,5));
+
+        var outAMPM = outTime.substring(6,8);
+        var outHours = parseInt(outTime.substring(0,2));
+
+        if(outAMPM == 'PM' && outHours!=12) {outHours = outHours + 12}
+        var outMins = parseInt(outTime.substring(3,5));
+
+        var hoursElapsed = outHours - inHours;
+        var minutesElapsed = outMins - inMins;
+        if (minutesElapsed < 0){
+          minutesElapsed += 60;
+          hoursElapsed -= 1;
+        }
         const recordRef = firebase.firestore().collection('ClockInsOuts')
         .where('userid', '==', userid)
         .where('date', '==', date)
@@ -79,8 +98,12 @@ export default function CreateClockRecordsScreen({  navigation  }) {
         recordRef.get().then(querySnapshot => {
           querySnapshot.forEach(doc => {
             doc.ref.update({
+              
               out_time: outTime,
-              currently_clocked_in: false
+              currently_clocked_in: false,
+              hoursElapsed: hoursElapsed,
+              minutesElapsed: minutesElapsed,
+              out_approved: "approved"
             })
           })
         }).then(() => {
@@ -114,13 +137,15 @@ export default function CreateClockRecordsScreen({  navigation  }) {
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
             <ScrollView style={{height:'90%'}}>
-              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
               <Text style={modalstyles.textStyle}>Username: {detailRecord.userid}</Text>
-              <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
+              <Text style={modalstyles.textStyle}></Text>
+              <Text style={modalstyles.textStyle}>Clocked In:</Text>
+              <Text style={modalstyles.textStyle}>{detailRecord.date} at {detailRecord.in_time}</Text>
+              <View style={styles.bigSpace}></View>
               <View style={styles.inputView} >
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Out Time (HH:MM) AM/PM" 
+                  placeholder="Out Time HH:MM AM/PM" 
                   placeholderTextColor="white"
                   onChangeText={text => setOutTime(text)}
                 />
@@ -131,6 +156,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
               >
                 <Text style={styles.signUpText}>Submit Out Time</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text style={styles.signUpText}>Close</Text></TouchableOpacity>
+
             </ScrollView>
           </View>
         </View>
@@ -183,6 +210,9 @@ const styles = StyleSheet.create({
     color: "#1C5A7D",
     
   },
+  bigSpace: {
+    margin: 10
+  }, 
   container: {
     flex: 1,
     backgroundColor: '#FFFFFF',
@@ -239,6 +269,7 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     padding: 20,
     paddingRight: 40,
+    alignSelf: 'center'
     
   },
   inputText:{
@@ -261,14 +292,15 @@ const styles = StyleSheet.create({
     height:50,
     alignItems:"center",
     justifyContent:"center",
-
+    alignSelf: 'center',
     marginBottom:10
   },
   clockOutBtn: {
-    backgroundColor: "red", 
+    backgroundColor: "#1C5A7D", 
     fontSize: 20,
     borderRadius: 10,
-    padding: 10
+    padding: 10,
+    alignContent: 'center'
   },
   createAccountBtn:{
     width:"80%",
@@ -287,6 +319,7 @@ const styles = StyleSheet.create({
     color:"white",
     fontSize: 18,
     fontWeight: "bold", 
+    textAlign: 'center'
   },
   input: {
     margin: 5,
@@ -321,10 +354,14 @@ const modalstyles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
+    backgroundColor: "grey",
+    borderRadius: 10,
     padding: 10,
-    elevation: 2
+    elevation: 2,
+    width: "80%",
+    alignSelf: 'center',
+    height: "17%",
+    marginTop: 20
   },
   textStyle: {
     color: "black",

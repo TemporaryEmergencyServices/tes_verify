@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Dimensions, Button, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, Button, Image, TouchableOpacity, Alert, FlatList, ActivityIndicator, Modal,TouchableHighlight, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react'
 import { TextInput } from 'react-native'
 
@@ -25,6 +25,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
   const userEmail = user.username
 
   const [detailApp,setDetailApp] = useState([] as any)
+  const [imgState, setImgState] = useState("none")
   useEffect(() => {
     let unmounted = false
     const roleSubscriber = firebase.firestore()
@@ -62,6 +63,15 @@ export default function ManagerApproveApplicationScreen({navigation}) {
     setLoading(false) 
     return () => { roleSubscriber(); unmounted=false };
   }, [viewtype])
+
+  const downloadProfileImg = (email) => {
+    firebase.storage()
+      .ref()
+      .child(String(email) + `-profile-image`)
+      .getDownloadURL()
+      .then((url) => setImgState(url))
+      .catch(() => setImgState("none"))
+  }
 
   const pendingQuery = async (ref) => {
     const resultRecords = await ref.where('approved','==',viewtype)
@@ -135,6 +145,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         onRequestClose={() => {setModalVisible(false);
         }}
       >
+        {downloadProfileImg(detailApp.userid)}
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
             <ScrollView style={{height:'90%'}}>
@@ -158,6 +169,8 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone1}</Text>
               <Text style={modalstyles.textStyle}>Emergency contact 2: {detailApp.emergencyName2}</Text>
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
+              <Text style={modalstyles.textStyle}>    Profile Image:</Text>
+              <Image style={modalstyles.profileImg} source={{uri: imgState}}/> 
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
               <TouchableOpacity style={styles.approveButton} onPress={() => {
@@ -494,5 +507,10 @@ const modalstyles = StyleSheet.create({
   modalText: {
     marginBottom: 15,
     textAlign: "center"
+  },
+  profileImg: {
+    width: 200,
+    height: 200,
+    marginBottom: 20
   }
 });
