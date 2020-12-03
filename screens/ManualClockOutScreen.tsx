@@ -71,6 +71,25 @@ export default function CreateClockRecordsScreen({  navigation  }) {
            {cancelable: false},
         )
       } else {
+
+        var inAMPM = inTime.substring(6,8);
+        var inHours = parseInt(inTime.substring(0,2));
+
+        if(inAMPM == 'PM' && inHours!=12) {inHours = inHours + 12}
+        var inMins = parseInt(inTime.substring(3,5));
+
+        var outAMPM = outTime.substring(6,8);
+        var outHours = parseInt(outTime.substring(0,2));
+
+        if(outAMPM == 'PM' && outHours!=12) {outHours = outHours + 12}
+        var outMins = parseInt(outTime.substring(3,5));
+
+        var hoursElapsed = outHours - inHours;
+        var minutesElapsed = outMins - inMins;
+        if (minutesElapsed < 0){
+          minutesElapsed += 60;
+          hoursElapsed -= 1;
+        }
         const recordRef = firebase.firestore().collection('ClockInsOuts')
         .where('userid', '==', userid)
         .where('date', '==', date)
@@ -79,8 +98,11 @@ export default function CreateClockRecordsScreen({  navigation  }) {
         recordRef.get().then(querySnapshot => {
           querySnapshot.forEach(doc => {
             doc.ref.update({
+              
               out_time: outTime,
-              currently_clocked_in: false
+              currently_clocked_in: false,
+              hoursElapsed: hoursElapsed,
+              minutesElapsed: minutesElapsed
             })
           })
         }).then(() => {
