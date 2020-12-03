@@ -114,7 +114,6 @@ export default function CreateClockRecordsScreen({  navigation  }) {
         <View style={modalstyles.centeredView}>
           <View style={modalstyles.modalView}>
             <ScrollView style={{height:'90%'}}>
-              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
               <Text style={modalstyles.textStyle}>Username: {detailRecord.userid}</Text>
               <Text style={modalstyles.textStyle}>Clocked In: {detailRecord.date} at {detailRecord.in_time}</Text>
               <View style={styles.inputView} >
@@ -131,6 +130,8 @@ export default function CreateClockRecordsScreen({  navigation  }) {
               >
                 <Text style={styles.signUpText}>Submit Out Time</Text>
               </TouchableOpacity>
+              <TouchableOpacity style={modalstyles.openButton} onPress={() => {setModalVisible(false)}}><Text>Close</Text></TouchableOpacity>
+
             </ScrollView>
           </View>
         </View>
