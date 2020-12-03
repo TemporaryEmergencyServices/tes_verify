@@ -9,6 +9,7 @@
     "resolveJsonModule": true,
     "strict": false,
     "allowJs":true,
-    "noImplicitAny":false
+    "noImplicitAny":false, 
+    "downlevelIteration": true,
   }
 }
