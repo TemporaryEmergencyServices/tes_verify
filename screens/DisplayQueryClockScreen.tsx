@@ -10,6 +10,10 @@ import { useEffect, Component, useLayoutEffect} from 'react'
 import { useDispatch } from 'react-redux'
 import { ScrollView } from 'react-native-gesture-handler';
 
+import XLSX from 'xlsx';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system'
+
 export default function DisplayQueryClockScreen({ route, navigation }) {
     
   const [loading, setLoading] = useState(true)
@@ -53,15 +57,16 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
          var temptotalApprovedHours = 0;
           var temptotalApprovedMinutes = 0;
          querySnapshot.forEach(documentSnapshot => {
+           var data = documentSnapshot.data();
            helperRecords.push({
-           ...documentSnapshot.data(),
+           ...data,
            key: documentSnapshot.id
            });
-           temptotalHours += documentSnapshot.data().hoursElapsed;
-           temptotalMinutes += documentSnapshot.data().minutesElapsed;
-           if (documentSnapshot.data().in_approved == 'approved' && documentSnapshot.data().out_approved == 'approved'){
-            temptotalApprovedHours += documentSnapshot.data().hoursElapsed;
-            temptotalApprovedMinutes += documentSnapshot.data().minutesElapsed;
+           temptotalHours += data.hoursElapsed;
+           temptotalMinutes += data.minutesElapsed;
+           if (data.in_approved == 'approved' && data.out_approved == 'approved'){
+            temptotalApprovedHours += data.hoursElapsed;
+            temptotalApprovedMinutes += data.minutesElapsed;
           }
          });
          setRecords(helperRecords);
@@ -80,7 +85,61 @@ export default function DisplayQueryClockScreen({ route, navigation }) {
      });
     return () => subscriber();
   } ,[]);
+//array of arrays format
+const get_aoa_data = () => {
+  const header = ['email','is currently clocked in','clock in date','clock in time',
+            'clock out date','clock out time','clock in approved','clock out approved','Hours Elapsed','Minutes Elapsed'];
+  var aoa = [header];
+  records.forEach(element => {
+    var cur = [];
+    //there's probably a toString-like thing I could do, but this was easier
+    cur.push(element.userid);
+    cur.push(element.currently_clocked_in);
+    cur.push(element.date);
+    cur.push(element.in_time);
+    cur.push(element.out_date);
+    cur.push(element.out_time);
+    cur.push(element.in_approved);
+    cur.push(element.out_approved);
+    cur.push(element.hoursElapsed);
+    cur.push(element.minutesElapsed);
+    cur.push(element.ethnicity);
+    cur.push(element.sex);
+    aoa.push(cur);
+  });
+  return aoa;
+}
 
+async function writeToCSV () {
+
+  // https://stackoverflow.com/a/60926972 was used to create this function
+  
+  //get data as an array of arrays
+  const aoa_data = get_aoa_data();
+
+  //convert to an individual sheet
+  var worksheet = XLSX.utils.aoa_to_sheet(aoa_data);
+  
+  //make new workbook
+  var workbook = XLSX.utils.book_new();
+  
+  //add the sheet to the workbook (name only matters if xlsx format)
+  XLSX.utils.book_append_sheet(workbook,worksheet,"Volunteer Records");
+  
+  //create file, see https://docs.sheetjs.com/#writing-options
+  const wbout = XLSX.write(workbook, {type:'base64',bookType:'csv'});
+  
+  //write file to a cache file
+  const uri = FileSystem.cacheDirectory + 'tesverify.csv'
+  await FileSystem.writeAsStringAsync(uri,wbout, {encoding: FileSystem.EncodingType.Base64});
+  
+  //open share dialog
+  await Sharing.shareAsync(uri, {
+    mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    dialogTitle: 'MyWater data',
+    UTI: 'com.microsoft.excel.xlsx'
+  });
+}
   const handleView =  (recordkey) => {
     //console.log(recordkey)
     setRecordKey(recordkey)
@@ -145,7 +204,7 @@ return (
         <Text style={styles.titleFlatList}>Searching:</Text>
         <Text style = {styles.instructions}> {firstName} {lastName} {userId} {ethnicity} {sex} {startDate} {stopDate}</Text>
 
-        <TouchableOpacity style={styles.exportBtn} onPress={() => {}}>
+        <TouchableOpacity style={styles.exportBtn} onPress={() => {writeToCSV();}}>
             <Text style={styles.exportText} >Export as CSV</Text>
         </TouchableOpacity> 
         <View>

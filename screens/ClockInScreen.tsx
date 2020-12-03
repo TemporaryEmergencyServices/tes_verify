@@ -119,14 +119,29 @@ export default function ClockInScreen() {
     return () => {subscriber(); appStateSubscriber(); unmounted = true; unmounted2 = true };
   } ,[]);
 
+  const isValidQRAsync = async (data) => {
+    let docRef = await firebase.firestore().collection('QRcodes').doc(data).get();
+    if (docRef.data().active == "enabled"){
+      setValidQR(true);
+      toggleClockIn();
+      alert(`valid QR code!`);
+      return true;
+    }
+    else{
+      alert(`QR code not valid!`);
+      return false;
+    }
+  }
+
   const isValidQR = (data : string) => {
     var isValid = false;
+    
     const docRef = firebase.firestore()
          .collection('QRcodes')
          .doc(data).get()
-         .then((doc) => {console.log(doc.data().active);setValidQR("enabled" == doc.data().active)})
+         .then((doc) => {console.log(doc.data().active);isValid = "enabled" == doc.data().active; setValidQR(isValid)})
          .then(() => {
-            if (validQR){
+            if (isValid){
               toggleClockIn();
               alert(`valid QR code!`);
             }
@@ -138,7 +153,8 @@ export default function ClockInScreen() {
 
   const handleBarCodeScanned = ({type, data}) => {
     setScanned(true);
-    isValidQR(data);
+    isValidQRAsync(data);
+    // isValidQR(data);
     
     setShowScanner(false);
     setScanned(false);
