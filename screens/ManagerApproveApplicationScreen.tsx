@@ -48,9 +48,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
     const subscriber = firebase.firestore().collection('volunteers')
     
     setAppRef(subscriber)
-    console.log('VIEWTYPE', viewtype)
-    subscriber
-    .onSnapshot(querySnapshot => {
+    subscriber.onSnapshot(querySnapshot => {
       const helperRecords = [] as any;
       querySnapshot.forEach(documentSnapshot => {
           helperRecords.push({
@@ -63,7 +61,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
 
     setLoading(false) 
     return () => { roleSubscriber(); unmounted=false };
-  }, [viewtype])//need to pass the viewtype variable to useEffect so it uses the latest state value
+  }, [viewtype])
 
   const pendingQuery = async (ref) => {
     const resultRecords = await ref.where('approved','==',viewtype)
@@ -107,13 +105,16 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         lastNameMatches = null ? firstNameMatches : await pendingQuery(appRef.where("lastName", "==", userid))
       }
       
+      var resultRecords = []
       if (firstNameMatches && lastNameMatches) {
-        setRecords(firstNameMatches.concat(lastNameMatches))
+        // filtering method found here: https://stackoverflow.com/questions/2218999/remove-duplicates-from-an-array-of-objects-in-javascript
+        resultRecords = firstNameMatches.concat(lastNameMatches).filter((v,i,a)=>a.findIndex(t=>(t.id === v.id))===i)
       } else if (firstNameMatches && !lastNameMatches) {
-        setRecords(firstNameMatches)
+        resultRecords = firstNameMatches
       } else {
-        setRecords(lastNameMatches)
+        resultRecords = lastNameMatches
       }
+      setRecords(resultRecords)
     }
   }
 
@@ -159,14 +160,14 @@ export default function ManagerApproveApplicationScreen({navigation}) {
               <Text style={modalstyles.textStyle}>    Phone: {detailApp.emergencyPhone2}</Text>
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-              <TouchableOpacity style={styles.approveButton} onPress={async () => {
-                await approve(detailApp.key,appRef,userEmail); 
+              <TouchableOpacity style={styles.approveButton} onPress={() => {
+                approve(detailApp.key,appRef,userEmail); 
                 setModalVisible(false);
               }}>
                 <Text style={styles.backText}>Approve</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.denyButton} onPress={async () => {
-                await deny(detailApp.key,appRef,userEmail); 
+              <TouchableOpacity style={styles.denyButton} onPress={() => {
+                deny(detailApp.key,appRef,userEmail); 
                 setModalVisible(false);
               }}>
                 <Text style={styles.backText}>Deny</Text>
@@ -179,7 +180,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         <Text style={styles.titleFlatList}>{viewtype} volunteer applications</Text>
         <View style={{ width:'100%', alignItems: 'center' }}>
           <Text style={styles.instructionsText}>Select to view pending, approved, or denied applications:</Text>
-          <RadioButton.Group onValueChange={value=> {console.log('SETTING VIEWTYPE'); setViewType(value)}} value={viewtype}>
+          <RadioButton.Group onValueChange={value=> {setViewType(value)}} value={viewtype}>
             <View style={{flexDirection: 'row', paddingLeft: 20}}>
               <RadioButton.Item labelStyle={styles.pending} label="Pending" value="pending"/>
               <RadioButton.Item labelStyle={styles.approved} label="Approved" value="approved"/>
@@ -212,7 +213,7 @@ export default function ManagerApproveApplicationScreen({navigation}) {
         </View> 
       </View>
       {
-          records.length === 0 &&
+          records.filter((record) => {return record.approved === viewtype}).length === 0 &&
           <Text style={[styles.header, {marginTop: 30}]}>No {viewtype} applications!</Text>
       }
       { 
