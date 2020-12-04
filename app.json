@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "tes_verify",
+    "name": "TES Verify",
     "slug": "tes_verify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/tes-logo-circle.jpg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/tes-logo-circle.jpg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +19,13 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.tes.tesverify",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.tes.tesverify",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
