@@ -90,12 +90,14 @@ export default function CreateClockRecordsScreen({  navigation  }) {
             var inHours = parseInt(inTimeState.substring(0,2));
         
             if(inAMPM == 'PM' && inHours!=12) {inHours = inHours + 12}
+            if(inAMPM == 'AM' && inHours==12) {inHours = 0}
             var inMins = parseInt(inTimeState.substring(3,5));
             
             var outAMPM = outTimeState.substring(6,8);
             var outHours = parseInt(outTimeState.substring(0,2));
         
             if(outAMPM == 'PM' && outHours!=12) {outHours = outHours + 12}
+            if(outAMPM == 'AM' && outHours==12) {outHours = 0}
             var outMins = parseInt(outTimeState.substring(3,5));
 
             var hoursElapsed = outHours - inHours;
@@ -125,7 +127,7 @@ export default function CreateClockRecordsScreen({  navigation  }) {
       
             Alert.alert(
             'Record Submitted',
-            "Record must still be approved. Press OK to continue.",
+            "You may view record using the search functinality.",
               [
                 {text: 'OK', onPress: () => {console.log('OK Pressed'); navigation.goBack() }},
               ],

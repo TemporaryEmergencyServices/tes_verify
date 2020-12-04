@@ -154,7 +154,9 @@ export default function ManagerQRcodesScreen({navigation}) {
             }
             </ScrollView>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white'}}>
-              
+            <TouchableOpacity style={modalstyles.openButton} 
+              onPress={() => {setModalVisible(false)}}><Text style = {styles.backText}>Back</Text>
+            </TouchableOpacity>
               <TouchableOpacity style={styles.approveButton} onPress={() => {makeActive(detailCode.key,codeRef,userEmail);setModalVisible(false) }}>
                 <Text style={styles.backText}>Enable</Text>
               </TouchableOpacity>
@@ -395,7 +397,7 @@ const styles = StyleSheet.create({
   },
 
   denyButton: {
-    width:"40%",
+    width:"33%",
     backgroundColor:"#E11383",
     borderRadius:25,
     height:"100%",
@@ -403,17 +405,19 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     // marginTop:30,
     // marginBottom:15
-  },
+},
   approveButton: {
-    width:"60%",
+    width:"33%",
     backgroundColor:"#1C5A7D",
+    marginLeft: 10,
+    marginRight: 10,
     borderRadius:25,
     height:"100%",
     alignItems:"center",
     justifyContent:"center",
     // marginTop:30,
     // marginBottom:15
-  },
+},
   input: {
     margin: 5,
     padding: 6,
@@ -461,10 +465,15 @@ const modalstyles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    width: "33%",
+    backgroundColor: "grey",
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
+    height: "100%",
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center'
   },
   textStyle: {
     color: "black",

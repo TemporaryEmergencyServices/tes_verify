@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 import { useSelector, RootStateOrAny } from 'react-redux'
 import { StyleSheet, Modal, Text, View, TextInput, Dimensions, TouchableOpacity, ActivityIndicator, Alert, Button, FlatList } from 'react-native';
 import { useEffect, Component, useLayoutEffect} from 'react'
+import { IconButton, Colors } from 'react-native-paper';
+
 
 
 import { useDispatch } from 'react-redux'
@@ -155,7 +157,7 @@ async function writeToCSV () {
   }
 
   
-  /*const handleDeleteAlert = (recordkey: any) => {
+  const handleDeleteAlert = (recordkey: any) => {
     Alert.alert(
       'WARNING',
       "Are you sure you want to permanently delete this record? This action CANNOT be undone. ",
@@ -170,25 +172,81 @@ async function writeToCSV () {
 
   const handleDelete = (recordkey: any) => {
     setModalVisible(false)
-    setRecordKey('')
-    setDetailApp({
-      firstName: "deleted",
-      lastName: "deleted",
-      userid: "deleted",
-      in_approved : "deleted",
-      out_approved: "deleted",
-      sex: "deleted",
-      ethnicity: "deleted",
-      date: "deleted",
-      out_date: "deleted",
-      in_time: "deleted",
-      out_time: "deleted",
-      key: "deleted"
-      })
-
     firebase.firestore().collection('ClockInsOuts').doc(recordkey).delete()
-  } */
+  } 
 
+const returnForNullDetailApp = (
+
+  <View style={styles.container}>
+
+        <Text style={styles.titleFlatList}>Searching:</Text>
+        <Text style = {styles.instructions}> {firstName} {lastName} {userId} {ethnicity} {sex} {startDate} {stopDate}</Text>
+
+        <TouchableOpacity style={styles.exportBtn} onPress={() => {writeToCSV();}}>
+            <Text style={styles.exportText} >Export as CSV</Text>
+        </TouchableOpacity> 
+        <View>
+          <Text>Total time logged: {totalHours} hours and {totalMinutes} minutes</Text>
+        </View>
+        <View>
+          <Text>Total approved time logged: {totalApprovedHours} hours and {totalApprovedMinutes} minutes</Text>
+        </View>
+        <View style={styles.space}></View>
+        <View style={styles.row}>
+            <Text style={styles.header}>Date</Text>
+            <Text style={styles.header}>In</Text>
+            <Text style={styles.header}>Out</Text>
+        </View>
+
+        { 
+        loading ? 
+            <View style={styles.centerContainer}>
+            <ActivityIndicator size="large" color="#E11383" />
+            </View>
+        :
+            <FlatList
+            data={records}
+            renderItem={({ item }) => (
+                <View style={styles.itemStyle2}>
+                    <View>
+                        <Text style = {styles.userIdText}>{item.userid}</Text>
+                    </View>
+                <View style={styles.row}>
+                    <Text>{item.date}</Text>
+                    <View>
+                    <Text>{item.in_time}</Text>
+                    <Text style={renderRecordStatus(item.in_approved)}>{item.in_approved}</Text>
+                    </View>
+                    <View>
+                    <Text>{item.out_time}</Text>
+                    <Text style={renderRecordStatus(item.out_approved)}>{item.out_approved}</Text>
+                    </View>
+                </View>
+                <TouchableOpacity style={styles.viewBtn} onPress={() => {handleView(item.key)}}>
+                    <Text style={styles.actionText}>view</Text>
+                  </TouchableOpacity> 
+                  {/*<IconButton
+                    icon="delete"
+                    color={Colors.black}
+                    size={20}
+                    onPress={() => handleDeleteAlert(item.key)}
+                  /> */}
+                </View>
+            )}
+            showsVerticalScrollIndicator={false}
+            />
+        }
+       <Button 
+        title="LEAVE PAGE" 
+        color = "#1C5A7D" 
+        onPress={() => navigation.goBack()} />
+        <View style={styles.bigSpace}></View>
+    </View>
+
+
+)
+
+if(detailApp == undefined) {return returnForNullDetailApp}
 
 return (
     
@@ -219,7 +277,12 @@ return (
               <Text style={modalstyles.textStyle}>Out Status: {detailApp.out_approved}</Text>
 
             </ScrollView>
-            
+            <View style={{height: "5%", flexDirection:'row',alignItems:'center',backgroundColor:'white', marginTop: "7%"}}>
+            <TouchableOpacity style={styles.deleteButton} 
+              onPress={() => {handleDeleteAlert(recordKey)}}><Text style = {styles.actionText}>PERMANENTLY DELETE</Text>
+            </TouchableOpacity>
+            </View>
+            <View style = {styles.bigSpace}></View>
             <View style={{height:"10%", flexDirection:'row',alignItems:'center',backgroundColor:'white', marginBottom: '5%'}}>
             <TouchableOpacity style={modalstyles.openButton} 
               onPress={() => {setModalVisible(false)}}><Text style = {styles.actionText}>CLOSE</Text>
@@ -230,15 +293,10 @@ return (
               <TouchableOpacity style={styles.denyButton} onPress={() => {handleDeny(recordKey); setModalVisible(false)}}>
                 <Text style={styles.backText}>Deny</Text>
               </TouchableOpacity>
+            
             </View>
 
-            {/* 
-            <View style={{height: "5%", flexDirection:'row',alignItems:'center',backgroundColor:'white', marginTop: "7%"}}>
-            <TouchableOpacity style={styles.deleteButton} 
-              onPress={() => {handleDeleteAlert(recordKey)}}><Text style = {styles.actionText}>PERMANENTLY DELETE</Text>
-            </TouchableOpacity>
-            </View>
-            */}
+            
             
           </View>
         </View>
@@ -291,6 +349,12 @@ return (
                 <TouchableOpacity style={styles.viewBtn} onPress={() => {handleView(item.key)}}>
                     <Text style={styles.actionText}>view</Text>
                   </TouchableOpacity> 
+                  {/*<IconButton
+                    icon="delete"
+                    color={Colors.black}
+                    size={20}
+                    onPress={() => handleDeleteAlert(item.key)}
+                  /> */}
                 </View>
             )}
             showsVerticalScrollIndicator={false}
