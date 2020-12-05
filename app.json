@@ -4,11 +4,11 @@
     "slug": "tes_verify",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/tes-logo-circle.jpg",
+    "icon": "./assets/images/tes-logo-circle.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/tes-logo-circle.jpg",
+      "image": "./assets/images/tes-logo-circle.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
