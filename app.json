@@ -20,7 +20,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.tes.tesverify",
+      "bundleIdentifier": "com.tesverify",
       "buildNumber": "1.0.3", 
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "The app requests access to the photo library to upload a profile picture", 
