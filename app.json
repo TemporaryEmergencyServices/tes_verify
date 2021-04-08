@@ -28,7 +28,7 @@
       }
     },
     "android": {
-      "package": "com.tes.tesverify",
+      "package": "com.tesverify",
       "versionCode": 1
     },
     "web": {
